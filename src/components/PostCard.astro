@@ -1,0 +1,71 @@
+---
+interface Props {
+  slug:        string;
+  title:       string;
+  publishDate: string;
+  category:    string;
+  excerpt:     string;
+  coverImage:  string | null;
+}
+
+const { slug, title, publishDate, category, excerpt, coverImage } = Astro.props;
+
+const categoryLabels: Record<string, string> = {
+  psy:        'Psy',
+  koty:       'Koty',
+  egzotyczne: 'Egzotyczne',
+  porady:     'Porady',
+};
+
+const date = new Date(publishDate).toLocaleDateString('pl-PL', {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
+---
+
+<article class="post-card flex flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-deep">
+
+  <a href={`/blog/${slug}`} class="block aspect-video overflow-hidden" tabindex="-1" aria-hidden="true">
+    {coverImage
+      ? <img
+          src={coverImage}
+          alt=""
+          class="h-full w-full object-cover transition-transform duration-300 hover:scale-[1.03]"
+          width="640"
+          height="360"
+          loading="lazy"
+          decoding="async"
+        />
+      : <div class="h-full w-full bg-cream-alt"></div>
+    }
+  </a>
+
+  <div class="flex flex-1 flex-col gap-3 p-6">
+
+    <div class="flex items-center gap-3">
+      <span class="rounded-full bg-sage-light px-3 py-1 text-xs font-semibold uppercase tracking-widest text-sage-dark">
+        {categoryLabels[category] ?? category}
+      </span>
+      <time class="text-sm font-medium text-muted" datetime={publishDate}>{date}</time>
+    </div>
+
+    <h2 class="font-serif text-lg font-semibold leading-snug text-ink">
+      <a
+        href={`/blog/${slug}`}
+        class="transition-colors duration-150 hover:text-sage focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-sage"
+      >
+        {title}
+      </a>
+    </h2>
+
+    <p class="line-clamp-3 flex-1 text-base leading-relaxed text-muted">{excerpt}</p>
+
+    <a
+      href={`/blog/${slug}`}
+      class="mt-1 text-sm font-semibold text-sage transition-colors duration-150 hover:text-sage-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage"
+      aria-label={`Czytaj: ${title}`}
+    >
+      Czytaj dalej
+    </a>
+
+  </div>
+</article>
