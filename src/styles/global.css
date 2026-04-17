@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@source "../**/*.{astro,ts,js}";
+
 @theme {
   /* Fonts */
   --font-sans:  'Inter', -apple-system, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif;
