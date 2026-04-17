@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme {
+  /* Fonts */
+  --font-sans:  'Inter', -apple-system, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
+
+  /* Colors */
+  --color-cream:        #F9F5F0;
+  --color-cream-alt:    #EDE8E1;
+  --color-surface:      #FFFFFF;
+  --color-ink:          #2C2C2C;
+  --color-muted:        #7A7068;
+  --color-placeholder:  #B0A89E;
+  --color-sage:         #7B9E87;
+  --color-sage-dark:    #5C7A68;
+  --color-sage-light:   #EEF3F0;
+  --color-brown:        #C4956A;
+  --color-brown-dark:   #A06B3E;
+  --color-brown-light:  #F7EDE3;
+  --color-border:       rgba(0, 0, 0, 0.08);
+  --color-border-input: rgba(0, 0, 0, 0.15);
+
+  /* Shadows */
+  --shadow-card:
+    rgba(44, 44, 44, 0.04)   0px 4px    18px,
+    rgba(44, 44, 44, 0.027)  0px 2px    7.85px,
+    rgba(44, 44, 44, 0.02)   0px 0.8px  2.93px,
+    rgba(44, 44, 44, 0.01)   0px 0.175px 1.04px;
+  --shadow-deep:
+    rgba(44, 44, 44, 0.01)   0px 1px  3px,
+    rgba(44, 44, 44, 0.02)   0px 3px  7px,
+    rgba(44, 44, 44, 0.02)   0px 7px  15px,
+    rgba(44, 44, 44, 0.04)   0px 14px 28px,
+    rgba(44, 44, 44, 0.05)   0px 23px 52px;
+
+  /* Border radius */
+  --radius-pill: 9999px;
+
+  /* Layout widths */
+  --width-container: 1120px;
+  --width-article:   720px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-sans);
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
