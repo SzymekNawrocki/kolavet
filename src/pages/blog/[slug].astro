@@ -1,0 +1,99 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { slug: post.data.title.slug },
+    props:  { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const categoryLabels: Record<string, string> = {
+  psy:        'Psy',
+  koty:       'Koty',
+  egzotyczne: 'Egzotyczne',
+  porady:     'Porady',
+};
+
+const date = new Date(post.data.publishDate).toLocaleDateString('pl-PL', {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title.name,
+  description: post.data.excerpt,
+  datePublished: post.data.publishDate,
+  author: {
+    '@type': 'Person',
+    name: 'Michalina',
+  },
+  ...(post.data.coverImage && { image: post.data.coverImage }),
+};
+---
+
+<BaseLayout
+  title={`${post.data.title.name} — Kolavet`}
+  description={post.data.excerpt}
+  ogImage={post.data.coverImage ?? undefined}
+  type="article"
+  publishDate={post.data.publishDate}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
+
+  <Nav />
+
+  <main>
+    <article class="mx-auto max-w-[720px] px-6 py-16">
+
+      <!-- Header -->
+      <header class="mb-10">
+        <div class="mb-4 flex items-center gap-3">
+          <span class="rounded-full bg-sage-light px-3 py-1 text-xs font-semibold uppercase tracking-widest text-sage-dark">
+            {categoryLabels[post.data.category] ?? post.data.category}
+          </span>
+          <time class="text-sm font-medium text-muted" datetime={post.data.publishDate}>
+            {date}
+          </time>
+        </div>
+
+        <h1 class="font-serif text-[2.75rem] font-bold leading-[1.15] tracking-[-1px] text-ink sm:text-[2rem]">
+          {post.data.title.name}
+        </h1>
+
+        <p class="mt-4 text-lg leading-relaxed text-muted">
+          {post.data.excerpt}
+        </p>
+      </header>
+
+      <!-- Cover image -->
+      {post.data.coverImage && (
+        <img
+          src={post.data.coverImage}
+          alt=""
+          class="mb-12 aspect-video w-full rounded-xl border border-border object-cover"
+          width="720"
+          height="405"
+          loading="eager"
+          decoding="async"
+        />
+      )}
+
+      <!-- Body -->
+      <div class="prose prose-stone max-w-none prose-headings:font-serif prose-headings:text-ink prose-a:text-sage prose-a:no-underline hover:prose-a:text-sage-dark prose-blockquote:border-l-sage prose-blockquote:font-serif prose-blockquote:italic prose-blockquote:text-muted prose-code:rounded prose-code:bg-cream-alt prose-img:rounded-xl">
+        <Content />
+      </div>
+
+    </article>
+  </main>
+
+  <Footer />
+</BaseLayout>
