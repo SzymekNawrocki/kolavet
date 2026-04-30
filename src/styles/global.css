@@ -6,51 +6,48 @@
 
 @theme {
   /* Fonts */
-  --font-sans:  'Inter', -apple-system, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif;
-  --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-sans:    'Geist', system-ui, -apple-system, sans-serif;
+  --font-serif:   'Outfit', system-ui, -apple-system, sans-serif;
 
   /* Colors */
-  --color-cream:        #F9F5F0;
-  --color-cream-alt:    #EDE8E1;
-  --color-surface:      #FFFFFF;
-  --color-ink:          #2C2C2C;
-  --color-muted:        #7A7068;
-  --color-placeholder:  #B0A89E;
-  --color-sage:         #7B9E87;
-  --color-sage-dark:    #5C7A68;
-  --color-sage-light:   #EEF3F0;
-  --color-brown:        #C4956A;
-  --color-brown-dark:   #A06B3E;
-  --color-brown-light:  #F7EDE3;
-  --color-border:       rgba(0, 0, 0, 0.08);
-  --color-border-input: rgba(0, 0, 0, 0.15);
+  --color-dark:           #0A0E27;
+  --color-surface-light:  #1A1E3F;
+  --color-surface-medium: #252D4A;
+  --color-bright:         #F5F7FA;
+  --color-secondary:      #B8BED1;
+  --color-muted:          #7A8399;
+  --color-placeholder:    #7A8399;
+  --color-cyan:           #00D9FF;
+  --color-cyan-dark:      #00A8CC;
+  --color-cyan-light:     rgba(0, 217, 255, 0.15);
+  --color-pink:           #FF006E;
+  --color-pink-light:     rgba(255, 0, 110, 0.15);
+  --color-yellow:         #FFBE0B;
+  --color-yellow-light:   rgba(255, 190, 11, 0.15);
+  --color-border:         rgba(0, 217, 255, 0.15);
+  --color-border-input:   rgba(0, 217, 255, 0.25);
 
   /* Shadows */
   --shadow-card:
-    rgba(44, 44, 44, 0.04)   0px 4px    18px,
-    rgba(44, 44, 44, 0.027)  0px 2px    7.85px,
-    rgba(44, 44, 44, 0.02)   0px 0.8px  2.93px,
-    rgba(44, 44, 44, 0.01)   0px 0.175px 1.04px;
+    0px 8px 24px rgba(0, 217, 255, 0.08),
+    0px 2px 8px  rgba(0, 217, 255, 0.04);
   --shadow-deep:
-    rgba(44, 44, 44, 0.01)   0px 1px  3px,
-    rgba(44, 44, 44, 0.02)   0px 3px  7px,
-    rgba(44, 44, 44, 0.02)   0px 7px  15px,
-    rgba(44, 44, 44, 0.04)   0px 14px 28px,
-    rgba(44, 44, 44, 0.05)   0px 23px 52px;
+    0px 20px 48px rgba(0, 217, 255, 0.12),
+    0px 8px  20px rgba(0, 217, 255, 0.06);
 
   /* Border radius */
   --radius-pill: 9999px;
 
   /* Layout widths */
-  --width-container: 1120px;
-  --width-article:   720px;
+  --width-container: 1200px;
+  --width-article:   768px;
 }
 
 @layer base {
   html {
     font-family: var(--font-sans);
-    background-color: var(--color-cream);
-    color: var(--color-ink);
+    background-color: var(--color-dark);
+    color: var(--color-bright);
     -webkit-font-smoothing: antialiased;
   }
 

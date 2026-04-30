@@ -4,26 +4,26 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-[0.9375rem] font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage focus-visible:ring-offset-2 focus-visible:ring-offset-cream disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-[0.9375rem] font-semibold tracking-[0.02em] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-dark disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        default: 'bg-sage text-white hover:bg-sage-dark active:scale-[0.97]',
-        secondary: 'border border-brown text-brown hover:bg-brown-light hover:text-brown-dark',
-        outline: 'border border-border bg-transparent text-ink hover:bg-cream-alt',
-        ghost: 'text-ink hover:bg-cream-alt',
-        link: 'h-auto p-0 text-sage underline-offset-4 hover:underline hover:text-sage-dark',
+        default:   'bg-cyan text-dark hover:bg-cyan-dark active:scale-[0.96]',
+        secondary: 'border-2 border-pink text-pink hover:bg-pink-light active:scale-[0.96]',
+        outline:   'border border-border bg-transparent text-bright hover:bg-surface-medium',
+        ghost:     'text-bright hover:bg-surface-medium',
+        link:      'h-auto p-0 text-cyan underline-offset-4 hover:underline hover:text-cyan-dark',
       },
       size: {
-        default: 'h-11 px-5 py-2.5',
-        sm: 'h-9 rounded-md px-4 text-sm',
-        lg: 'h-12 rounded-xl px-8 text-base',
-        icon: 'h-11 w-11',
+        default: 'h-12 px-6 py-3',
+        sm:      'h-9 rounded-md px-4 text-sm',
+        lg:      'h-13 rounded-xl px-8 text-base',
+        icon:    'h-11 w-11',
       },
     },
     defaultVariants: {
       variant: 'default',
-      size: 'default',
+      size:    'default',
     },
   }
 );

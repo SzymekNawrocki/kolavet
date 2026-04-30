@@ -13,26 +13,26 @@ interface NavClientProps {
 
 export function NavClient({ currentPath, currentLocale, localePaths, links }: NavClientProps) {
   const linkClass = (href: string) =>
-    `rounded px-3 py-2 text-[0.9375rem] font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage ${
-      currentPath === href ? 'text-sage' : 'text-ink hover:text-sage'
+    `rounded px-3 py-2 text-[0.9375rem] font-semibold tracking-[0.02em] transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan ${
+      currentPath === href ? 'text-cyan' : 'text-bright hover:text-cyan'
     }`;
 
   const mobileLinkClass = (href: string) =>
-    `block w-full rounded px-3 py-3 text-[0.9375rem] font-medium transition-colors duration-150 ${
-      currentPath === href ? 'text-sage' : 'text-ink hover:text-sage'
+    `block w-full rounded px-3 py-3 text-[0.9375rem] font-semibold tracking-[0.02em] transition-colors duration-150 ${
+      currentPath === href ? 'text-cyan' : 'text-bright hover:text-cyan'
     }`;
 
   const LocaleSwitcher = ({ className = '' }: { className?: string }) => (
     <div className={`flex items-center gap-0.5 ${className}`} aria-label="Wybór języka">
       {LOCALES.map((locale, i) => (
         <React.Fragment key={locale}>
-          {i > 0 && <span className="text-border select-none text-xs">|</span>}
+          {i > 0 && <span className="select-none text-xs text-secondary">|</span>}
           <a
             href={localePaths[locale]}
-            className={`px-1.5 py-0.5 text-xs font-semibold uppercase tracking-wider rounded transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage ${
+            className={`px-1.5 py-0.5 text-xs font-semibold uppercase tracking-wider rounded transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan ${
               currentLocale === locale
-                ? 'text-sage'
-                : 'text-muted hover:text-ink'
+                ? 'text-cyan'
+                : 'text-secondary hover:text-bright'
             }`}
             aria-current={currentLocale === locale ? 'true' : undefined}
           >

@@ -24,14 +24,14 @@ const { Content: BioContent } = bioEntry ? await render(bioEntry) : { Content: n
 >
   <Nav />
 
-  <main class="mx-auto max-w-[720px] px-6 py-16">
+  <main class="mx-auto max-w-[768px] px-6 py-16">
 
     <header class="mb-10">
-      <h1 class="font-serif text-[2.75rem] font-bold leading-tight tracking-[-1px] text-ink">
+      <h1 class="font-serif text-[3rem] font-bold leading-tight tracking-[-0.8px] text-bright">
         {heading}
       </h1>
       {intro && (
-        <p class="mt-4 text-lg leading-relaxed text-muted">{intro}</p>
+        <p class="mt-4 text-lg leading-relaxed text-secondary">{intro}</p>
       )}
     </header>
 
@@ -48,7 +48,7 @@ const { Content: BioContent } = bioEntry ? await render(bioEntry) : { Content: n
     )}
 
     {BioContent && (
-      <div class="prose prose-stone max-w-none prose-headings:font-serif prose-headings:text-ink prose-a:text-sage prose-a:no-underline hover:prose-a:text-sage-dark prose-blockquote:border-l-sage prose-blockquote:font-serif prose-blockquote:italic prose-blockquote:text-muted">
+      <div class="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-bright prose-a:text-cyan prose-a:no-underline hover:prose-a:text-cyan-dark prose-blockquote:border-l-pink prose-blockquote:italic prose-blockquote:text-secondary">
         <BioContent />
       </div>
     )}

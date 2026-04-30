@@ -1,223 +1,244 @@
-# Design System — Michalina's Veterinary Blog
+# Design System — Michalina's Veterinary Blog (Redesigned)
 
-Warm minimalism inspired by Notion, adapted for a personal veterinary blog.
-Palette: cream, sage green, warm brown. Typography: Lora (headings) + Inter (body).
+Bold, modern minimalism with playful personality. 2026 trending palette: electric brights with dark mode sophistication.
 
 ## 1. Visual Theme & Atmosphere
 
-Michalina's blog embodies organic, trustworthy warmth — like a good vet reception: calm,
-professional, approachable. The cream background (`#F9F5F0`) replaces cold white. Sage green
-(`#7B9E87`) takes the role of the primary accent instead of blue. Warm brown (`#C4956A`) adds
-depth and earthiness. Text `#2C2C2C` — dark but not black, soft on the eyes.
+This is a **confident, energetic, forward-thinking** veterinary blog. Playful without being childish. Bold without being aggressive. Dark mode foundation with electric accents that pop. Modern, high-contrast, vibrant.
 
-Lora serif headings give personality and editorial character; Inter body ensures readability.
-The serif/sans contrast is a classic editorial combination that feels intentional, not accidental.
+Think: high-energy vet clinic with personality. Clean lines. Confident typography. Colors that *move*.
 
 **Key Characteristics:**
-- Lora (serif, Google Fonts) for headings with negative letter-spacing for elegance
-- Inter for body text — readability and neutrality, familiar from Notion
-- Cream background (`#F9F5F0`) — warm, organic, not sterile
-- Sage green (`#7B9E87`) as the only saturated color in core UI (CTA, links, focus)
-- Warm brown (`#C4956A`) as secondary accent for tags, decorative elements, hover states
-- Whisper borders: `1px solid rgba(0,0,0,0.08)` — softer than Notion's 0.1
-- Multi-layer shadows with max opacity 0.05 — depth without heaviness
-- 8px base spacing unit
+- **Font Stack**: Geist (modern, playful sans-serif, Google Fonts)  
+  + Outfit (bold display headlines, geometric energy)
+- **Geist** for body and secondary headings — contemporary, friendly, highly legible
+- **Outfit** for primary headings — geometric, bold, trendy 2024–2026 energy
+- **Dark Mode First**: `#0A0E27` (almost-black background) — sophisticated, modern, reduces eye strain
+- **Electric Primary**: `#00D9FF` (cyan, electric aqua) — CTAs, links, focus, accent elements
+- **Neon Secondary**: `#FF006E` (hot pink/magenta) — complementary accent, hover states, decorative
+- **Accent Tertiary**: `#FFBE0B` (electric yellow) — highlights, tags, warnings
+- **Surface Light**: `#1A1E3F` (dark navy, raised surfaces) — cards, containers
+- **Text Bright**: `#F5F7FA` (near-white, cool tone) — primary reading text
+- **Text Secondary**: `#B8BED1` (cool gray) — secondary info, descriptions
+- **Ultra-clean borders**: `1px solid rgba(0,217,255,0.15)` — subtle electric glow
+- **Neon shadows**: Low-opacity colored shadows with cyan tint for depth
+- **4px base spacing unit**
 
 ## 2. Color Palette & Roles
 
 ### Primary
-- **Text Dark** (`#2C2C2C`): Primary text, headings, body copy. Warm near-black.
-- **Background Cream** (`#F9F5F0`): Page background. Warm cream, not cold white.
-- **Sage Green** (`#7B9E87`): Primary accent — CTA buttons, links, focus ring, active elements.
+- **Text Bright** (`#F5F7FA`): Primary text, headings, body copy. Cool white, not harsh.
+- **Background Dark** (`#0A0E27`): Page background. Deep, dark, modern.
+- **Cyan/Electric** (`#00D9FF`): Primary accent — CTA buttons, links, focus ring, active elements. Pops on dark.
 
-### Brand Secondary
-- **Warm Brown** (`#C4956A`): Secondary accent — tags, hover states, decorative accents.
-- **Sage Dark** (`#5C7A68`): Darker sage variant for button hover/active states.
+### Brand Secondary & Tertiary
+- **Neon Pink/Magenta** (`#FF006E`): Hot accent — hover states, decorative, secondary CTAs.
+- **Electric Yellow** (`#FFBE0B`): Warm accent — tags, badges, highlights.
+- **Cyan Dark** (`#00A8CC`): Darker cyan variant for button hover/active states.
 
-### Neutral Scale (Warm)
-- **Cream Light** (`#F9F5F0`): Page background.
-- **Cream Mid** (`#EDE8E1`): Alternate section backgrounds, card fills.
-- **Warm Gray 500** (`#7A7068`): Secondary text, descriptions, muted labels.
-- **Warm Gray 300** (`#B0A89E`): Placeholder text, disabled states, captions.
-- **Surface White** (`#FFFFFF`): Card surfaces, modals, inputs.
+### Neutral Scale (Cool)
+- **Background Dark** (`#0A0E27`): Page background, deep black.
+- **Surface Light** (`#1A1E3F`): Card fills, raised surfaces, alternate sections.
+- **Surface Medium** (`#252D4A`): Secondary card backgrounds, containers.
+- **Text Bright** (`#F5F7FA`): Primary text.
+- **Text Secondary** (`#B8BED1`): Secondary text, descriptions, muted labels.
+- **Text Muted** (`#7A8399`): Disabled states, captions, very secondary info.
+- **Border Subtle** (`rgba(0,217,255,0.15)`): Whisper borders with cyan tint.
+- **Border Strong** (`rgba(0,217,255,0.25)`): Emphasized borders, dividers.
 
 ### Semantic Accents
-- **Success** (`#7B9E87`): Sage green — confirmations, success indicators.
-- **Warning** (`#C4956A`): Warm brown — warnings, attention indicators.
-- **Muted** (`#B0A89E`): Disabled, inactive states.
+- **Success** (`#00D9FF`): Cyan — confirmations, success indicators.
+- **Warning** (`#FFBE0B`): Electric yellow — warnings, attention indicators.
+- **Error** (`#FF006E`): Neon pink — errors, critical alerts.
+- **Info** (`#00D9FF`): Cyan — informational states.
 
 ### Interactive
-- **Link** (`#7B9E87`): Link color — sage green with underline on hover.
-- **Link Hover** (`#5C7A68`): Darker sage for hover state.
-- **Focus Ring** (`#7B9E87`): 2px solid focus, visible contrast on cream background.
-- **Badge Sage Bg** (`#EEF3F0`): Pill badge background — light sage tint.
-- **Badge Sage Text** (`#5C7A68`): Pill badge text — darker sage.
-- **Badge Brown Bg** (`#F7EDE3`): Brown badge background — warm tint.
-- **Badge Brown Text** (`#A06B3E`): Brown badge text.
+- **Link** (`#00D9FF`): Link color — cyan with subtle underline on hover.
+- **Link Hover** (`#00A8CC`): Darker cyan for hover state.
+- **Focus Ring** (`#00D9FF`): 2px solid focus, high contrast on dark background.
+- **Badge Cyan Bg** (`rgba(0,217,255,0.15)`): Pill badge background — cyan tint.
+- **Badge Cyan Text** (`#00D9FF`): Pill badge text — bright cyan.
+- **Badge Pink Bg** (`rgba(255,0,110,0.15)`): Pink badge background.
+- **Badge Pink Text** (`#FF006E`): Pink badge text.
+- **Badge Yellow Bg** (`rgba(255,190,11,0.15)`): Yellow badge background.
+- **Badge Yellow Text** (`#FFBE0B`): Yellow badge text.
 
 ### Shadows & Depth
-- **Card Shadow** (`rgba(44,44,44,0.04) 0px 4px 18px, rgba(44,44,44,0.027) 0px 2px 7.85px, rgba(44,44,44,0.02) 0px 0.8px 2.93px, rgba(44,44,44,0.01) 0px 0.175px 1.04px`): Card elevation — warm, multi-layered.
-- **Deep Shadow** (`rgba(44,44,44,0.01) 0px 1px 3px, rgba(44,44,44,0.02) 0px 3px 7px, rgba(44,44,44,0.02) 0px 7px 15px, rgba(44,44,44,0.04) 0px 14px 28px, rgba(44,44,44,0.05) 0px 23px 52px`): Modals, featured content.
-- **Whisper Border** (`1px solid rgba(0,0,0,0.08)`): Dividers, card outlines. Softer than Notion.
+- **Card Shadow** (`0px 8px 24px rgba(0,217,255,0.08), 0px 2px 8px rgba(0,217,255,0.04)`): Card elevation — subtle cyan glow.
+- **Deep Shadow** (`0px 20px 48px rgba(0,217,255,0.12), 0px 8px 20px rgba(0,217,255,0.06)`): Modals, featured content — stronger glow.
+- **Neon Glow** (optional): `0px 0px 20px rgba(255,0,110,0.15)` — pink glow on hover for special elements.
+- **Border** (`1px solid rgba(0,217,255,0.15)`): Default dividers, card outlines.
 
 ## 3. Typography Rules
 
 ### Font Family
-- **Headings**: `Lora`, fallback: `Georgia, 'Times New Roman', serif` — Google Fonts serif.
-- **Body**: `Inter`, fallback: `-apple-system, system-ui, Segoe UI, Helvetica, Arial, sans-serif`.
-- **OpenType**: `"lnum"` and `"locl"` on Lora headings for typographic precision.
+- **Primary Headings (H1, H2)**: `Outfit`, fallback: `system-ui, -apple-system, sans-serif` — Google Fonts, geometric, bold, 2026 energy.
+- **Secondary Headings (H3, H4)**: `Geist`, fallback: `system-ui, -apple-system, sans-serif` — Google Fonts, clean, modern, friendly.
+- **Body**: `Geist`, fallback: `system-ui, -apple-system, sans-serif` — warm sans-serif, highly readable.
+- **Monospace**: `JetBrains Mono` or `Courier New` — code blocks, technical text.
 
 ### Loading (Google Fonts)
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
 ```
 
 ### Hierarchy
 
 | Role | Font | Size | Weight | Line Height | Letter Spacing | Notes |
 |------|------|------|--------|-------------|----------------|-------|
-| Display Hero | Lora | 56px (3.50rem) | 700 | 1.10 | -1.5px | Main page headline |
-| Display Secondary | Lora | 44px (2.75rem) | 700 | 1.15 | -1.0px | Hero sub-headlines |
-| Section Heading | Lora | 36px (2.25rem) | 700 | 1.20 | -0.75px | Section titles, `"lnum"` |
-| Sub-heading Large | Lora | 28px (1.75rem) | 600 | 1.30 | -0.5px | Sub-sections, card headers |
-| Sub-heading | Lora | 22px (1.375rem) | 600 | 1.35 | -0.25px | H3, content headers |
-| Card Title | Lora | 18px (1.125rem) | 600 | 1.40 | normal | Blog post card titles |
-| Body Large | Inter | 18px (1.125rem) | 400 | 1.65 | normal | Leads, intro paragraphs |
-| Body | Inter | 16px (1.00rem) | 400 | 1.70 | normal | Standard reading text |
-| Body Medium | Inter | 16px (1.00rem) | 500 | 1.70 | normal | Nav links, UI labels |
-| Body Semibold | Inter | 16px (1.00rem) | 600 | 1.70 | normal | Strong labels |
-| Nav / Button | Inter | 15px (0.9375rem) | 500 | 1.33 | 0.01em | Navigation, button text |
-| Caption | Inter | 14px (0.875rem) | 500 | 1.50 | normal | Metadata, dates, labels |
-| Caption Light | Inter | 14px (0.875rem) | 400 | 1.50 | normal | Descriptions, secondary |
-| Badge | Inter | 12px (0.75rem) | 600 | 1.33 | 0.05em | Tags, categories, status |
-| Micro Label | Inter | 11px (0.6875rem) | 500 | 1.33 | 0.05em | Timestamps, meta |
+| Display Hero | Outfit | 64px (4.00rem) | 800 | 1.05 | -1.2px | Main page headline, bold impact |
+| Display Secondary | Outfit | 48px (3.00rem) | 700 | 1.10 | -0.8px | Hero sub-headlines |
+| Section Heading | Outfit | 40px (2.5rem) | 700 | 1.15 | -0.6px | Section titles, major headings |
+| Sub-heading Large | Geist | 28px (1.75rem) | 600 | 1.25 | -0.25px | Sub-sections, card headers |
+| Sub-heading | Geist | 24px (1.5rem) | 600 | 1.30 | normal | H3, content headers |
+| Card Title | Geist | 20px (1.25rem) | 600 | 1.35 | normal | Blog post card titles |
+| Body Large | Geist | 18px (1.125rem) | 400 | 1.60 | normal | Leads, intro paragraphs |
+| Body | Geist | 16px (1.00rem) | 400 | 1.65 | normal | Standard reading text |
+| Body Medium | Geist | 16px (1.00rem) | 500 | 1.65 | normal | Nav links, UI labels |
+| Body Semibold | Geist | 16px (1.00rem) | 600 | 1.65 | normal | Strong labels, emphasis |
+| Nav / Button | Geist | 15px (0.9375rem) | 600 | 1.40 | 0.02em | Navigation, button text |
+| Caption | Geist | 14px (0.875rem) | 500 | 1.50 | normal | Metadata, dates, labels |
+| Caption Light | Geist | 14px (0.875rem) | 400 | 1.50 | normal | Descriptions, secondary |
+| Badge | Geist | 12px (0.75rem) | 600 | 1.33 | 0.05em | Tags, categories, status |
+| Micro Label | Geist | 11px (0.6875rem) | 500 | 1.33 | 0.05em | Timestamps, meta |
 
 ### Principles
-- **Serif contrast**: Lora headings vs Inter body — classic editorial contrast that gives the blog character and identity.
-- **Warmth at scale**: Lora uses negative letter-spacing at large sizes (-1.5px @ 56px), relaxing to normal at 18px.
-- **Three Inter weights**: 400 (reading), 500 (interface), 600 (emphasis). Lora: 400 italic (quotes), 600 (sub-headings), 700 (headings).
-- **Generous line-height**: Body 1.70 — higher than Notion, better for long-form article reading.
-- **Lora italic**: Use `Lora italic 400` for veterinary quotes and callouts — a naturally elegant accent.
+- **Bold Headlines**: Outfit is geometric, futuristic, confident — gives the blog personality and energy
+- **Readable Body**: Geist is modern but warm — perfect for long-form veterinary content
+- **High Contrast**: Dark background + bright text = strong legibility and modern feel
+- **Generous spacing**: Line-height 1.60–1.65 for body — airy, contemporary feel
+- **Weight hierarchy**: Use Outfit's weight 800 for impact, Geist's 600 for emphasis, 400 for reading
 
 ## 4. Component Stylings
 
 ### Buttons
 
-**Primary (Sage Green)**
-- Background: `#7B9E87`
-- Text: `#FFFFFF`
-- Padding: 10px 20px
-- Radius: 6px
+**Primary (Cyan Electric)**
+- Background: `#00D9FF`
+- Text: `#0A0E27`
+- Padding: 12px 24px
+- Radius: 8px
 - Border: `1px solid transparent`
-- Hover: background `#5C7A68`
-- Active: scale(0.97) transform
-- Focus: `2px solid #7B9E87`, offset 2px
-- Use: Primary CTA ("Read article", "Subscribe")
+- Font: Geist 15px weight 600
+- Hover: background `#00A8CC`, text stays dark
+- Active: scale(0.96) transform
+- Focus: `2px solid #00D9FF`, offset 3px, subtle glow
+- Use: Primary CTA ("Read article", "Subscribe", "Learn More")
 
-**Secondary (Warm Brown)**
+**Secondary (Neon Pink)**
 - Background: `transparent`
-- Text: `#C4956A`
-- Border: `1px solid #C4956A`
+- Text: `#FF006E`
+- Border: `2px solid #FF006E`
+- Padding: 10px 22px
+- Radius: 8px
+- Hover: background `rgba(255,0,110,0.15)`, text `#FF006E`
+- Active: scale(0.96)
+- Use: Secondary actions, alt CTAs
+
+**Tertiary (Ghost)**
+- Background: `transparent`
+- Text: `#F5F7FA`
+- Border: `1px solid rgba(0,217,255,0.25)`
 - Padding: 10px 20px
-- Radius: 6px
-- Hover: background `#F7EDE3`, text `#A06B3E`
-- Use: Secondary actions
-
-**Ghost**
-- Background: `transparent`
-- Text: `#2C2C2C`
-- Decoration: underline on hover in `#7B9E87`
+- Radius: 8px
+- Hover: background `rgba(0,217,255,0.1)`, border color `#00D9FF`
 - Use: Tertiary actions, inline links
 
 **Pill Badge / Tag**
-- Background: `#EEF3F0` (sage tint) or `#F7EDE3` (brown tint)
-- Text: `#5C7A68` or `#A06B3E`
-- Padding: 4px 10px
+- Background: `rgba(0,217,255,0.15)` (cyan), `rgba(255,0,110,0.15)` (pink), or `rgba(255,190,11,0.15)` (yellow)
+- Text: `#00D9FF`, `#FF006E`, or `#FFBE0B` respectively
+- Padding: 6px 14px
 - Radius: 9999px
-- Font: Inter 12px weight 600, letter-spacing 0.05em
-- Use: Post categories, tags (e.g. "Cats", "Dogs", "Prevention")
+- Font: Geist 12px weight 600, letter-spacing 0.05em
+- Use: Post categories, tags, status indicators
+- Hover: subtle background intensification
 
 ### Cards & Containers
-- Background: `#FFFFFF`
-- Border: `1px solid rgba(0,0,0,0.08)`
+- Background: `#1A1E3F` (surface light)
+- Border: `1px solid rgba(0,217,255,0.15)`
 - Radius: 12px (standard cards), 16px (featured)
-- Shadow: Card Shadow (multi-layer, warm-tinted)
-- Hover: shadow intensification + subtle translateY(-2px)
+- Shadow: Card Shadow (soft cyan glow)
+- Hover: shadow intensification + subtle cyan border glow + translateY(-2px)
 - Image area: `12px 12px 0 0` border-radius on top
 
 ### Inputs & Forms
-- Background: `#FFFFFF`
-- Text: `#2C2C2C`
-- Border: `1px solid rgba(0,0,0,0.15)`
-- Padding: 10px 14px
-- Radius: 6px
-- Focus: `2px solid #7B9E87` outline
-- Placeholder: `#B0A89E`
+- Background: `#252D4A` (surface medium)
+- Text: `#F5F7FA`
+- Border: `1px solid rgba(0,217,255,0.15)`
+- Padding: 12px 16px
+- Radius: 8px
+- Focus: `2px solid #00D9FF` outline + glow effect
+- Placeholder: `#7A8399`
+- Transition: all 200ms for smooth focus states
 
 ### Navigation
-- Background: `#F9F5F0` (cream, not white)
-- Logo: Lora 20px weight 700, color `#2C2C2C`
-- Links: Inter 15px weight 500, `#2C2C2C`, hover color `#7B9E87`
-- CTA: sage green pill button, right-aligned
-- Sticky with `backdrop-filter: blur(8px)` + whisper border-bottom
+- Background: `#0A0E27` (dark background) or `rgba(10,14,39,0.9)` if floating
+- Logo: Outfit 24px weight 800, color `#00D9FF`
+- Links: Geist 15px weight 600, `#F5F7FA`, hover color `#00D9FF`
+- CTA: cyan pill button or outlined button, right-aligned
+- Sticky with `backdrop-filter: blur(12px)` + subtle border-bottom `rgba(0,217,255,0.1)`
 - Mobile: hamburger collapse
+- Active nav link: `#00D9FF` text color + underline
 
 ### Article Typography (Blog Post)
-- Article headings: Lora
-- Article body: Inter 16px, line-height 1.80 (more room for long reading)
-- Optional drop cap on first paragraph (Lora, 3-line)
-- Blockquote: Lora italic, border-left 3px `#7B9E87`, padding-left 20px, color `#7A7068`
-- Inline code: background `#EDE8E1`, border-radius 3px, monospace font
+- Article headings: Outfit (primary) or Geist (secondary)
+- Article body: Geist 16px, line-height 1.70 (breathing room for long reading)
+- Optional drop cap on first paragraph: Outfit, 3-line, cyan color
+- Blockquote: Geist italic, border-left 4px solid `#FF006E`, padding-left 20px, color `#B8BED1`, background `rgba(255,0,110,0.08)`
+- Inline code: background `#252D4A`, border `1px solid rgba(0,217,255,0.15)`, color `#00D9FF`, border-radius 4px, monospace font
+- Code block: background `#0A0E27`, border `1px solid rgba(0,217,255,0.2)`, padding 16px, border-radius 8px, overflow-x auto
 
 ### Image Treatment
-- Animal photos: border-radius 12px, whisper border
-- Hero image: full-width with `object-fit: cover`
-- Card thumbnails: aspect-ratio 16/9 or 4/3
+- Animal photos: border-radius 12px, border `1px solid rgba(0,217,255,0.15)`
+- Hero image: full-width with `object-fit: cover`, subtle glow on hover
+- Card thumbnails: aspect-ratio 16/9 or 4/3, border-radius 8px top
 - Alt text: always required for accessibility
 
 ## 5. Layout Principles
 
 ### Spacing System
-- Base: 8px
+- Base: 4px (tighter, more modern)
 - Scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96, 128px
-- Organic, not mechanical — 4px adjustments are fine for optical balance
+- Modern, tech-forward spacing — more compact than warm minimalism
 
 ### Grid & Container
-- Max content width: 1120px (narrower than Notion — intimate blog feel)
-- Article max-width: 720px (optimal for reading)
-- Hero: single-column, centered, 80-100px top padding
-- Card grid: 3 columns → 2 → 1 on mobile
+- Max content width: 1200px (modern, expansive blog feel)
+- Article max-width: 768px (optimal for reading, slightly wider)
+- Hero: full-viewport or 100vh with overlay, centered
+- Card grid: 3 columns → 2 → 1 on mobile, 20px gap (modern)
 - Optional sidebar: 2/3 content + 1/3 sidebar layout
+- Generous horizontal padding on mobile: 16px
 
 ### Whitespace Philosophy
-- **Generous vertical rhythm**: 64-96px between major sections
-- **Cream alternation**: sections on `#F9F5F0` (page bg) alternate with `#FFFFFF` card surfaces
-- **Article breathing**: article has its own max-width 720px and larger line-height
-- **Section spacing**: section headings separated 12px from sub-headline, 32px from content
+- **Bold vertical rhythm**: 80–120px between major sections (spacious)
+- **Dark alternation**: sections on `#0A0E27` alternate with `#1A1E3F` raised cards
+- **Article breathing**: article has its own max-width 768px and generous line-height 1.70
+- **Section spacing**: section headings 16px from sub-headline, 40px from content
+- **Modern aesthetic**: lots of negative space, not cramped
 
 ### Border Radius Scale
-- Micro (4px): Small UI elements
-- Subtle (6px): Buttons, inputs
-- Standard (8px): Small cards, inline containers
-- Comfortable (12px): Article cards, images
-- Large (16px): Featured cards, hero elements
+- Micro (4px): Small UI elements, inputs
+- Subtle (6px): Button alternatives
+- Standard (8px): Buttons, inputs, small cards
+- Comfortable (12px): Article cards, images, standard containers
+- Large (16px): Featured cards, modals, hero elements
 - Full Pill (9999px): Tags, categories, status badges
-- Circle (100%): Avatars
+- Circle (100%): Avatars, circular images
 
 ## 6. Depth & Elevation
 
 | Level | Treatment | Use |
 |-------|-----------|-----|
 | Flat (0) | No shadow, no border | Page background, text blocks |
-| Whisper (1) | `1px solid rgba(0,0,0,0.08)` | Standard card outlines |
-| Soft Card (2) | 4-layer shadow stack (max 0.04) | Article cards |
-| Deep Card (3) | 5-layer shadow stack (max 0.05) | Featured content, modals |
-| Focus (A11y) | `2px solid #7B9E87` outline | Keyboard focus on all interactive elements |
+| Whisper (1) | `1px solid rgba(0,217,255,0.15)` | Standard card outlines |
+| Soft Card (2) | `0px 8px 24px rgba(0,217,255,0.08)` | Article cards, containers |
+| Deep Card (3) | `0px 20px 48px rgba(0,217,255,0.12)` | Featured content, modals |
+| Neon Glow (Special) | `0px 0px 20px rgba(255,0,110,0.15)` | Hover on accent elements |
+| Focus (A11y) | `2px solid #00D9FF` outline | Keyboard focus on all interactive elements |
 
-**Shadow Philosophy**: Shadows use `rgba(44,44,44,...)` instead of pure black,
-producing warm, organic depth that matches the cream palette. Multi-layered, low individual opacity.
+**Shadow Philosophy**: Shadows use cyan-tinted rgba for a cohesive, modern electric glow. Low opacity, multi-layered, creates subtle depth without heaviness. Optional pink glow for hover states adds playful energy.
 
 ## 7. Responsive Behavior
 
@@ -225,111 +246,121 @@ producing warm, organic depth that matches the cream palette. Multi-layered, low
 | Name | Width | Key Changes |
 |------|-------|-------------|
 | Mobile S | <380px | Tight single column, 16px padding |
-| Mobile | 380–640px | Standard mobile, stacked layout |
-| Tablet | 640–1024px | 2-column card grid |
-| Desktop | 1024–1280px | Full layout, optional sidebar |
-| Wide | >1280px | Centered, generous margins |
+| Mobile | 380–640px | Standard mobile, stacked layout, compact spacing |
+| Tablet | 640–1024px | 2-column card grid, 20px padding |
+| Desktop | 1024–1280px | Full layout, optional sidebar, generous padding |
+| Wide | >1280px | Centered, maximum width 1200px, spacious margins |
 
 ### Touch Targets
-- Buttons: min 44px height (WCAG 2.5.5)
-- Navigation links: adequate padding
-- Tags/badges: 8px vertical, 10px horizontal padding
+- Buttons: min 48px height (WCAG 2.5.5 + modern standard)
+- Navigation links: adequate padding for thumb-friendly interaction
+- Tags/badges: 12px vertical, 14px horizontal padding
+- Cards: min 54px clickable height
 
 ### Collapsing Strategy
-- Hero: 56px → 40px → 28px on mobile, proportional letter-spacing
-- Nav: horizontal links → hamburger
+- Hero: 64px → 48px → 36px on mobile, proportional letter-spacing
+- Nav: horizontal links → hamburger (mobile)
 - Cards: 3-col → 2-col → 1-col
-- Article: max-width 720px → full width with 20px padding
-- Section spacing: 64px → 40px on mobile
+- Article: max-width 768px → full width with 16px padding
+- Section spacing: 100px → 60px on tablet → 40px on mobile
+- Font sizes: subtle reduction on mobile (max 6% scale down)
 
 ## 8. Accessibility & States
 
 ### Focus System
 - All interactive elements receive a visible focus indicator
-- Focus: `2px solid #7B9E87` + `outline-offset: 2px`
+- Focus: `2px solid #00D9FF` + `outline-offset: 3px`
 - Full keyboard navigation support
-- Contrast: `#2C2C2C` on `#F9F5F0` → ~12:1 (WCAG AAA)
+- Tab order: logical, left-to-right, top-to-bottom
+- Contrast: `#F5F7FA` on `#0A0E27` → ~14:1 (WCAG AAA+)
 
 ### Color Contrast Ratios
-- Primary text `#2C2C2C` on `#F9F5F0`: ~12:1 (WCAG AAA)
-- Secondary `#7A7068` on `#F9F5F0`: ~5.2:1 (WCAG AA)
-- Sage green `#7B9E87` on `#FFFFFF`: ~3.8:1 (passes AA for large text / UI components)
-- Badge text `#5C7A68` on `#EEF3F0`: ~4.6:1 (WCAG AA)
+- Primary text `#F5F7FA` on `#0A0E27`: ~14:1 (WCAG AAA+)
+- Secondary `#B8BED1` on `#0A0E27`: ~8.5:1 (WCAG AAA)
+- Cyan `#00D9FF` on `#1A1E3F`: ~7.2:1 (WCAG AA+, passes for all text)
+- Pink `#FF006E` on `#1A1E3F`: ~5.8:1 (WCAG AA for large text / UI)
+- Badge text `#00D9FF` on `rgba(0,217,255,0.15)` (dark): ~6.5:1 (WCAG AA)
+- Yellow `#FFBE0B` on dark: ~8:1 (excellent contrast)
 
 ### Interactive States
-- **Default**: Standard appearance
-- **Hover**: Color shift to sage/brown, subtle translateY on cards
-- **Active**: scale(0.97), darker background
-- **Focus**: Sage green outline
-- **Disabled**: `#B0A89E` text, opacity 0.6
+- **Default**: Standard appearance, subtle border
+- **Hover**: Color shift to cyan/pink, shadow intensification, slight elevation (translateY)
+- **Active**: scale(0.96), darker background tint
+- **Focus**: Cyan outline + glow effect, clearly visible
+- **Disabled**: `#7A8399` text, opacity 0.5, cursor not-allowed
+- **Loading**: Spinner animation using cyan + pink gradient
 
 ## 9. Agent Prompt Guide
 
 ### Quick Color Reference
 ```
-Background:       #F9F5F0  (cream)
-Alt Background:   #EDE8E1  (cream mid, section fills)
-Card Surface:     #FFFFFF
-Primary Text:     #2C2C2C
-Secondary Text:   #7A7068
-Muted Text:       #B0A89E
-Primary Accent:   #7B9E87  (sage green — CTA, links, focus)
-Accent Hover:     #5C7A68
-Secondary Accent: #C4956A  (warm brown — tags, decoration)
-Border:           1px solid rgba(0,0,0,0.08)
-Heading Font:     Lora (serif)
-Body Font:        Inter (sans-serif)
+Background:       #0A0E27  (deep dark)
+Surface Light:    #1A1E3F  (card/container fill)
+Surface Medium:   #252D4A  (alternate fill)
+Text Bright:      #F5F7FA  (primary text)
+Text Secondary:   #B8BED1  (secondary text)
+Text Muted:       #7A8399  (disabled/meta)
+Primary Accent:   #00D9FF  (cyan — CTA, links, focus) ✨
+Accent Hover:     #00A8CC  (darker cyan)
+Secondary Accent: #FF006E  (neon pink — decorative, hover)
+Tertiary Accent:  #FFBE0B  (electric yellow — tags, warnings)
+Border:           1px solid rgba(0,217,255,0.15)
+Heading Font:     Outfit (bold, geometric, modern)
+Body Font:        Geist (clean, friendly, readable)
 ```
 
 ### Example Component Prompts
-- "Hero section on cream background `#F9F5F0`. Headline 56px Lora weight 700, line-height 1.10, letter-spacing -1.5px, color `#2C2C2C`. Lead text 18px Inter weight 400, line-height 1.65, color `#7A7068`. CTA button: sage green `#7B9E87`, radius 6px, padding 10px 20px, white text."
-- "Blog post card: white background, `1px solid rgba(0,0,0,0.08)` border, radius 12px, warm card shadow. Title 18px Lora weight 600, `#2C2C2C`. Meta (date, category) Inter 14px weight 500, `#7A7068`. Tag pill: `#EEF3F0` bg, `#5C7A68` text, 9999px radius, Inter 12px weight 600."
-- "Navigation: cream background `#F9F5F0`, sticky, backdrop-blur. Logo Lora 20px weight 700. Links Inter 15px weight 500, `#2C2C2C`, hover `#7B9E87`. CTA sage green pill button right-aligned."
-- "Blockquote: Lora italic 18px, color `#7A7068`, border-left 3px solid `#7B9E87`, padding-left 20px, margin 32px 0."
-- "Card grid section: white cards on cream background. 3-column grid, 24px gap. Section vertical padding 80px."
+- "Hero section on dark background `#0A0E27`. Headline 64px Outfit weight 800, line-height 1.05, letter-spacing -1.2px, color `#F5F7FA`. Subheadline 20px Geist weight 500, color `#B8BED1`. CTA button: cyan `#00D9FF`, dark text, radius 8px, padding 12px 24px, weight 600."
+- "Blog post card: `#1A1E3F` background, `1px solid rgba(0,217,255,0.15)` border, radius 12px, cyan glow shadow. Title 20px Geist weight 600, `#F5F7FA`. Meta (date, category) Geist 14px weight 400, `#B8BED1`. Tag pill: cyan tint bg `rgba(0,217,255,0.15)`, cyan text `#00D9FF`, 9999px radius, Geist 12px weight 600."
+- "Navigation: dark background `#0A0E27`, sticky, backdrop-blur 12px. Logo Outfit 24px weight 800, cyan `#00D9FF`. Links Geist 15px weight 600, `#F5F7FA`, hover `#00D9FF`. CTA cyan button right-aligned."
+- "Blockquote: Geist 16px italic, color `#B8BED1`, border-left 4px solid `#FF006E`, padding-left 20px, background `rgba(255,0,110,0.08)`, margin 32px 0."
+- "Card grid section: `#1A1E3F` cards on `#0A0E27` background. 3-column grid, 20px gap. Section vertical padding 100px."
+- "Input field: `#252D4A` background, `#F5F7FA` text, `1px solid rgba(0,217,255,0.15)` border, 12px 16px padding, radius 8px. Focus: `2px solid #00D9FF` outline with glow."
 
 ### Iteration Guide
-1. Always use cream (`#F9F5F0`) as background — never cold white as the page canvas
-2. Lora on ALL headings — this is the blog's typographic identity
-3. Sage green (`#7B9E87`) is the only saturated UI color (equivalent to Notion Blue)
-4. Warm brown (`#C4956A`) is decorative only — tags, hover accents, not primary actions
-5. Borders are soft: `rgba(0,0,0,0.08)` — lighter than Notion's 0.1
-6. Shadows use `rgba(44,44,44,...)` not `rgba(0,0,0,...)` for warmth
-7. Body line-height 1.70–1.80 — long-form reading needs more room than UI does
-8. Tags always as pill badges (9999px) in sage or brown tints
+1. Use `#0A0E27` as page background — dark, modern, sophisticated
+2. Outfit on ALL primary headings — bold, geometric, 2026 energy
+3. Geist on all body and secondary headings — clean, modern, readable
+4. Cyan (`#00D9FF`) is the primary accent — pops on dark, high energy
+5. Pink (`#FF006E`) and yellow (`#FFBE0B`) are decorative — hover states, tags, secondary accents
+6. Borders use cyan tint: `rgba(0,217,255,0.15)` — cohesive, not harsh
+7. Shadows are cyan-tinted, low opacity — modern, subtle depth
+8. High contrast is key — bright text on dark = legibility + modern aesthetic
+9. Spacing is tighter & more modern than warm minimalism — 4px base unit
 
 ## 10. Component Library (shadcn/ui)
 
-shadcn/ui provides the component foundation. All components live in `src/components/ui/` and are fully customized to use this design system's tokens — no CSS variable layer, direct Tailwind class usage.
+shadcn/ui provides the component foundation. All components live in `src/components/ui/` and are fully customized to use this design system's tokens.
 
 ### Installed Components
 
 | Component | File | Usage |
 |-----------|------|-------|
-| `Button` | `ui/button.tsx` | CTAs and actions. Variants: `default` (sage green), `secondary` (warm brown outline), `outline`, `ghost`, `link` |
-| `Badge` | `ui/badge.tsx` | Category tags, status pills. Variants: `default` (sage), `secondary` (brown), `outline` |
+| `Button` | `ui/button.tsx` | CTAs and actions. Variants: `default` (cyan), `secondary` (pink outline), `tertiary` (ghost), `outline` |
+| `Badge` | `ui/badge.tsx` | Category tags, status pills. Variants: `cyan`, `pink`, `yellow` |
 | `Card` | `ui/card.tsx` | Content containers. Sub-components: `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter` |
-| `Sheet` | `ui/sheet.tsx` | Slide-in drawer panel (mobile nav). Sides: `top`, `bottom`, `left`, `right`. Powered by Radix Dialog |
-| `Separator` | `ui/separator.tsx` | Horizontal/vertical dividers. Powered by Radix Separator |
+| `Sheet` | `ui/sheet.tsx` | Slide-in drawer panel (mobile nav). Sides: `top`, `bottom`, `left`, `right` |
+| `Separator` | `ui/separator.tsx` | Horizontal/vertical dividers with cyan tint |
 
 ### Design Token Mapping
 
-Components use existing Tailwind tokens directly:
+Components use Tailwind tokens directly:
 
 ```
-Button default      →  bg-sage + text-white, hover:bg-sage-dark
-Button secondary    →  border-brown + text-brown, hover:bg-brown-light
-Badge default       →  bg-sage-light + text-sage-dark
-Badge secondary     →  bg-brown-light + text-brown-dark
-Card                →  bg-surface + border-border + shadow-card
-Sheet panel         →  bg-cream + shadow-deep
-Separator           →  bg-border (h-px)
-Focus ring          →  ring-sage (all interactive elements)
+Button default      →  bg-cyan + text-dark, hover:bg-cyan-dark
+Button secondary    →  border-pink + text-pink, hover:bg-pink-light
+Badge cyan          →  bg-cyan-light + text-cyan
+Badge pink          →  bg-pink-light + text-pink
+Badge yellow        →  bg-yellow-light + text-yellow
+Card                →  bg-surface-light + border-cyan-whisper + shadow-card-cyan
+Sheet panel         →  bg-dark + shadow-deep-cyan
+Separator           →  bg-cyan-whisper (h-px)
+Focus ring          →  ring-cyan (all interactive elements)
 ```
 
 ### `cn()` Utility
 
-`src/lib/utils.ts` exports `cn()` (clsx + tailwind-merge). Use it in all React components for safe class composition:
+`src/lib/utils.ts` exports `cn()` (clsx + tailwind-merge). Use it in all React components:
 ```ts
 import { cn } from '@/lib/utils';
 cn('base-class', condition && 'conditional-class', props.className)
@@ -337,8 +368,13 @@ cn('base-class', condition && 'conditional-class', props.className)
 
 ### Adding New Components
 
-Copy from [ui.shadcn.com](https://ui.shadcn.com) or use the CLI:
+Copy from [ui.shadcn.com](https://ui.shadcn.com):
 ```bash
 npx shadcn@latest add <component>
 ```
-After adding, replace all default CSS variable references (`bg-background`, `text-foreground`, `bg-primary`, etc.) with the equivalent tokens from this design system (`bg-cream`, `text-ink`, `bg-sage`, etc.).
+Replace all default CSS variable references with this design system's tokens:
+- `bg-background` → `bg-dark` (`#0A0E27`)
+- `text-foreground` → `text-bright` (`#F5F7FA`)
+- `bg-primary` → `bg-cyan` (`#00D9FF`)
+- `bg-secondary` → `bg-pink` (`#FF006E`) or `bg-yellow` (`#FFBE0B`)
+- `border-border` → `border-cyan-whisper` (`rgba(0,217,255,0.15)`)

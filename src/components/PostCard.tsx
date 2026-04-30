@@ -23,7 +23,7 @@ export function PostCard({ slug, title, publishDate, category, excerpt, coverIma
   const cta = readMoreLabel[lang];
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-deep">
+    <article className="flex flex-col overflow-hidden rounded-xl border border-border bg-surface-light shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-deep hover:border-cyan/30">
       <a
         href={`${basePath}/${slug}`}
         className="block aspect-video overflow-hidden"
@@ -41,32 +41,32 @@ export function PostCard({ slug, title, publishDate, category, excerpt, coverIma
             decoding="async"
           />
         ) : (
-          <div className="h-full w-full bg-cream-alt" />
+          <div className="h-full w-full bg-surface-medium" />
         )}
       </a>
 
       <CardContent className="flex flex-1 flex-col gap-3 pt-6">
         <div className="flex items-center gap-3">
           <Badge>{catLabel}</Badge>
-          <time className="text-sm font-medium text-muted" dateTime={publishDate}>
+          <time className="text-sm font-medium text-secondary" dateTime={publishDate}>
             {date}
           </time>
         </div>
 
-        <h2 className="font-serif text-lg font-semibold leading-snug text-ink">
+        <h2 className="text-lg font-semibold leading-snug text-bright">
           <a
             href={`${basePath}/${slug}`}
-            className="transition-colors duration-150 hover:text-sage focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-sage"
+            className="transition-colors duration-150 hover:text-cyan focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-cyan"
           >
             {title}
           </a>
         </h2>
 
-        <p className="line-clamp-3 flex-1 text-base leading-relaxed text-muted">{excerpt}</p>
+        <p className="line-clamp-3 flex-1 text-base leading-relaxed text-secondary">{excerpt}</p>
 
         <a
           href={`${basePath}/${slug}`}
-          className="mt-1 text-sm font-semibold text-sage transition-colors duration-150 hover:text-sage-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage"
+          className="mt-1 text-sm font-semibold text-cyan transition-colors duration-150 hover:text-cyan-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
           aria-label={`${cta}: ${title}`}
         >
           {cta}

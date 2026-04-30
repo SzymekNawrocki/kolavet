@@ -33,17 +33,17 @@ const posts = allPosts
 
   <main>
     <!-- Hero -->
-    <section class="py-20 text-center sm:py-12">
-      <div class="mx-auto flex max-w-[720px] flex-col items-center gap-6 px-6">
+    <section class="py-24 text-center sm:py-14">
+      <div class="mx-auto flex max-w-[768px] flex-col items-center gap-6 px-6">
 
         <Badge>{heroBadge}</Badge>
 
-        <h1 class="font-serif text-[3.5rem] font-bold leading-[1.1] tracking-[-1.5px] text-ink sm:text-[2.75rem] sm:tracking-[-1px]">
+        <h1 class="font-serif text-[4rem] font-extrabold leading-[1.05] tracking-[-1.2px] text-bright sm:text-[3rem] sm:tracking-[-0.8px]">
           {heroHeadline}
         </h1>
 
         {heroSubtext && (
-          <p class="max-w-[560px] text-lg leading-relaxed text-muted">
+          <p class="max-w-[580px] text-lg leading-relaxed text-secondary">
             {heroSubtext}
           </p>
         )}
@@ -56,23 +56,23 @@ const posts = allPosts
     </section>
 
     <!-- Latest posts -->
-    <section class="pb-20">
-      <div class="mx-auto max-w-[1120px] px-6">
+    <section class="pb-24">
+      <div class="mx-auto max-w-[1200px] px-6">
 
         <div class="mb-8 flex items-baseline justify-between gap-4">
-          <h2 class="font-serif text-[2.25rem] font-bold leading-snug tracking-[-0.75px] text-ink">
+          <h2 class="font-serif text-[2.5rem] font-bold leading-snug tracking-[-0.6px] text-bright">
             {blogHeading}
           </h2>
           <a
             href="/blog"
-            class="shrink-0 text-sm font-semibold text-sage transition-colors hover:text-sage-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage"
+            class="shrink-0 text-sm font-semibold text-cyan transition-colors hover:text-cyan-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
           >
             {blogCta} →
           </a>
         </div>
 
         {posts.length > 0 ? (
-          <ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3" role="list">
+          <ul class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3" role="list">
             {posts.map((post) => (
               <li>
                 <PostCard
@@ -87,7 +87,7 @@ const posts = allPosts
             ))}
           </ul>
         ) : (
-          <p class="text-base text-muted">Artykuły już wkrótce.</p>
+          <p class="text-base text-secondary">Artykuły już wkrótce.</p>
         )}
 
       </div>

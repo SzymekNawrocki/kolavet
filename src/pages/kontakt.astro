@@ -25,14 +25,14 @@ const { Content: BodyContent } = bodyEntry ? await render(bodyEntry) : { Content
 >
   <Nav />
 
-  <main class="mx-auto max-w-[720px] px-6 py-16">
+  <main class="mx-auto max-w-[768px] px-6 py-16">
 
     <header class="mb-10">
-      <h1 class="font-serif text-[2.75rem] font-bold leading-tight tracking-[-1px] text-ink">
+      <h1 class="font-serif text-[3rem] font-bold leading-tight tracking-[-0.8px] text-bright">
         {heading}
       </h1>
       {intro && (
-        <p class="mt-4 text-lg leading-relaxed text-muted">{intro}</p>
+        <p class="mt-4 text-lg leading-relaxed text-secondary">{intro}</p>
       )}
     </header>
 
@@ -41,7 +41,7 @@ const { Content: BodyContent } = bodyEntry ? await render(bodyEntry) : { Content
         {phone && (
           <a
             href={`tel:${phone.replace(/\s/g, '')}`}
-            class="text-base font-medium text-ink transition-colors hover:text-sage focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage"
+            class="text-base font-medium text-bright transition-colors hover:text-cyan focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
           >
             {phone}
           </a>
@@ -49,7 +49,7 @@ const { Content: BodyContent } = bodyEntry ? await render(bodyEntry) : { Content
         {email && (
           <a
             href={`mailto:${email}`}
-            class="text-base font-semibold text-sage transition-colors hover:text-sage-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage"
+            class="text-base font-semibold text-cyan transition-colors hover:text-cyan-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
           >
             {email}
           </a>
@@ -58,7 +58,7 @@ const { Content: BodyContent } = bodyEntry ? await render(bodyEntry) : { Content
     )}
 
     {BodyContent && (
-      <div class="prose prose-stone max-w-none prose-headings:font-serif prose-headings:text-ink prose-a:text-sage prose-a:no-underline hover:prose-a:text-sage-dark">
+      <div class="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-bright prose-a:text-cyan prose-a:no-underline hover:prose-a:text-cyan-dark">
         <BodyContent />
       </div>
     )}

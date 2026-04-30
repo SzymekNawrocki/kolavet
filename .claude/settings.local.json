@@ -13,7 +13,9 @@
       "Bash(npx tsc *)",
       "WebFetch(domain:kolavet.pl)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(cd C:\\\\\\\\kolavet)",
+      "Bash(git *)"
     ]
   }
 }

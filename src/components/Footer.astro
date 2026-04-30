@@ -19,9 +19,9 @@ const contactLink = links.find(l => l.href === contactPaths[currentLocale]) ?? {
 
 <footer class="mt-20">
   <Separator />
-  <div class="mx-auto flex max-w-[1120px] flex-wrap items-center justify-between gap-6 px-6 py-8">
+  <div class="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-6 px-6 py-8">
 
-    <p class="text-sm font-medium text-muted">
+    <p class="text-sm font-medium text-secondary">
       &copy; {year} Michalina — Kolavet.
     </p>
 
@@ -30,7 +30,7 @@ const contactLink = links.find(l => l.href === contactPaths[currentLocale]) ?? {
         <li>
           <a
             href={aboutLink.href}
-            class="text-sm font-medium text-muted transition-colors duration-150 hover:text-sage focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage"
+            class="text-sm font-medium text-secondary transition-colors duration-150 hover:text-cyan focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
           >
             {aboutLink.label}
           </a>
@@ -38,7 +38,7 @@ const contactLink = links.find(l => l.href === contactPaths[currentLocale]) ?? {
         <li>
           <a
             href={contactLink.href}
-            class="text-sm font-medium text-muted transition-colors duration-150 hover:text-sage focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage"
+            class="text-sm font-medium text-secondary transition-colors duration-150 hover:text-cyan focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
           >
             {contactLink.label}
           </a>
