@@ -59,5 +59,10 @@ export function getLocalePaths(currentPath: string): Record<Locale, string> {
   // Trim trailing slash from normalised path (except root)
   const normalised = path.length > 1 ? path.replace(/\/$/, '') : path;
 
+  // Blog post pages have no EN/DE equivalent — fall back to the blog listing
+  if (normalised.startsWith('/blog/')) {
+    return { pl: '/blog', en: '/en/blog', de: '/de/blog' };
+  }
+
   return pageEquivalents[normalised] ?? { pl: '/', en: '/en/', de: '/de/' };
 }
