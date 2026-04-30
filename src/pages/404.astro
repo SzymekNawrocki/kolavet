@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { Button } from '../components/ui/button';
+---
+
+<BaseLayout
+  title="404 — Strona nie istnieje | Kolavet"
+  description="Ta strona nie istnieje."
+>
+  <Nav />
+
+  <main class="mx-auto flex max-w-[768px] flex-col items-center justify-center px-6 py-32 text-center">
+    <p class="font-serif text-[6rem] font-extrabold leading-none tracking-[-2px] text-cyan opacity-20 select-none">
+      404
+    </p>
+    <h1 class="mt-6 font-serif text-[2rem] font-bold tracking-[-0.5px] text-bright">
+      Strona nie istnieje
+    </h1>
+    <p class="mt-4 text-lg text-secondary">
+      Nie możemy znaleźć tego, czego szukasz. Może wróć na stronę główną?
+    </p>
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+      <Button asChild>
+        <a href="/">Strona główna</a>
+      </Button>
+      <Button variant="outline" asChild>
+        <a href="/blog">Blog</a>
+      </Button>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

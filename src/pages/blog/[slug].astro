@@ -1,10 +1,14 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import { Badge } from '../../components/ui/badge';
+import { PostCard } from '../../components/PostCard';
 import { categoryLabels } from '../../lib/i18n';
+import { calculateReadingTime } from '../../lib/reading-time';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -16,6 +20,39 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+
+let rawContent = '';
+try {
+  rawContent = fs.readFileSync(
+    path.join(process.cwd(), 'src/content/posts', `${post.id}.mdoc`),
+    'utf-8'
+  );
+} catch {}
+const readingTime = calculateReadingTime(rawContent, 'pl');
+
+const allPosts = await getCollection('posts');
+const related = allPosts
+  .filter(p => p.id !== post.id && p.data.category === post.data.category)
+  .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
+  .slice(0, 3)
+  .map(p => {
+    let raw = '';
+    try {
+      raw = fs.readFileSync(
+        path.join(process.cwd(), 'src/content/posts', `${p.id}.mdoc`),
+        'utf-8'
+      );
+    } catch {}
+    return {
+      slug:        p.id,
+      title:       p.data.title,
+      publishDate: p.data.publishDate,
+      category:    p.data.category,
+      excerpt:     p.data.excerpt,
+      coverImage:  p.data.coverImage ?? null,
+      readingTime: calculateReadingTime(raw, 'pl'),
+    };
+  });
 
 const date = new Date(post.data.publishDate).toLocaleDateString('pl-PL', {
   year: 'numeric', month: 'long', day: 'numeric',
@@ -49,13 +86,13 @@ const jsonLd = {
   <main>
     <article class="mx-auto max-w-[768px] px-6 py-16">
 
-      <!-- Header -->
       <header class="mb-10">
-        <div class="mb-4 flex items-center gap-3">
+        <div class="mb-4 flex flex-wrap items-center gap-3">
           <Badge>{categoryLabels.pl[post.data.category] ?? post.data.category}</Badge>
           <time class="text-sm font-medium text-secondary" datetime={post.data.publishDate}>
             {date}
           </time>
+          <span class="text-sm text-muted">{readingTime}</span>
         </div>
 
         <h1 class="font-serif text-[3rem] font-bold leading-[1.10] tracking-[-0.8px] text-bright sm:text-[2.25rem]">
@@ -67,7 +104,6 @@ const jsonLd = {
         </p>
       </header>
 
-      <!-- Cover image -->
       {post.data.coverImage && (
         <img
           src={post.data.coverImage}
@@ -80,12 +116,34 @@ const jsonLd = {
         />
       )}
 
-      <!-- Body -->
       <div class="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-bright prose-a:text-cyan prose-a:no-underline hover:prose-a:text-cyan-dark prose-blockquote:border-l-pink prose-blockquote:italic prose-blockquote:text-secondary prose-code:rounded prose-code:bg-surface-medium prose-code:text-cyan prose-img:rounded-xl">
         <Content />
       </div>
 
     </article>
+
+    {related.length > 0 && (
+      <section class="mx-auto max-w-[1200px] border-t border-border px-6 py-16">
+        <h2 class="mb-8 font-serif text-[1.75rem] font-bold tracking-[-0.4px] text-bright">
+          Podobne artykuły
+        </h2>
+        <ul class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3" role="list">
+          {related.map(p => (
+            <li>
+              <PostCard
+                slug={p.slug}
+                title={p.title}
+                publishDate={p.publishDate}
+                category={p.category}
+                excerpt={p.excerpt}
+                coverImage={p.coverImage}
+                readingTime={p.readingTime}
+              />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
   </main>
 
   <Footer />

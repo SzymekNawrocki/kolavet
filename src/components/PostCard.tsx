@@ -4,17 +4,18 @@ import { CardContent } from './ui/card';
 import { categoryLabels, readMoreLabel, type Locale } from '@/lib/i18n';
 
 interface PostCardProps {
-  slug:        string;
-  title:       string;
-  publishDate: string;
-  category:    string;
-  excerpt:     string;
-  coverImage:  string | null;
-  basePath?:   string;
-  lang?:       Locale;
+  slug:         string;
+  title:        string;
+  publishDate:  string;
+  category:     string;
+  excerpt:      string;
+  coverImage:   string | null;
+  readingTime?: string;
+  basePath?:    string;
+  lang?:        Locale;
 }
 
-export function PostCard({ slug, title, publishDate, category, excerpt, coverImage, basePath = '/blog', lang = 'pl' }: PostCardProps) {
+export function PostCard({ slug, title, publishDate, category, excerpt, coverImage, readingTime, basePath = '/blog', lang = 'pl' }: PostCardProps) {
   const date = new Date(publishDate).toLocaleDateString(lang === 'pl' ? 'pl-PL' : lang === 'de' ? 'de-DE' : 'en-GB', {
     year: 'numeric', month: 'long', day: 'numeric',
   });
@@ -46,11 +47,14 @@ export function PostCard({ slug, title, publishDate, category, excerpt, coverIma
       </a>
 
       <CardContent className="flex flex-1 flex-col gap-3 pt-6">
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <Badge>{catLabel}</Badge>
           <time className="text-sm font-medium text-secondary" dateTime={publishDate}>
             {date}
           </time>
+          {readingTime && (
+            <span className="text-sm text-muted">{readingTime}</span>
+          )}
         </div>
 
         <h2 className="text-lg font-semibold leading-snug text-bright">

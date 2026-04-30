@@ -1,35 +1,52 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
-import ArticleGrid from '../../components/ArticleGrid.astro';
+import { BlogFilter } from '../../components/BlogFilter';
+import { calculateReadingTime } from '../../lib/reading-time';
 
 const allPosts = await getCollection('posts');
-const posts = allPosts.sort(
-  (a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
-);
+const posts = allPosts
+  .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
+  .map(post => {
+    let rawContent = '';
+    try {
+      rawContent = fs.readFileSync(
+        path.join(process.cwd(), 'src/content/posts', `${post.id}.mdoc`),
+        'utf-8'
+      );
+    } catch {}
+    return {
+      slug:        post.id,
+      title:       post.data.title,
+      publishDate: post.data.publishDate,
+      category:    post.data.category,
+      excerpt:     post.data.excerpt,
+      coverImage:  post.data.coverImage ?? null,
+      readingTime: calculateReadingTime(rawContent, 'pl'),
+    };
+  });
 ---
 
 <BaseLayout
   title="Blog — Kolavet"
   description="Wszystkie artykuły o zdrowiu zwierząt, opiece nad pupilami i poradach weterynaryjnych."
 >
+  <link rel="alternate" type="application/rss+xml" title="Kolavet RSS" href="/rss.xml" slot="head" />
+
   <Nav />
 
   <main class="mx-auto max-w-[1200px] px-6 py-16">
-
     <header class="mb-12">
       <h1 class="font-serif text-[3rem] font-bold leading-tight tracking-[-0.8px] text-bright">
         Blog
       </h1>
-      <p class="mt-3 text-lg text-secondary">
-        {posts.length} {posts.length === 1 ? 'artykuł' : 'artykułów'}
-      </p>
     </header>
 
-    <ArticleGrid posts={posts} />
-
+    <BlogFilter posts={posts} lang="pl" client:load />
   </main>
 
   <Footer />
