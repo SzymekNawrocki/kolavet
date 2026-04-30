@@ -1,0 +1,106 @@
+---
+import { getCollection } from 'astro:content';
+import { createReader } from '@keystatic/core/reader';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { PostCard } from '../../components/PostCard';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { LOCALES, type Locale } from '../../lib/i18n';
+import keystaticConfig from '../../../keystatic.config';
+
+export function getStaticPaths() {
+  return LOCALES.filter(l => l !== 'pl').map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const hp = await reader.singletons.homePage.read();
+
+const locData = lang === 'en'
+  ? { badge: hp?.en_heroBadgeLabel, headline: hp?.en_heroHeadline, subtext: hp?.en_heroSubtext, cta: hp?.en_heroCtaLabel, blogH: hp?.en_blogSectionHeading, blogCta: hp?.en_blogCtaLabel }
+  : { badge: hp?.de_heroBadgeLabel, headline: hp?.de_heroHeadline, subtext: hp?.de_heroSubtext, cta: hp?.de_heroCtaLabel, blogH: hp?.de_blogSectionHeading, blogCta: hp?.de_blogCtaLabel };
+
+const heroBadge    = locData.badge    ?? hp?.heroBadgeLabel    ?? '';
+const heroHeadline = locData.headline ?? hp?.heroHeadline      ?? '';
+const heroSubtext  = locData.subtext  ?? hp?.heroSubtext       ?? '';
+const heroCtaLabel = locData.cta      ?? hp?.heroCtaLabel      ?? 'Browse articles';
+const blogHeading  = locData.blogH    ?? hp?.blogSectionHeading ?? '';
+const blogCta      = locData.blogCta  ?? hp?.blogCtaLabel      ?? 'Show all';
+
+const allPosts = await getCollection('posts');
+const posts = allPosts
+  .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
+  .slice(0, 3);
+
+const descriptions: Record<Locale, string> = {
+  pl: '',
+  en: 'Veterinary advice, animal health and pet care — written with passion by a veterinarian.',
+  de: 'Tierärztliche Ratschläge, Tiergesundheit und Haustierpflege — mit Leidenschaft von einer Tierärztin verfasst.',
+};
+---
+
+<BaseLayout
+  title="Kolavet — Veterinary blog"
+  description={descriptions[lang]}
+  lang={lang}
+>
+  <Nav />
+
+  <main>
+    <section class="py-20 text-center sm:py-12">
+      <div class="mx-auto flex max-w-[720px] flex-col items-center gap-6 px-6">
+        <Badge>{heroBadge}</Badge>
+        <h1 class="font-serif text-[3.5rem] font-bold leading-[1.1] tracking-[-1.5px] text-ink sm:text-[2.75rem] sm:tracking-[-1px]">
+          {heroHeadline}
+        </h1>
+        {heroSubtext && (
+          <p class="max-w-[560px] text-lg leading-relaxed text-muted">{heroSubtext}</p>
+        )}
+        <Button asChild>
+          <a href={`/${lang}/blog`}>{heroCtaLabel}</a>
+        </Button>
+      </div>
+    </section>
+
+    <section class="pb-20">
+      <div class="mx-auto max-w-[1120px] px-6">
+        <div class="mb-8 flex items-baseline justify-between gap-4">
+          <h2 class="font-serif text-[2.25rem] font-bold leading-snug tracking-[-0.75px] text-ink">
+            {blogHeading}
+          </h2>
+          <a
+            href={`/${lang}/blog`}
+            class="shrink-0 text-sm font-semibold text-sage transition-colors hover:text-sage-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage"
+          >
+            {blogCta} →
+          </a>
+        </div>
+        {posts.length > 0 ? (
+          <ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3" role="list">
+            {posts.map((post) => (
+              <li>
+                <PostCard
+                  slug={post.data.title.slug}
+                  title={post.data.title.name}
+                  publishDate={post.data.publishDate}
+                  category={post.data.category}
+                  excerpt={post.data.excerpt}
+                  coverImage={post.data.coverImage}
+                  basePath="/blog"
+                  lang={lang}
+                />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="text-base text-muted">{lang === 'de' ? 'Artikel erscheinen bald.' : 'Articles coming soon.'}</p>
+        )}
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

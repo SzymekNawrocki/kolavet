@@ -3,6 +3,8 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
+import { Badge } from '../../components/ui/badge';
+import { categoryLabels } from '../../lib/i18n';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -14,13 +16,6 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-
-const categoryLabels: Record<string, string> = {
-  psy:        'Psy',
-  koty:       'Koty',
-  egzotyczne: 'Egzotyczne',
-  porady:     'Porady',
-};
 
 const date = new Date(post.data.publishDate).toLocaleDateString('pl-PL', {
   year: 'numeric', month: 'long', day: 'numeric',
@@ -57,9 +52,7 @@ const jsonLd = {
       <!-- Header -->
       <header class="mb-10">
         <div class="mb-4 flex items-center gap-3">
-          <span class="rounded-full bg-sage-light px-3 py-1 text-xs font-semibold uppercase tracking-widest text-sage-dark">
-            {categoryLabels[post.data.category] ?? post.data.category}
-          </span>
+          <Badge>{categoryLabels.pl[post.data.category] ?? post.data.category}</Badge>
           <time class="text-sm font-medium text-muted" datetime={post.data.publishDate}>
             {date}
           </time>
