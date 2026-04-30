@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { PostCard } from './PostCard';
+import type { Locale } from '../lib/i18n';
+
+interface Props {
+  posts:        CollectionEntry<'posts'>[];
+  lang?:        Locale;
+  emptyMessage?: string;
+}
+
+const { posts, lang = 'pl', emptyMessage = 'Artykuły już wkrótce.' } = Astro.props;
+---
+
+{posts.length > 0 ? (
+  <ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3" role="list">
+    {posts.map((post) => (
+      <li>
+        <PostCard
+          slug={post.data.title.slug}
+          title={post.data.title.name}
+          publishDate={post.data.publishDate}
+          category={post.data.category}
+          excerpt={post.data.excerpt}
+          coverImage={post.data.coverImage}
+          lang={lang}
+        />
+      </li>
+    ))}
+  </ul>
+) : (
+  <p class="text-base text-muted">{emptyMessage}</p>
+)}

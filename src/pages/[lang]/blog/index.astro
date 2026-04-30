@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Nav from '../../../components/Nav.astro';
 import Footer from '../../../components/Footer.astro';
-import { PostCard } from '../../../components/PostCard';
+import ArticleGrid from '../../../components/ArticleGrid.astro';
 import { LOCALES, type Locale } from '../../../lib/i18n';
 
 export function getStaticPaths() {
@@ -17,19 +17,21 @@ const posts = allPosts.sort(
   (a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
 );
 
-const ui: Record<Locale, { title: string; description: string; heading: string; count: (n: number) => string }> = {
-  pl: { title: '', description: '', heading: 'Blog', count: n => `${n} artykułów` },
+const ui: Record<Locale, { title: string; description: string; heading: string; count: (n: number) => string; empty: string }> = {
+  pl: { title: '', description: '', heading: 'Blog', count: n => `${n} artykułów`, empty: 'Artykuły już wkrótce.' },
   en: {
     title: 'Blog — Kolavet',
     description: 'All articles on animal health, pet care and veterinary advice.',
     heading: 'Blog',
     count: n => `${n} ${n === 1 ? 'article' : 'articles'}`,
+    empty: 'Articles coming soon.',
   },
   de: {
     title: 'Blog — Kolavet',
     description: 'Alle Artikel zu Tiergesundheit, Haustierpflege und tierärztlichen Ratschlägen.',
     heading: 'Blog',
     count: n => `${n} ${n === 1 ? 'Artikel' : 'Artikel'}`,
+    empty: 'Artikel erscheinen bald.',
   },
 };
 
@@ -48,28 +50,7 @@ const t = ui[lang];
       <p class="mt-3 text-lg text-muted">{t.count(posts.length)}</p>
     </header>
 
-    {posts.length > 0 ? (
-      <ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3" role="list">
-        {posts.map((post) => (
-          <li>
-            <PostCard
-              slug={post.data.title.slug}
-              title={post.data.title.name}
-              publishDate={post.data.publishDate}
-              category={post.data.category}
-              excerpt={post.data.excerpt}
-              coverImage={post.data.coverImage}
-              basePath="/blog"
-              lang={lang}
-            />
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <p class="text-base text-muted">
-        {lang === 'de' ? 'Artikel erscheinen bald.' : 'Articles coming soon.'}
-      </p>
-    )}
+    <ArticleGrid posts={posts} lang={lang} emptyMessage={t.empty} />
 
   </main>
 

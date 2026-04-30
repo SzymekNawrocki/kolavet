@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
-import PostCard from '../../components/PostCard.astro';
+import ArticleGrid from '../../components/ArticleGrid.astro';
 
 const allPosts = await getCollection('posts');
 const posts = allPosts.sort(
@@ -28,24 +28,7 @@ const posts = allPosts.sort(
       </p>
     </header>
 
-    {posts.length > 0 ? (
-      <ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3" role="list">
-        {posts.map((post) => (
-          <li>
-            <PostCard
-              slug={post.data.title.slug}
-              title={post.data.title.name}
-              publishDate={post.data.publishDate}
-              category={post.data.category}
-              excerpt={post.data.excerpt}
-              coverImage={post.data.coverImage}
-            />
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <p class="text-base text-muted">Artykuły już wkrótce.</p>
-    )}
+    <ArticleGrid posts={posts} />
 
   </main>
 
