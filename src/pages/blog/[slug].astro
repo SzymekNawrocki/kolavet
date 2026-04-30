@@ -9,7 +9,7 @@ import { categoryLabels } from '../../lib/i18n';
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
   return posts.map((post) => ({
-    params: { slug: post.data.title.slug },
+    params: { slug: post.id },
     props:  { post },
   }));
 }
@@ -24,7 +24,7 @@ const date = new Date(post.data.publishDate).toLocaleDateString('pl-PL', {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
-  headline: post.data.title.name,
+  headline: post.data.title,
   description: post.data.excerpt,
   datePublished: post.data.publishDate,
   author: {
@@ -36,7 +36,7 @@ const jsonLd = {
 ---
 
 <BaseLayout
-  title={`${post.data.title.name} — Kolavet`}
+  title={`${post.data.title} — Kolavet`}
   description={post.data.excerpt}
   ogImage={post.data.coverImage ?? undefined}
   type="article"
@@ -59,7 +59,7 @@ const jsonLd = {
         </div>
 
         <h1 class="font-serif text-[2.75rem] font-bold leading-[1.15] tracking-[-1px] text-ink sm:text-[2rem]">
-          {post.data.title.name}
+          {post.data.title}
         </h1>
 
         <p class="mt-4 text-lg leading-relaxed text-muted">

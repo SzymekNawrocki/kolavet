@@ -1,0 +1,78 @@
+---
+import { getEntry, render } from 'astro:content';
+import { createReader } from '@keystatic/core/reader';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { LOCALES, type Locale } from '../../lib/i18n';
+import keystaticConfig from '../../../keystatic.config';
+
+export function getStaticPaths() {
+  return LOCALES.filter(l => l !== 'pl').map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const about = await reader.singletons.aboutMe.read();
+
+const locData = lang === 'en'
+  ? { heading: about?.en_heading, intro: about?.en_intro }
+  : { heading: about?.de_heading, intro: about?.de_intro };
+
+const heading = locData.heading ?? about?.heading ?? '';
+const intro   = locData.intro   ?? about?.intro   ?? '';
+const photo   = about?.photo ?? null;
+
+const bioEntry = lang === 'en'
+  ? await getEntry('pages', 'about/en_bio')
+  : await getEntry('pages', 'about/de_bio');
+const { Content: BioContent } = bioEntry ? await render(bioEntry) : { Content: null };
+
+const descriptions: Record<Locale, string> = {
+  pl: '',
+  en: 'Meet Michalina Kolarz — veterinarian and author of the Kolavet blog.',
+  de: 'Lerne Michalina Kolarz kennen — Tierärztin und Autorin des Kolavet-Blogs.',
+};
+---
+
+<BaseLayout
+  title={`${heading} — Kolavet`}
+  description={descriptions[lang]}
+  lang={lang}
+>
+  <Nav />
+
+  <main class="mx-auto max-w-[720px] px-6 py-16">
+
+    <header class="mb-10">
+      <h1 class="font-serif text-[2.75rem] font-bold leading-tight tracking-[-1px] text-ink">
+        {heading}
+      </h1>
+      {intro && (
+        <p class="mt-4 text-lg leading-relaxed text-muted">{intro}</p>
+      )}
+    </header>
+
+    {photo && (
+      <img
+        src={photo}
+        alt="Michalina Kolarz"
+        class="mb-10 aspect-square w-36 rounded-full border border-border object-cover shadow-card"
+        width="144"
+        height="144"
+        loading="eager"
+        decoding="async"
+      />
+    )}
+
+    {BioContent && (
+      <div class="prose prose-stone max-w-none prose-headings:font-serif prose-headings:text-ink prose-a:text-sage prose-a:no-underline hover:prose-a:text-sage-dark prose-blockquote:border-l-sage prose-blockquote:font-serif prose-blockquote:italic prose-blockquote:text-muted">
+        <BioContent />
+      </div>
+    )}
+
+  </main>
+
+  <Footer />
+</BaseLayout>

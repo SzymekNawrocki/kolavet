@@ -2,7 +2,18 @@
   "permissions": {
     "allow": [
       "Bash(npm install *)",
-      "Bash(npx astro *)"
+      "Bash(npx astro *)",
+      "Bash(timeout 15 npm run dev)",
+      "Bash(npm list *)",
+      "Bash(node -e \"console.log\\(require\\('@tailwindcss/vite/package.json'\\).version\\)\")",
+      "Bash(npm ls *)",
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:4321)",
+      "WebFetch(domain:localhost)",
+      "Bash(npx tsc *)",
+      "WebFetch(domain:kolavet.pl)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }

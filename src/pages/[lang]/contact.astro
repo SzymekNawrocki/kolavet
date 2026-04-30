@@ -1,0 +1,88 @@
+---
+import { getEntry, render } from 'astro:content';
+import { createReader } from '@keystatic/core/reader';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { LOCALES, type Locale } from '../../lib/i18n';
+import keystaticConfig from '../../../keystatic.config';
+
+export function getStaticPaths() {
+  return LOCALES.filter(l => l !== 'pl').map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const contact = await reader.singletons.contact.read();
+
+const locData = lang === 'en'
+  ? { heading: contact?.en_heading, intro: contact?.en_intro }
+  : { heading: contact?.de_heading, intro: contact?.de_intro };
+
+const heading = locData.heading ?? contact?.heading ?? '';
+const intro   = locData.intro   ?? contact?.intro   ?? '';
+const email   = contact?.email ?? '';
+const phone   = contact?.phone ?? '';
+
+const bodyEntry = lang === 'en'
+  ? await getEntry('pages', 'contact/en_body')
+  : await getEntry('pages', 'contact/de_body');
+const { Content: BodyContent } = bodyEntry ? await render(bodyEntry) : { Content: null };
+
+const descriptions: Record<Locale, string> = {
+  pl: '',
+  en: 'Contact Michalina Kolarz — author of the Kolavet blog.',
+  de: 'Kontaktiere Michalina Kolarz — Autorin des Kolavet-Blogs.',
+};
+---
+
+<BaseLayout
+  title={`${heading} — Kolavet`}
+  description={descriptions[lang]}
+  lang={lang}
+>
+  <Nav />
+
+  <main class="mx-auto max-w-[720px] px-6 py-16">
+
+    <header class="mb-10">
+      <h1 class="font-serif text-[2.75rem] font-bold leading-tight tracking-[-1px] text-ink">
+        {heading}
+      </h1>
+      {intro && (
+        <p class="mt-4 text-lg leading-relaxed text-muted">{intro}</p>
+      )}
+    </header>
+
+    {(phone || email) && (
+      <div class="mb-10 flex flex-col gap-3">
+        {phone && (
+          <a
+            href={`tel:${phone.replace(/\s/g, '')}`}
+            class="text-base font-medium text-ink transition-colors hover:text-sage focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage"
+          >
+            {phone}
+          </a>
+        )}
+        {email && (
+          <a
+            href={`mailto:${email}`}
+            class="text-base font-semibold text-sage transition-colors hover:text-sage-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage"
+          >
+            {email}
+          </a>
+        )}
+      </div>
+    )}
+
+    {BodyContent && (
+      <div class="prose prose-stone max-w-none prose-headings:font-serif prose-headings:text-ink prose-a:text-sage prose-a:no-underline hover:prose-a:text-sage-dark">
+        <BodyContent />
+      </div>
+    )}
+
+  </main>
+
+  <Footer />
+</BaseLayout>

@@ -34,7 +34,6 @@ export default config({
           label: 'Zdjęcie okładki',
           directory: 'public/images/posts',
           publicPath: '/images/posts/',
-          validation: { isRequired: true },
         }),
         content: fields.markdoc({ label: 'Treść' }),
       },
@@ -42,26 +41,76 @@ export default config({
   },
 
   singletons: {
+    homePage: singleton({
+      label: 'Strona główna',
+      path: 'src/content/pages/home',
+      schema: {
+        // Polish
+        heroBadgeLabel:    fields.text({ label: 'PL | Tekst odznaki hero' }),
+        heroHeadline:      fields.text({ label: 'PL | Nagłówek hero' }),
+        heroSubtext:       fields.text({ label: 'PL | Podtytuł hero', multiline: true }),
+        heroCtaLabel:      fields.text({ label: 'PL | Przycisk CTA' }),
+        blogSectionHeading: fields.text({ label: 'PL | Nagłówek sekcji bloga' }),
+        blogCtaLabel:      fields.text({ label: 'PL | „Pokaż wszystkie"' }),
+        // English
+        en_heroBadgeLabel:    fields.text({ label: 'EN | Hero badge text' }),
+        en_heroHeadline:      fields.text({ label: 'EN | Hero headline' }),
+        en_heroSubtext:       fields.text({ label: 'EN | Hero subtext', multiline: true }),
+        en_heroCtaLabel:      fields.text({ label: 'EN | CTA button' }),
+        en_blogSectionHeading: fields.text({ label: 'EN | Blog section heading' }),
+        en_blogCtaLabel:      fields.text({ label: 'EN | "Show all" label' }),
+        // German
+        de_heroBadgeLabel:    fields.text({ label: 'DE | Hero-Abzeichen' }),
+        de_heroHeadline:      fields.text({ label: 'DE | Hero-Überschrift' }),
+        de_heroSubtext:       fields.text({ label: 'DE | Hero-Untertext', multiline: true }),
+        de_heroCtaLabel:      fields.text({ label: 'DE | CTA-Schaltfläche' }),
+        de_blogSectionHeading: fields.text({ label: 'DE | Blog-Abschnittsüberschrift' }),
+        de_blogCtaLabel:      fields.text({ label: 'DE | „Alle anzeigen"' }),
+      },
+    }),
+
     aboutMe: singleton({
       label: 'O mnie',
       path: 'src/content/pages/about',
       schema: {
-        heading: fields.text({ label: 'Nagłówek' }),
-        bio: fields.markdoc({ label: 'Bio' }),
         photo: fields.image({
-          label: 'Zdjęcie',
+          label: 'Zdjęcie profilowe',
           directory: 'public/images',
           publicPath: '/images/',
         }),
+        // Polish
+        heading: fields.text({ label: 'PL | Nagłówek strony' }),
+        intro:   fields.text({ label: 'PL | Krótki opis', multiline: true }),
+        bio:     fields.markdoc({ label: 'PL | Bio (pełna treść)' }),
+        // English
+        en_heading: fields.text({ label: 'EN | Page heading' }),
+        en_intro:   fields.text({ label: 'EN | Short intro', multiline: true }),
+        en_bio:     fields.markdoc({ label: 'EN | Full bio' }),
+        // German
+        de_heading: fields.text({ label: 'DE | Seitenüberschrift' }),
+        de_intro:   fields.text({ label: 'DE | Kurze Einführung', multiline: true }),
+        de_bio:     fields.markdoc({ label: 'DE | Vollständige Bio' }),
       },
     }),
+
     contact: singleton({
       label: 'Kontakt',
       path: 'src/content/pages/contact',
       schema: {
-        heading: fields.text({ label: 'Nagłówek' }),
-        email: fields.text({ label: 'Email' }),
-        body: fields.markdoc({ label: 'Treść' }),
+        email: fields.text({ label: 'E-mail' }),
+        phone: fields.text({ label: 'Telefon' }),
+        // Polish
+        heading: fields.text({ label: 'PL | Nagłówek strony' }),
+        intro:   fields.text({ label: 'PL | Wstęp', multiline: true }),
+        body:    fields.markdoc({ label: 'PL | Dodatkowa treść' }),
+        // English
+        en_heading: fields.text({ label: 'EN | Page heading' }),
+        en_intro:   fields.text({ label: 'EN | Intro', multiline: true }),
+        en_body:    fields.markdoc({ label: 'EN | Additional content' }),
+        // German
+        de_heading: fields.text({ label: 'DE | Seitenüberschrift' }),
+        de_intro:   fields.text({ label: 'DE | Einführung', multiline: true }),
+        de_body:    fields.markdoc({ label: 'DE | Zusätzlicher Inhalt' }),
       },
     }),
   },

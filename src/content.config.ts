@@ -5,12 +5,17 @@ import { glob } from 'astro/loaders';
 const posts = defineCollection({
   loader: glob({ pattern: '**/*.mdoc', base: './src/content/posts' }),
   schema: z.object({
-    title: z.object({ name: z.string(), slug: z.string() }),
+    title: z.string(),
     publishDate: z.string(),
     category: z.enum(['psy', 'koty', 'egzotyczne', 'porady']),
     excerpt: z.string(),
-    coverImage: z.string().nullable(),
+    coverImage: z.string().nullish().transform(v => v ?? null),
   }),
 });
 
-export const collections = { posts };
+const pages = defineCollection({
+  loader: glob({ pattern: '*/*.mdoc', base: './src/content/pages' }),
+  schema: z.object({}),
+});
+
+export const collections = { posts, pages };

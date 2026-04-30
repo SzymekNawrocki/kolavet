@@ -6,8 +6,10 @@ import keystatic from '@keystatic/astro';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 export default defineConfig({
   site: 'https://kolavet.pl',
   vite: { plugins: [tailwindcss()] },
-  integrations: [react(), markdoc(), keystatic(), sitemap()],
+  integrations: [react(), markdoc(), ...(isDev ? [keystatic()] : []), sitemap()],
 });

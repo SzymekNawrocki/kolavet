@@ -297,3 +297,48 @@ Body Font:        Inter (sans-serif)
 6. Shadows use `rgba(44,44,44,...)` not `rgba(0,0,0,...)` for warmth
 7. Body line-height 1.70–1.80 — long-form reading needs more room than UI does
 8. Tags always as pill badges (9999px) in sage or brown tints
+
+## 10. Component Library (shadcn/ui)
+
+shadcn/ui provides the component foundation. All components live in `src/components/ui/` and are fully customized to use this design system's tokens — no CSS variable layer, direct Tailwind class usage.
+
+### Installed Components
+
+| Component | File | Usage |
+|-----------|------|-------|
+| `Button` | `ui/button.tsx` | CTAs and actions. Variants: `default` (sage green), `secondary` (warm brown outline), `outline`, `ghost`, `link` |
+| `Badge` | `ui/badge.tsx` | Category tags, status pills. Variants: `default` (sage), `secondary` (brown), `outline` |
+| `Card` | `ui/card.tsx` | Content containers. Sub-components: `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter` |
+| `Sheet` | `ui/sheet.tsx` | Slide-in drawer panel (mobile nav). Sides: `top`, `bottom`, `left`, `right`. Powered by Radix Dialog |
+| `Separator` | `ui/separator.tsx` | Horizontal/vertical dividers. Powered by Radix Separator |
+
+### Design Token Mapping
+
+Components use existing Tailwind tokens directly:
+
+```
+Button default      →  bg-sage + text-white, hover:bg-sage-dark
+Button secondary    →  border-brown + text-brown, hover:bg-brown-light
+Badge default       →  bg-sage-light + text-sage-dark
+Badge secondary     →  bg-brown-light + text-brown-dark
+Card                →  bg-surface + border-border + shadow-card
+Sheet panel         →  bg-cream + shadow-deep
+Separator           →  bg-border (h-px)
+Focus ring          →  ring-sage (all interactive elements)
+```
+
+### `cn()` Utility
+
+`src/lib/utils.ts` exports `cn()` (clsx + tailwind-merge). Use it in all React components for safe class composition:
+```ts
+import { cn } from '@/lib/utils';
+cn('base-class', condition && 'conditional-class', props.className)
+```
+
+### Adding New Components
+
+Copy from [ui.shadcn.com](https://ui.shadcn.com) or use the CLI:
+```bash
+npx shadcn@latest add <component>
+```
+After adding, replace all default CSS variable references (`bg-background`, `text-foreground`, `bg-primary`, etc.) with the equivalent tokens from this design system (`bg-cream`, `text-ink`, `bg-sage`, etc.).

@@ -17,8 +17,8 @@ const { posts, lang = 'pl', emptyMessage = 'Artykuły już wkrótce.' } = Astro.
     {posts.map((post) => (
       <li>
         <PostCard
-          slug={post.data.title.slug}
-          title={post.data.title.name}
+          slug={post.id}
+          title={post.data.title}
           publishDate={post.data.publishDate}
           category={post.data.category}
           excerpt={post.data.excerpt}

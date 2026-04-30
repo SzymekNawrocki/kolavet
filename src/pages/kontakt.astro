@@ -1,30 +1,68 @@
 ---
+import { getEntry, render } from 'astro:content';
+import { createReader } from '@keystatic/core/reader';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import keystaticConfig from '../../keystatic.config';
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const contact = await reader.singletons.contact.read();
+
+const heading = contact?.heading ?? 'Kontakt';
+const intro   = contact?.intro   ?? '';
+const email   = contact?.email   ?? '';
+const phone   = contact?.phone   ?? '';
+
+const bodyEntry = await getEntry('pages', 'contact/body');
+const { Content: BodyContent } = bodyEntry ? await render(bodyEntry) : { Content: null };
 ---
 
 <BaseLayout
-  title="Kontakt — Kolavet"
-  description="Skontaktuj się z Michaliną — autorką bloga Kolavet."
+  title={`${heading} — Kolavet`}
+  description="Skontaktuj się z Michaliną Kolarz — autorką bloga Kolavet."
+  lang="pl"
 >
   <Nav />
 
   <main class="mx-auto max-w-[720px] px-6 py-16">
+
     <header class="mb-10">
       <h1 class="font-serif text-[2.75rem] font-bold leading-tight tracking-[-1px] text-ink">
-        Kontakt
+        {heading}
       </h1>
+      {intro && (
+        <p class="mt-4 text-lg leading-relaxed text-muted">{intro}</p>
+      )}
     </header>
 
-    <div class="prose prose-stone max-w-none prose-headings:font-serif prose-headings:text-ink prose-a:text-sage hover:prose-a:text-sage-dark">
-      <p>
-        Masz pytanie dotyczące artykułu lub chcesz zaproponować temat? Napisz do mnie.
-      </p>
-      <p>
-        <a href="mailto:kontakt@kolavet.pl">kontakt@kolavet.pl</a>
-      </p>
-    </div>
+    {(phone || email) && (
+      <div class="mb-10 flex flex-col gap-3">
+        {phone && (
+          <a
+            href={`tel:${phone.replace(/\s/g, '')}`}
+            class="text-base font-medium text-ink transition-colors hover:text-sage focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage"
+          >
+            {phone}
+          </a>
+        )}
+        {email && (
+          <a
+            href={`mailto:${email}`}
+            class="text-base font-semibold text-sage transition-colors hover:text-sage-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage"
+          >
+            {email}
+          </a>
+        )}
+      </div>
+    )}
+
+    {BodyContent && (
+      <div class="prose prose-stone max-w-none prose-headings:font-serif prose-headings:text-ink prose-a:text-sage prose-a:no-underline hover:prose-a:text-sage-dark">
+        <BodyContent />
+      </div>
+    )}
+
   </main>
 
   <Footer />

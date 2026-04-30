@@ -1,14 +1,28 @@
 ---
 import { getCollection } from 'astro:content';
+import { createReader } from '@keystatic/core/reader';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import PostCard from '../components/PostCard.astro';
+import { PostCard } from '../components/PostCard';
+import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
+import keystaticConfig from '../../keystatic.config';
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const homePage = await reader.singletons.homePage.read();
+
+const heroBadge    = homePage?.heroBadgeLabel    ?? 'Blog weterynaryjny';
+const heroHeadline = homePage?.heroHeadline       ?? 'Zdrowie Twojego pupila w dobrych rękach';
+const heroSubtext  = homePage?.heroSubtext        ?? '';
+const heroCtaLabel = homePage?.heroCtaLabel       ?? 'Przeglądaj artykuły';
+const blogHeading  = homePage?.blogSectionHeading ?? 'Ostatnie artykuły';
+const blogCta      = homePage?.blogCtaLabel       ?? 'Pokaż wszystkie';
 
 const allPosts = await getCollection('posts');
-const posts = allPosts.sort(
-  (a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
-);
+const posts = allPosts
+  .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
+  .slice(0, 3);
 ---
 
 <BaseLayout
@@ -22,25 +36,21 @@ const posts = allPosts.sort(
     <section class="py-20 text-center sm:py-12">
       <div class="mx-auto flex max-w-[720px] flex-col items-center gap-6 px-6">
 
-        <span class="rounded-full bg-sage-light px-4 py-1 text-xs font-semibold uppercase tracking-widest text-sage-dark">
-          Blog weterynaryjny
-        </span>
+        <Badge>{heroBadge}</Badge>
 
         <h1 class="font-serif text-[3.5rem] font-bold leading-[1.1] tracking-[-1.5px] text-ink sm:text-[2.75rem] sm:tracking-[-1px]">
-          Zdrowie Twojego&nbsp;pupila<br />w dobrych rękach
+          {heroHeadline}
         </h1>
 
-        <p class="max-w-[560px] text-lg leading-relaxed text-muted">
-          Jestem Michalina — lekarz weterynarii. Piszę o zdrowiu zwierząt tak, żebyś
-          naprawdę rozumiał, co dzieje się z Twoim pupilem i jak mu najlepiej pomóc.
-        </p>
+        {heroSubtext && (
+          <p class="max-w-[560px] text-lg leading-relaxed text-muted">
+            {heroSubtext}
+          </p>
+        )}
 
-        <a
-          href="/blog"
-          class="rounded bg-sage px-5 py-2.5 text-[0.9375rem] font-medium text-white transition-colors duration-150 hover:bg-sage-dark active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage"
-        >
-          Przeglądaj artykuły
-        </a>
+        <Button asChild>
+          <a href="/blog">{heroCtaLabel}</a>
+        </Button>
 
       </div>
     </section>
@@ -49,17 +59,25 @@ const posts = allPosts.sort(
     <section class="pb-20">
       <div class="mx-auto max-w-[1120px] px-6">
 
-        <h2 class="mb-8 font-serif text-[2.25rem] font-bold leading-snug tracking-[-0.75px] text-ink">
-          Ostatnie artykuły
-        </h2>
+        <div class="mb-8 flex items-baseline justify-between gap-4">
+          <h2 class="font-serif text-[2.25rem] font-bold leading-snug tracking-[-0.75px] text-ink">
+            {blogHeading}
+          </h2>
+          <a
+            href="/blog"
+            class="shrink-0 text-sm font-semibold text-sage transition-colors hover:text-sage-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sage"
+          >
+            {blogCta} →
+          </a>
+        </div>
 
         {posts.length > 0 ? (
           <ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3" role="list">
             {posts.map((post) => (
               <li>
                 <PostCard
-                  slug={post.data.title.slug}
-                  title={post.data.title.name}
+                  slug={post.id}
+                  title={post.data.title}
                   publishDate={post.data.publishDate}
                   category={post.data.category}
                   excerpt={post.data.excerpt}

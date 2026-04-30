@@ -1,7 +1,8 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+@plugin "tailwindcss-animate";
 
-@source "../**/*.{astro,ts,js}";
+@source "../**/*.{astro,ts,tsx,js}";
 
 @theme {
   /* Fonts */

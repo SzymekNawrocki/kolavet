@@ -23,8 +23,11 @@ like advice from a vet you already know.
 
 - **Framework**: Astro 6 (static site generation, island architecture)
 - **CMS**: Keystatic v5 (file-based CMS, Git-backed, no external database)
+- **Component Library**: shadcn/ui — React components in `src/components/ui/`, customized to the design system
 - **Styling**: Tailwind CSS v4 via `@tailwindcss/vite` — utility classes only, no scoped `<style>` blocks
 - **Typography plugin**: `@tailwindcss/typography` for article prose
+- **Animations**: `tailwindcss-animate` — powers Sheet open/close transitions
+- **Icons**: `lucide-react` (used in shadcn components)
 - **Fonts**: Lora (headings) + Inter (body) via Google Fonts
 - **Deployment**: Static output (Astro default)
 
@@ -35,8 +38,11 @@ like advice from a vet you already know.
 Keystatic v5 **automatically injects its own routes** — do NOT create manual route files for it.
 The admin UI is available at `/keystatic` in dev mode without any extra configuration.
 
-React (`@astrojs/react`) is installed **exclusively** for Keystatic's admin interface.
-Do not use React components outside of Keystatic internals.
+React (`@astrojs/react`) is used for two purposes:
+1. **Keystatic admin interface** — auto-injected at `/keystatic`
+2. **shadcn/ui components** — interactive UI components in `src/components/ui/` and `src/components/*.tsx`
+
+**Hydration rules**: Only add `client:load` or `client:visible` when the component needs browser interactivity (e.g. `NavClient` uses `client:load` because it contains a Sheet/Dialog). Purely presentational React components (e.g. `PostCard`, `Badge`, `Button`) render server-side with no directive — no JavaScript is shipped to the browser.
 
 Content is authored in Markdoc (`@astrojs/markdoc`). Blog posts live in `src/content/posts/`
 as `.mdoc` files. The content schema is defined in `keystatic.config.ts` (root) and mirrored
@@ -53,18 +59,25 @@ in `src/content.config.ts` for Astro's content collections.
 
 | File | Purpose |
 |------|---------|
-| `keystatic.config.ts` | CMS schema — collections (`posts`) and singletons (`aboutMe`, `contact`) |
+| `keystatic.config.ts` | CMS schema — collections (`posts`) and singletons (`homePage`, `aboutMe`, `contact`) |
 | `src/content.config.ts` | Astro 6 content collection schema with `glob` loader (must match Keystatic) |
 | `src/styles/global.css` | Tailwind v4 entry point — `@theme` tokens, `@source`, `@layer base` globals |
-| `src/layouts/BaseLayout.astro` | Root layout — SEO, OG tags, Google Fonts, named `head` slot |
-| `astro.config.mjs` | Vite plugin: tailwindcss; Integrations: react, markdoc, keystatic, sitemap |
+| `src/layouts/BaseLayout.astro` | Root layout — SEO, OG tags, Google Fonts, named `head` slot; accepts `lang` prop |
+| `astro.config.mjs` | Vite plugin: tailwindcss; Keystatic excluded from production builds (dev-only) |
+| `src/lib/utils.ts` | `cn()` utility (clsx + tailwind-merge) — import in all React components |
+| `src/lib/i18n.ts` | Locale constants, nav links per locale, `getLocalePaths()` helper |
+| `src/components/ui/` | shadcn/ui components: `button`, `badge`, `card`, `sheet`, `separator` |
+| `src/components/NavClient.tsx` | React nav — desktop links + mobile Sheet + PL/EN/DE switcher, `client:load` |
+| `src/components/PostCard.tsx` | React post card — uses `Badge` + `CardContent`, server-rendered |
+| `components.json` | shadcn/ui CLI config — defines aliases, style, and icon library |
 
 ### Tailwind v4 Critical Notes
 
-- `@source "../**/*.{astro,ts,js}"` in `global.css` is required — Tailwind v4 does not auto-scan `.astro` files
+- `@source "../**/*.{astro,ts,tsx,js}"` in `global.css` is required — Tailwind v4 does not auto-scan `.astro` or `.tsx` files
 - Global base styles must be inside `@layer base {}` — unlayered CSS overrides `@layer utilities` and breaks all utility classes
 - Custom tokens live in `@theme {}` and generate utilities: `--color-sage` → `bg-sage`, `text-sage`, `border-sage`
-- Typography plugin loaded via `@plugin "@tailwindcss/typography"` in `global.css`
+- Typography plugin: `@plugin "@tailwindcss/typography"` in `global.css`
+- Animate plugin: `@plugin "tailwindcss-animate"` in `global.css` — required for Sheet open/close animations
 
 ### Content Collection Schema (Astro 6)
 
@@ -105,18 +118,35 @@ shadow-card / shadow-deep  →  warm multi-layer shadows
 - Exception: trivial one-line fixes do not require Plan Mode
 
 ### Component Standards
-- Each component lives in `src/components/`
+- Astro components in `src/components/*.astro`, React/shadcn components in `src/components/*.tsx` and `src/components/ui/*.tsx`
 - Use Tailwind utility classes — avoid scoped `<style>` blocks unless unavoidable
+- Use `cn()` from `@/lib/utils` for conditional class composition in `.tsx` files
+- Use shadcn/ui primitives (`Button`, `Badge`, `Card`, `Sheet`, `Separator`) instead of hand-rolling equivalent patterns
 - Mobile-first responsive: default → `md:` (768px) → `lg:` (1024px)
 - `sm:` means 640px **and above** — do not use it for mobile-only styles
 - Every interactive element must have `focus-visible:outline-2 focus-visible:outline-sage focus-visible:outline-offset-2`
+- `@` path alias resolves to `src/` — use `@/lib/utils`, `@/components/ui/button`, etc.
+
+### i18n (Internationalisation)
+
+- Three locales: `pl` (default, no prefix), `en` (`/en/`), `de` (`/de/`)
+- Locale utilities in `src/lib/i18n.ts`: `LOCALES`, `Locale`, `navLinks`, `getLocalePaths()`
+- Polish pages live at root (`/`, `/blog`, `/o-mnie`, `/kontakt`)
+- English and German pages live under `src/pages/[lang]/` (only `en`/`de` in `getStaticPaths`)
+- `BaseLayout` accepts a `lang` prop (default `'pl'`) used on `<html lang>`
+- `NavClient` receives `links`, `currentLocale`, `localePaths` from `Nav.astro`; renders PL|EN|DE switcher
+- Keystatic singletons store locale content as **flat prefixed fields**: `en_heading`, `de_heading`, `en_bio`, etc.
+  - Polish fields keep their original names (`heading`, `intro`, `bio`) for backward compatibility
+  - EN/DE pages fall back to Polish values when a locale field is empty
+- Blog posts stay at Polish-only URLs (`/blog/[slug]`); `[lang]/blog` links there
 
 ### Keystatic CMS
 - Content schema defined in `keystatic.config.ts`
 - Blog posts stored as Markdoc in `src/content/posts/`
 - Images stored in `public/images/`
 - Never hardcode content that belongs in the CMS
-- Singletons: `aboutMe` and `contact` (pages not yet wired to Keystatic data)
+- Singletons: `homePage`, `aboutMe`, `contact` — all wired up, all locale-aware
+- Keystatic admin (`/keystatic`) only active in dev mode (`NODE_ENV !== 'production'`)
 
 ### Astro Conventions
 - Pages in `src/pages/`
@@ -143,7 +173,7 @@ Performance, Accessibility, Best Practices, SEO.
 - Color contrast: verify against ratios in DESIGN.md Section 8 before using any color pair
 - Keyboard navigation: tab order must be logical, all interactive elements focusable
 - ARIA labels on icon-only buttons and ambiguous links
-- `lang="pl"` on `<html>` (content is in Polish)
+- `lang` attribute on `<html>` driven by `BaseLayout`'s `lang` prop — must be set on every page
 
 ### Best Practices
 - No console errors or warnings in production
@@ -168,7 +198,7 @@ Performance, Accessibility, Best Practices, SEO.
 ## Content Guidelines
 
 - Tone: warm, expert, personal — Michalina writes in first person
-- Language: Polish (`lang="pl"`)
+- Primary language: Polish; EN/DE translations maintained via Keystatic locale fields
 - Categories: `psy`, `koty`, `egzotyczne`, `porady` (defined in Keystatic schema)
 - Every post must have: title, date, category, excerpt, cover image, body
 - Cover images: minimum 1200×630px for Open Graph compatibility
