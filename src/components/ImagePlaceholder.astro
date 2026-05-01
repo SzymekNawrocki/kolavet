@@ -1,0 +1,63 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  src?: string | null;
+  alt?: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: 'eager' | 'lazy';
+}
+
+const {
+  src = null,
+  alt = '',
+  width = 480,
+  height = 600,
+  class: className = '',
+  loading = 'lazy',
+} = Astro.props;
+---
+
+<div class={`relative ${className}`}>
+  <!-- Ambient glow behind the frame -->
+  <div
+    class="absolute inset-0 -m-8 rounded-[3rem] bg-cyan/10 blur-3xl [animation:glowPulse_6s_ease-in-out_infinite]"
+    aria-hidden="true"
+  />
+
+  <!-- Frame -->
+  <div class="relative h-full w-full overflow-hidden rounded-3xl border border-border/60 bg-surface-light shadow-deep">
+
+    <!-- Dot-grid texture (always visible — shows through when no photo) -->
+    <div
+      class="absolute inset-0 [background-image:radial-gradient(circle,rgba(0,217,255,0.07)_1px,transparent_1px)] [background-size:20px_20px]"
+      aria-hidden="true"
+    />
+
+    <!-- Gradient wash -->
+    <div
+      class="absolute inset-0 bg-gradient-to-br from-cyan/6 via-transparent to-pink/4"
+      aria-hidden="true"
+    />
+
+    {src ? (
+      <Image
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        class="absolute inset-0 h-full w-full object-cover object-top"
+        loading={loading}
+        decoding="async"
+        inferSize={false}
+      />
+    ) : (
+      /* Pure placeholder state — inner orb so the box isn't completely empty */
+      <div class="absolute inset-0 flex items-end justify-start p-6" aria-hidden="true">
+        <div class="h-32 w-32 rounded-full bg-cyan/12 blur-3xl" />
+      </div>
+    )}
+  </div>
+</div>

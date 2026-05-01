@@ -16,7 +16,11 @@
       "Bash(git commit -m ' *)",
       "Bash(cd C:\\\\\\\\kolavet)",
       "Bash(git *)",
-      "Bash(node -e \"require\\('@astrojs/rss'\\)\")"
+      "Bash(node -e \"require\\('@astrojs/rss'\\)\")",
+      "Bash(curl -s \"https://kolavet.pl\")",
+      "Bash(curl -s \"https://kolavet.pl/blog\")",
+      "Read(//tmp/**)",
+      "Bash(curl -sL \"https://kolavet.pl/blog/\")"
     ]
   }
 }
