@@ -52,25 +52,44 @@ const descriptions: Record<Locale, string> = {
   <Nav />
 
   <main id="main-content">
-    <section class="py-24 text-center sm:py-14">
-      <div class="mx-auto flex max-w-[768px] flex-col items-center gap-6 px-6">
-        <Badge>{heroBadge}</Badge>
-        <h1 class="font-serif text-[4rem] font-extrabold leading-[1.05] tracking-[-1.2px] text-bright sm:text-[3rem] sm:tracking-[-0.8px]">
+    <!-- Hero -->
+    <section class="relative overflow-hidden py-28 text-center md:py-40">
+
+      <!-- Floating gradient orbs -->
+      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute -top-32 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-cyan/10 blur-[140px] [animation:float_12s_ease-in-out_infinite]" />
+        <div class="absolute -right-40 top-1/2 h-[380px] w-[380px] -translate-y-1/2 rounded-full bg-pink/8 blur-[120px] [animation:float_16s_ease-in-out_4s_infinite]" />
+        <div class="absolute -bottom-20 left-1/4 h-[300px] w-[300px] rounded-full bg-yellow/6 blur-[100px] [animation:float_14s_ease-in-out_8s_infinite]" />
+      </div>
+
+      <!-- Bottom fade -->
+      <div class="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-dark to-transparent" aria-hidden="true" />
+
+      <div class="relative z-10 mx-auto flex max-w-[768px] flex-col items-center gap-6 px-6">
+        <span class="[animation:fadeInUp_0.5s_ease_both]">
+          <Badge>{heroBadge}</Badge>
+        </span>
+        <h1 class="font-serif text-[3rem] font-extrabold leading-[1.05] tracking-[-1px] text-bright [animation:fadeInUp_0.65s_0.1s_ease_both] md:text-[4.5rem] md:tracking-[-1.5px]">
           {heroHeadline}
         </h1>
         {heroSubtext && (
-          <p class="max-w-[580px] text-lg leading-relaxed text-secondary">{heroSubtext}</p>
+          <p class="max-w-[560px] text-lg leading-relaxed text-secondary [animation:fadeInUp_0.65s_0.2s_ease_both]">
+            {heroSubtext}
+          </p>
         )}
-        <Button asChild>
-          <a href={`/${lang}/blog`}>{heroCtaLabel}</a>
-        </Button>
+        <div class="[animation:fadeInUp_0.65s_0.3s_ease_both]">
+          <Button asChild size="lg">
+            <a href={`/${lang}/blog`}>{heroCtaLabel}</a>
+          </Button>
+        </div>
       </div>
     </section>
 
-    <section class="pb-24">
+    <!-- Latest posts -->
+    <section class="pb-24 pt-4">
       <div class="mx-auto max-w-[1200px] px-6">
         <div class="mb-8 flex items-baseline justify-between gap-4">
-          <h2 class="font-serif text-[2.5rem] font-bold leading-snug tracking-[-0.6px] text-bright">
+          <h2 class="relative pl-5 font-serif text-[2.25rem] font-bold leading-snug tracking-[-0.5px] text-bright before:absolute before:bottom-1 before:left-0 before:top-1 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-cyan before:to-cyan/0 before:content-['']">
             {blogHeading}
           </h2>
           <a
