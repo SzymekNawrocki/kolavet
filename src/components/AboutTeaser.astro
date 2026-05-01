@@ -25,10 +25,10 @@ const defaults = {
 const heading = rawHead  || defaults.heading;
 const intro   = rawIntro || defaults.intro;
 
-const specialties = {
-  pl: ['Chirurgia', 'Dermatologia', 'Żywienie', 'Diagnostyka'],
-  en: ['Surgery', 'Dermatology', 'Nutrition', 'Diagnostics'],
-  de: ['Chirurgie', 'Dermatologie', 'Ernährung', 'Diagnostik'],
+const interests = {
+  pl: ['Koty', 'Psy', 'Egzotyczne', 'Profilaktyka'],
+  en: ['Cats', 'Dogs', 'Exotic Pets', 'Prevention'],
+  de: ['Katzen', 'Hunde', 'Exoten', 'Vorbeugung'],
 }[lang];
 ---
 
@@ -96,8 +96,8 @@ const specialties = {
         </p>
 
         <!-- Specialties -->
-        <ul class="flex flex-wrap justify-center gap-2 [animation:slideInRight_0.6s_0.2s_ease_both] md:justify-start" aria-label="Specjalizacje">
-          {specialties.map(s => (
+        <ul class="flex flex-wrap justify-center gap-2 [animation:slideInRight_0.6s_0.2s_ease_both] md:justify-start" aria-label="Zainteresowania">
+          {interests.map(s => (
             <li class="flex items-center gap-1.5 rounded-full border border-border bg-surface-medium px-3 py-1.5 text-xs font-semibold text-secondary">
               <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-cyan" aria-hidden="true" />
               {s}
