@@ -1,0 +1,30 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+  lang?: 'pl' | 'en' | 'de';
+}
+const { headings, lang = 'pl' } = Astro.props;
+
+const filtered = headings.filter(h => h.depth === 2 || h.depth === 3);
+const label = { pl: 'Spis treści', en: 'Contents', de: 'Inhalt' }[lang];
+---
+
+{filtered.length >= 3 && (
+  <nav aria-label={label} class="mb-10 rounded-xl border border-border bg-surface-light p-5">
+    <p class="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-cyan">{label}</p>
+    <ol class="flex flex-col gap-1.5">
+      {filtered.map(h => (
+        <li style={h.depth === 3 ? 'padding-left: 1rem' : ''}>
+          <a
+            href={`#${h.slug}`}
+            class="text-sm leading-snug text-secondary transition-colors hover:text-bright focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+          >
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}
