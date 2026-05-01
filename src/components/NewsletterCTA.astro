@@ -1,0 +1,31 @@
+---
+import { Button } from './ui/button';
+
+interface Props {
+  lang?: 'pl' | 'en' | 'de';
+  href?: string;
+}
+const { lang = 'pl', href = '#' } = Astro.props;
+
+const t = {
+  pl: { heading: 'Bądź na bieżąco', body: 'Nowe artykuły o zdrowiu zwierząt prosto na Twoją skrzynkę.', cta: 'Zapisz się na newsletter' },
+  en: { heading: 'Stay up to date',   body: 'New articles on animal health delivered straight to your inbox.', cta: 'Subscribe to newsletter' },
+  de: { heading: 'Bleib informiert',  body: 'Neue Artikel zur Tiergesundheit direkt in Ihr Postfach.',         cta: 'Newsletter abonnieren' },
+}[lang];
+---
+
+<section class="border-t border-border">
+  <div class="mx-auto max-w-[768px] px-6 py-16 text-center">
+    <h2 class="font-serif text-[1.75rem] font-bold tracking-[-0.4px] text-bright">
+      {t.heading}
+    </h2>
+    <p class="mx-auto mt-3 max-w-[420px] text-base leading-relaxed text-secondary">
+      {t.body}
+    </p>
+    <div class="mt-6">
+      <Button asChild>
+        <a href={href}>{t.cta}</a>
+      </Button>
+    </div>
+  </div>
+</section>
