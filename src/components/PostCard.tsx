@@ -24,7 +24,7 @@ export function PostCard({ slug, title, publishDate, category, excerpt, coverIma
   const cta = readMoreLabel[lang];
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-xl border border-border bg-surface-light shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-deep hover:border-cyan/30">
+    <article className="group flex flex-col overflow-hidden rounded-xl border border-border bg-surface-light shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-deep hover:border-cyan/40 hover:shadow-[0_8px_32px_rgba(0,217,255,0.12)]">
       <a
         href={`${basePath}/${slug}`}
         className="block aspect-video overflow-hidden"
@@ -42,7 +42,7 @@ export function PostCard({ slug, title, publishDate, category, excerpt, coverIma
             decoding="async"
           />
         ) : (
-          <div className="h-full w-full bg-surface-medium" />
+          <div className="h-full w-full bg-surface-medium [background-image:radial-gradient(circle,rgba(0,217,255,0.07)_1px,transparent_1px)] [background-size:20px_20px]" />
         )}
       </a>
 
