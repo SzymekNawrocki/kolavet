@@ -13,7 +13,12 @@ const about = await reader.singletons.aboutMe.read();
 const heading      = about?.heading      ?? 'O mnie';
 const intro        = about?.intro        ?? '';
 const photo        = about?.photo        ?? '/images/photo.jpeg';
-const journeyItems = about?.journeyItems ?? [];
+const defaultJourney = [
+  { year: '2019–2024', title: 'Studia weterynaryjne', description: 'Pięć lat nauki na wydziale medycyny weterynaryjnej — od anatomii po chirurgię.' },
+  { year: '2024',      title: 'Dyplom lekarza weterynarii', description: 'Obrona pracy dyplomowej i uzyskanie tytułu lek. wet.' },
+  { year: '2025',      title: 'Pierwsza praca i ten blog', description: 'Zaczęłam pracę w klinice i postanowiłam dzielić się tym, czego się uczę — stąd Kolavet.' },
+];
+const journeyItems = (about?.journeyItems ?? []).length > 0 ? (about?.journeyItems ?? []) : defaultJourney;
 
 const bioEntry = await getEntry('pages', 'about/bio');
 const { Content: BioContent } = bioEntry ? await render(bioEntry) : { Content: null };
@@ -77,8 +82,7 @@ const { Content: BioContent } = bioEntry ? await render(bioEntry) : { Content: n
       </div>
     )}
 
-    {journeyItems.length > 0 && (
-      <section class="mx-auto max-w-[768px] px-6 pb-20">
+    <section class="mx-auto max-w-[768px] px-6 pb-20">
 
         <div class="h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
 
@@ -108,8 +112,7 @@ const { Content: BioContent } = bioEntry ? await render(bioEntry) : { Content: n
           ))}
         </ol>
 
-      </section>
-    )}
+    </section>
 
   </main>
 
