@@ -14,13 +14,24 @@ import { calculateReadingTime } from '../../lib/reading-time';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
-  return posts.map((post) => ({
+  const sorted = posts.sort(
+    (a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
+  );
+  return sorted.map((post, i) => ({
     params: { slug: post.id },
-    props:  { post },
+    props: {
+      post,
+      prevPost: i < sorted.length - 1
+        ? { slug: sorted[i + 1].id, title: sorted[i + 1].data.title }
+        : null,
+      nextPost: i > 0
+        ? { slug: sorted[i - 1].id, title: sorted[i - 1].data.title }
+        : null,
+    },
   }));
 }
 
-const { post } = Astro.props;
+const { post, prevPost, nextPost } = Astro.props;
 const { Content } = await render(post);
 
 let rawContent = '';
@@ -158,6 +169,39 @@ const jsonLd = {
         </ul>
       </section>
     )}
+    {(prevPost || nextPost) && (
+      <nav
+        aria-label="Nawigacja między artykułami"
+        class="mx-auto max-w-[768px] border-t border-border px-6 py-10"
+      >
+        <div class="flex flex-col gap-4 sm:flex-row sm:justify-between">
+          {prevPost ? (
+            <a
+              href={`/blog/${prevPost.slug}`}
+              class="group flex max-w-[45%] flex-col gap-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+            >
+              <span class="text-xs font-semibold uppercase tracking-wider text-muted">← Starszy</span>
+              <span class="text-sm font-semibold text-secondary transition-colors group-hover:text-cyan line-clamp-2">
+                {prevPost.title}
+              </span>
+            </a>
+          ) : <div />}
+
+          {nextPost && (
+            <a
+              href={`/blog/${nextPost.slug}`}
+              class="group flex max-w-[45%] flex-col items-end gap-1 text-right focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+            >
+              <span class="text-xs font-semibold uppercase tracking-wider text-muted">Nowszy →</span>
+              <span class="text-sm font-semibold text-secondary transition-colors group-hover:text-cyan line-clamp-2">
+                {nextPost.title}
+              </span>
+            </a>
+          )}
+        </div>
+      </nav>
+    )}
+
   </main>
 
   <Footer />
