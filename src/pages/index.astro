@@ -9,6 +9,7 @@ import Footer from '../components/Footer.astro';
 import { PostCard } from '../components/PostCard';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
+import AboutTeaser from '../components/AboutTeaser.astro';
 import keystaticConfig from '../../keystatic.config';
 import { calculateReadingTime } from '../lib/reading-time';
 
@@ -105,6 +106,9 @@ const posts = allPosts
 
       </div>
     </section>
+
+    <AboutTeaser lang="pl" />
+
   </main>
 
   <Footer />

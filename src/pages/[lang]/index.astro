@@ -7,6 +7,7 @@ import Footer from '../../components/Footer.astro';
 import { PostCard } from '../../components/PostCard';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
+import AboutTeaser from '../../components/AboutTeaser.astro';
 import { LOCALES, type Locale } from '../../lib/i18n';
 import keystaticConfig from '../../../keystatic.config';
 
@@ -100,6 +101,9 @@ const descriptions: Record<Locale, string> = {
         )}
       </div>
     </section>
+
+    <AboutTeaser lang={lang} />
+
   </main>
 
   <Footer />

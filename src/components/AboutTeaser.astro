@@ -1,0 +1,62 @@
+---
+import { Image } from 'astro:assets';
+import { Button } from './ui/button';
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../keystatic.config';
+
+interface Props {
+  lang?: 'pl' | 'en' | 'de';
+}
+const { lang = 'pl' } = Astro.props;
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const about  = await reader.singletons.aboutMe.read();
+
+const photo   = about?.photo ?? '/images/photo.jpeg';
+const rawHead = lang === 'en' ? about?.en_heading : lang === 'de' ? about?.de_heading : about?.heading;
+const rawIntro = lang === 'en' ? about?.en_intro  : lang === 'de' ? about?.de_intro  : about?.intro;
+
+const defaults = {
+  pl: { heading: 'Cześć, jestem Michalina',  intro: 'Lekarz weterynarii z pasją do edukacji właścicieli zwierząt. Na tym blogu dzielę się wiedzą, by pomóc Ci zadbać o zdrowie Twojego pupila.', cta: 'Więcej o mnie', href: '/o-mnie' },
+  en: { heading: "Hi, I'm Michalina",         intro: 'A veterinarian passionate about educating pet owners. On this blog I share knowledge to help you take care of your pet\'s health.',           cta: 'More about me', href: '/en/about' },
+  de: { heading: 'Hallo, ich bin Michalina',  intro: 'Tierärztin mit Leidenschaft für Tierhalter. In diesem Blog teile ich Wissen, um Ihnen bei der Gesundheitsfürsorge für Ihr Haustier zu helfen.', cta: 'Mehr über mich', href: '/de/about' },
+}[lang];
+
+const heading = rawHead  || defaults.heading;
+const intro   = rawIntro || defaults.intro;
+---
+
+<section class="border-t border-border">
+  <div class="mx-auto max-w-[1200px] px-6 py-20">
+    <div class="flex flex-col items-center gap-10 md:flex-row md:gap-16">
+
+      <div class="shrink-0">
+        <Image
+          src={photo}
+          alt="Michalina Kolarz"
+          width={200}
+          height={200}
+          class="rounded-2xl border border-border object-cover shadow-deep"
+          loading="lazy"
+          decoding="async"
+          inferSize={false}
+        />
+      </div>
+
+      <div class="flex flex-col gap-4 text-center md:text-left">
+        <h2 class="font-serif text-[2rem] font-bold tracking-[-0.5px] text-bright">
+          {heading}
+        </h2>
+        <p class="max-w-[520px] text-base leading-relaxed text-secondary">
+          {intro}
+        </p>
+        <div class="flex justify-center md:justify-start">
+          <Button variant="outline" asChild>
+            <a href={defaults.href}>{defaults.cta}</a>
+          </Button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
