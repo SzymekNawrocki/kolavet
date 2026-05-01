@@ -9,6 +9,7 @@ import Footer from '../components/Footer.astro';
 import { PostCard } from '../components/PostCard';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
+import { categoryLabels } from '../lib/i18n';
 import ImagePlaceholder from '../components/ImagePlaceholder.astro';
 import AboutTeaser from '../components/AboutTeaser.astro';
 import NewsletterCTA from '../components/NewsletterCTA.astro';
@@ -42,6 +43,11 @@ const posts = allPosts
     } catch {}
     return { ...post, readingTime: calculateReadingTime(rawContent, 'pl') };
   });
+
+const featuredSlug = homePage?.featuredPostSlug ?? null;
+const featuredPost = featuredSlug
+  ? allPosts.find(p => p.id === featuredSlug) ?? null
+  : null;
 
 const categoryCounts = allPosts.reduce((acc, post) => {
   acc[post.data.category] = (acc[post.data.category] || 0) + 1;
@@ -122,6 +128,55 @@ const categories = [
 
       </div>
     </section>
+
+    {featuredPost && (
+      <section class="pb-16 pt-4">
+        <div class="mx-auto max-w-[1200px] px-6">
+
+          <p class="mb-6 text-xs font-semibold uppercase tracking-[0.2em] text-cyan [animation:fadeInUp_0.5s_ease_both]">
+            Polecany artykuł
+          </p>
+
+          <a
+            href={`/blog/${featuredPost.id}`}
+            class="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface-light shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-cyan/40 hover:shadow-deep md:flex-row focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan [animation:fadeInUp_0.6s_0.1s_ease_both]"
+          >
+            <div class="relative aspect-video shrink-0 overflow-hidden md:aspect-auto md:w-[420px]">
+              {featuredPost.data.coverImage ? (
+                <>
+                  <img
+                    src={featuredPost.data.coverImage}
+                    alt=""
+                    class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                    width={420}
+                    height={280}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-dark/50 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:bg-gradient-to-r" />
+                </>
+              ) : (
+                <div class="h-full w-full bg-surface-medium [background-image:radial-gradient(circle,rgba(0,217,255,0.07)_1px,transparent_1px)] [background-size:20px_20px]">
+                  <div class="absolute inset-0 bg-gradient-to-br from-cyan/6 via-transparent to-pink/4" />
+                </div>
+              )}
+            </div>
+
+            <div class="flex flex-col justify-center gap-4 p-6 md:p-8 lg:p-10">
+              <Badge>{categoryLabels.pl[featuredPost.data.category] ?? featuredPost.data.category}</Badge>
+              <h2 class="font-serif text-[1.5rem] font-bold leading-snug tracking-[-0.4px] text-bright transition-colors group-hover:text-cyan md:text-[1.875rem]">
+                {featuredPost.data.title}
+              </h2>
+              <p class="line-clamp-3 text-base leading-relaxed text-secondary">
+                {featuredPost.data.excerpt}
+              </p>
+              <span class="text-sm font-semibold text-cyan">Czytaj artykuł →</span>
+            </div>
+          </a>
+
+        </div>
+      </section>
+    )}
 
     <!-- Latest posts -->
     <section class="py-20 md:py-24">

@@ -52,6 +52,10 @@ export default config({
         heroCtaLabel:      fields.text({ label: 'PL | Przycisk CTA' }),
         blogSectionHeading: fields.text({ label: 'PL | Nagłówek sekcji bloga' }),
         blogCtaLabel:      fields.text({ label: 'PL | „Pokaż wszystkie"' }),
+        featuredPostSlug:  fields.text({
+          label: 'Wyróżniony artykuł — slug (opcjonalnie)',
+          description: 'Slug posta do wyróżnienia na stronie głównej, np. "moj-pierwszy-artykul". Zostaw puste, żeby ukryć tę sekcję.',
+        }),
         // English
         en_heroBadgeLabel:    fields.text({ label: 'EN | Hero badge text' }),
         en_heroHeadline:      fields.text({ label: 'EN | Hero headline' }),
