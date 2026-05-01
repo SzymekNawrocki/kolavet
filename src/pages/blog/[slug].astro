@@ -127,7 +127,7 @@ const jsonLd = {
         </p>
       </header>
 
-      {post.data.coverImage && (
+      {post.data.coverImage ? (
         <Image
           src={post.data.coverImage}
           alt=""
@@ -138,6 +138,10 @@ const jsonLd = {
           decoding="async"
           inferSize={false}
         />
+      ) : (
+        <div class="mb-12 h-1.5 w-full overflow-hidden rounded-full bg-surface-medium" aria-hidden="true">
+          <div class="h-full w-full bg-gradient-to-r from-cyan via-pink to-yellow" />
+        </div>
       )}
 
       <div class="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-bright prose-a:text-cyan prose-a:no-underline hover:prose-a:text-cyan-dark prose-blockquote:border-l-pink prose-blockquote:italic prose-blockquote:text-secondary prose-code:rounded prose-code:bg-surface-medium prose-code:text-cyan prose-img:rounded-xl">
@@ -152,7 +156,7 @@ const jsonLd = {
 
     {related.length > 0 && (
       <section class="mx-auto max-w-[1200px] border-t border-border px-6 py-16">
-        <h2 class="mb-8 font-serif text-[1.75rem] font-bold tracking-[-0.4px] text-bright">
+        <h2 class="relative mb-8 pl-5 font-serif text-[1.75rem] font-bold tracking-[-0.4px] text-bright before:absolute before:bottom-1 before:left-0 before:top-1 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-cyan before:to-cyan/0 before:content-['']">
           Podobne artykuły
         </h2>
         <ul class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3" role="list">
