@@ -15,7 +15,8 @@
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
       "Bash(cd C:\\\\\\\\kolavet)",
-      "Bash(git *)"
+      "Bash(git *)",
+      "Bash(node -e \"require\\('@astrojs/rss'\\)\")"
     ]
   }
 }

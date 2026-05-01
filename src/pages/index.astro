@@ -1,4 +1,6 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import { getCollection } from 'astro:content';
 import { createReader } from '@keystatic/core/reader';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -8,6 +10,7 @@ import { PostCard } from '../components/PostCard';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import keystaticConfig from '../../keystatic.config';
+import { calculateReadingTime } from '../lib/reading-time';
 
 const reader = createReader(process.cwd(), keystaticConfig);
 const homePage = await reader.singletons.homePage.read();
@@ -22,7 +25,16 @@ const blogCta      = homePage?.blogCtaLabel       ?? 'Pokaż wszystkie';
 const allPosts = await getCollection('posts');
 const posts = allPosts
   .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
-  .slice(0, 3);
+  .slice(0, 3)
+  .map(post => {
+    let rawContent = '';
+    try {
+      rawContent = fs.readFileSync(
+        path.join(process.cwd(), 'src/content/posts', `${post.id}.mdoc`), 'utf-8'
+      );
+    } catch {}
+    return { ...post, readingTime: calculateReadingTime(rawContent, 'pl') };
+  });
 ---
 
 <BaseLayout
@@ -82,6 +94,7 @@ const posts = allPosts
                   category={post.data.category}
                   excerpt={post.data.excerpt}
                   coverImage={post.data.coverImage}
+                  readingTime={post.readingTime}
                 />
               </li>
             ))}
