@@ -1,0 +1,42 @@
+---
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../keystatic.config';
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const data = await reader.singletons.testimonials.read();
+const items = data?.items ?? [];
+---
+
+{items.length > 0 && (
+  <section class="relative isolate overflow-hidden py-20 md:py-24">
+    <div class="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
+    <div class="absolute inset-0 bg-surface-light/20" aria-hidden="true" />
+    <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
+
+    <div class="relative z-10 mx-auto max-w-[1200px] px-6">
+      <h2 class="relative mb-10 pl-5 font-serif text-[2.25rem] font-bold leading-snug tracking-[-0.5px] text-bright before:absolute before:bottom-1 before:left-0 before:top-1 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-cyan before:to-cyan/0 before:content-['']">
+        Co mówią właściciele
+      </h2>
+
+      <ul class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3" role="list">
+        {items.map((item, i) => (
+          <li
+            class="flex flex-col gap-4 rounded-2xl border border-border bg-surface-light p-6 shadow-card [animation:scaleIn_0.5s_ease_both]"
+            style={`animation-delay: ${i * 0.08}s`}
+          >
+            <div class="select-none font-serif text-2xl leading-none text-cyan" aria-hidden="true">"</div>
+            <p class="flex-1 text-base leading-relaxed text-secondary">{item.quote}</p>
+            <div class="border-t border-border pt-4">
+              <p class="text-sm font-semibold text-bright">{item.author}</p>
+              {(item.petName || item.petType) && (
+                <p class="mt-0.5 text-xs text-muted">
+                  {[item.petName, item.petType].filter(Boolean).join(' · ')}
+                </p>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}

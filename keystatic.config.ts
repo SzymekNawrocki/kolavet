@@ -97,6 +97,25 @@ export default config({
       },
     }),
 
+    testimonials: singleton({
+      label: 'Opinie',
+      path: 'src/content/pages/testimonials',
+      schema: {
+        items: fields.array(
+          fields.object({
+            quote:   fields.text({ label: 'Treść opinii', multiline: true, validation: { isRequired: true } }),
+            author:  fields.text({ label: 'Imię autora', validation: { isRequired: true } }),
+            petName: fields.text({ label: 'Imię zwierzęcia (opcjonalnie)' }),
+            petType: fields.text({ label: 'Gatunek (np. "pies", "kot")' }),
+          }),
+          {
+            label: 'Opinie',
+            itemLabel: props => props.fields.author.value ?? 'Opinia',
+          }
+        ),
+      },
+    }),
+
     contact: singleton({
       label: 'Kontakt',
       path: 'src/content/pages/contact',

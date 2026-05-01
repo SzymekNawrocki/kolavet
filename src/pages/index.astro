@@ -13,6 +13,7 @@ import { categoryLabels } from '../lib/i18n';
 import ImagePlaceholder from '../components/ImagePlaceholder.astro';
 import AboutTeaser from '../components/AboutTeaser.astro';
 import NewsletterCTA from '../components/NewsletterCTA.astro';
+import Testimonials from '../components/Testimonials.astro';
 import keystaticConfig from '../../keystatic.config';
 import { calculateReadingTime } from '../lib/reading-time';
 
@@ -282,6 +283,7 @@ const categories = [
       </div>
     </section>
 
+    <Testimonials />
     <AboutTeaser lang="pl" />
     <NewsletterCTA lang="pl" />
 
