@@ -12,13 +12,13 @@ const { lang = 'pl' } = Astro.props;
 const reader = createReader(process.cwd(), keystaticConfig);
 const about  = await reader.singletons.aboutMe.read();
 
-const photo   = about?.photo ?? '/images/photo.jpeg';
-const rawHead = lang === 'en' ? about?.en_heading : lang === 'de' ? about?.de_heading : about?.heading;
-const rawIntro = lang === 'en' ? about?.en_intro  : lang === 'de' ? about?.de_intro  : about?.intro;
+const photo    = about?.photo ?? '/images/photo.jpeg';
+const rawHead  = lang === 'en' ? about?.en_heading : lang === 'de' ? about?.de_heading : about?.heading;
+const rawIntro = lang === 'en' ? about?.en_intro   : lang === 'de' ? about?.de_intro   : about?.intro;
 
 const defaults = {
   pl: { heading: 'Cześć, jestem Michalina',  intro: 'Lekarz weterynarii z pasją do edukacji właścicieli zwierząt. Na tym blogu dzielę się wiedzą, by pomóc Ci zadbać o zdrowie Twojego pupila.', cta: 'Więcej o mnie', href: '/o-mnie' },
-  en: { heading: "Hi, I'm Michalina",         intro: 'A veterinarian passionate about educating pet owners. On this blog I share knowledge to help you take care of your pet\'s health.',           cta: 'More about me', href: '/en/about' },
+  en: { heading: "Hi, I'm Michalina",         intro: "A veterinarian passionate about educating pet owners. On this blog I share knowledge to help you take care of your pet's health.",           cta: 'More about me', href: '/en/about' },
   de: { heading: 'Hallo, ich bin Michalina',  intro: 'Tierärztin mit Leidenschaft für Tierhalter. In diesem Blog teile ich Wissen, um Ihnen bei der Gesundheitsfürsorge für Ihr Haustier zu helfen.', cta: 'Mehr über mich', href: '/de/about' },
 }[lang];
 
@@ -26,25 +26,49 @@ const heading = rawHead  || defaults.heading;
 const intro   = rawIntro || defaults.intro;
 ---
 
-<section class="border-t border-border">
-  <div class="mx-auto max-w-[1200px] px-6 py-20">
-    <div class="flex flex-col items-center gap-10 md:flex-row md:gap-16">
+<section class="relative isolate overflow-hidden">
+  <!-- Gradient top divider -->
+  <div class="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
 
-      <div class="shrink-0">
+  <!-- Elevated surface -->
+  <div class="absolute inset-0 bg-surface-light/30" aria-hidden="true" />
+
+  <!-- Ambient glow behind photo side -->
+  <div
+    class="pointer-events-none absolute left-0 top-1/2 h-[500px] w-[500px] -translate-x-1/3 -translate-y-1/2 rounded-full bg-cyan/6 blur-[120px]"
+    aria-hidden="true"
+  />
+
+  <!-- Gradient bottom divider -->
+  <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
+
+  <div class="relative z-10 mx-auto max-w-[1200px] px-6 py-20">
+    <div class="flex flex-col items-center gap-12 md:flex-row md:gap-20">
+
+      <!-- Photo with glow ring -->
+      <div class="relative shrink-0">
+        <div
+          class="absolute inset-0 -m-6 rounded-3xl bg-cyan/10 blur-2xl [animation:glowPulse_5s_ease-in-out_infinite]"
+          aria-hidden="true"
+        />
         <Image
           src={photo}
           alt="Michalina Kolarz"
-          width={200}
-          height={200}
-          class="rounded-2xl border border-border object-cover shadow-deep"
+          width={220}
+          height={220}
+          class="relative rounded-2xl border border-border/60 object-cover shadow-deep"
           loading="lazy"
           decoding="async"
           inferSize={false}
         />
       </div>
 
+      <!-- Text content -->
       <div class="flex flex-col gap-4 text-center md:text-left">
-        <h2 class="font-serif text-[2rem] font-bold tracking-[-0.5px] text-bright">
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan">
+          {lang === 'pl' ? 'O autorce' : lang === 'de' ? 'Über mich' : 'About the author'}
+        </p>
+        <h2 class="font-serif text-[2rem] font-bold tracking-[-0.5px] text-bright md:text-[2.5rem] md:tracking-[-0.7px]">
           {heading}
         </h2>
         <p class="max-w-[520px] text-base leading-relaxed text-secondary">
