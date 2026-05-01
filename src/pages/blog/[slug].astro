@@ -1,6 +1,7 @@
 ---
 import fs from 'node:fs';
 import path from 'node:path';
+import { Image } from 'astro:assets';
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/Nav.astro';
@@ -114,14 +115,15 @@ const jsonLd = {
       </header>
 
       {post.data.coverImage && (
-        <img
+        <Image
           src={post.data.coverImage}
           alt=""
           class="mb-12 aspect-video w-full rounded-xl border border-border object-cover"
-          width="768"
-          height="432"
+          width={768}
+          height={432}
           loading="eager"
           decoding="async"
+          inferSize={false}
         />
       )}
 
