@@ -4,14 +4,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import { Button } from '../../components/ui/button';
-import { getLocalePaths, type Locale } from '../../lib/i18n';
 import keystaticConfig from '../../../keystatic.config';
 
 export function getStaticPaths() {
   return (['en', 'de'] as const).map(lang => ({ params: { lang } }));
 }
 
-const { lang } = Astro.params as { lang: Locale };
+const { lang } = Astro.params as { lang: 'en' | 'de' };
 const reader = createReader(process.cwd(), keystaticConfig);
 const data = await reader.singletons.faq.read();
 
