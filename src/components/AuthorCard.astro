@@ -1,0 +1,39 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  lang?: 'pl' | 'en' | 'de';
+}
+const { lang = 'pl' } = Astro.props;
+
+const t = {
+  pl: { label: 'Autorka', role: 'Lekarz weterynarii', cta: 'Więcej o mnie', href: '/o-mnie' },
+  en: { label: 'Author',  role: 'Veterinarian',      cta: 'More about me', href: '/en/about' },
+  de: { label: 'Autorin', role: 'Tierärztin',         cta: 'Mehr über mich', href: '/de/about' },
+}[lang];
+---
+
+<aside class="mt-12 border-t border-border pt-10">
+  <div class="flex flex-wrap items-center gap-5">
+    <Image
+      src="/images/photo.jpeg"
+      alt="Michalina Kolarz"
+      width={64}
+      height={64}
+      class="size-16 shrink-0 rounded-full border border-border object-cover"
+      loading="lazy"
+      decoding="async"
+    />
+    <div class="flex-1">
+      <p class="text-xs font-semibold uppercase tracking-wider text-muted">{t.label}</p>
+      <p class="text-base font-bold text-bright">Michalina Kolarz</p>
+      <p class="text-sm text-secondary">{t.role}</p>
+    </div>
+    <a
+      href={t.href}
+      class="text-sm font-semibold text-cyan transition-colors hover:text-cyan-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+    >
+      {t.cta} →
+    </a>
+  </div>
+</aside>
