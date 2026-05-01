@@ -27,20 +27,23 @@ export function PostCard({ slug, title, publishDate, category, excerpt, coverIma
     <article className="group flex flex-col overflow-hidden rounded-xl border border-border bg-surface-light shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-deep hover:border-cyan/40 hover:shadow-[0_8px_32px_rgba(0,217,255,0.12)]">
       <a
         href={`${basePath}/${slug}`}
-        className="block aspect-video overflow-hidden"
+        className="relative block aspect-video overflow-hidden"
         tabIndex={-1}
         aria-hidden="true"
       >
         {coverImage ? (
-          <img
-            src={coverImage}
-            alt=""
-            className="h-full w-full object-cover transition-transform duration-300 hover:scale-[1.03]"
-            width={640}
-            height={360}
-            loading="lazy"
-            decoding="async"
-          />
+          <>
+            <img
+              src={coverImage}
+              alt=""
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+              width={640}
+              height={360}
+              loading="lazy"
+              decoding="async"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-dark/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          </>
         ) : (
           <div className="h-full w-full bg-surface-medium [background-image:radial-gradient(circle,rgba(0,217,255,0.07)_1px,transparent_1px)] [background-size:20px_20px]" />
         )}
