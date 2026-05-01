@@ -1,0 +1,65 @@
+---
+interface Props {
+  url:   string;
+  title: string;
+  lang?: 'pl' | 'en' | 'de';
+}
+const { url, title, lang = 'pl' } = Astro.props;
+
+const encoded      = encodeURIComponent(url);
+const encodedTitle = encodeURIComponent(title);
+
+const t = {
+  pl: { share: 'Udostępnij', copy: 'Kopiuj link', copied: 'Skopiowano!' },
+  en: { share: 'Share',      copy: 'Copy link',   copied: 'Copied!' },
+  de: { share: 'Teilen',     copy: 'Link kopieren', copied: 'Kopiert!' },
+}[lang];
+---
+
+<div class="flex flex-wrap items-center gap-3 py-5">
+  <span class="text-xs font-semibold uppercase tracking-[0.15em] text-muted">{t.share}</span>
+
+  <a
+    href={`https://www.facebook.com/sharer/sharer.php?u=${encoded}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="flex h-9 items-center rounded-full border border-border bg-surface-light px-4 text-xs font-semibold text-secondary transition-colors hover:border-cyan/40 hover:text-bright focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+    aria-label={lang === 'pl' ? 'Udostępnij na Facebooku' : lang === 'de' ? 'Auf Facebook teilen' : 'Share on Facebook'}
+  >
+    Facebook
+  </a>
+
+  <a
+    href={`https://x.com/intent/tweet?url=${encoded}&text=${encodedTitle}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="flex h-9 items-center rounded-full border border-border bg-surface-light px-4 text-xs font-semibold text-secondary transition-colors hover:border-cyan/40 hover:text-bright focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+    aria-label={lang === 'pl' ? 'Udostępnij na X' : lang === 'de' ? 'Auf X teilen' : 'Share on X'}
+  >
+    X
+  </a>
+
+  <button
+    type="button"
+    data-copy-url={url}
+    data-label={t.copy}
+    data-label-copied={t.copied}
+    class="flex h-9 items-center rounded-full border border-border bg-surface-light px-4 text-xs font-semibold text-secondary transition-colors hover:border-cyan/40 hover:text-bright focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+    aria-label={t.copy}
+  >
+    {t.copy}
+  </button>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-url]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const url    = btn.dataset.copyUrl ?? '';
+      const label  = btn.dataset.label ?? 'Copy';
+      const copied = btn.dataset.labelCopied ?? 'Copied!';
+      await navigator.clipboard.writeText(url);
+      btn.textContent = copied;
+      setTimeout(() => { btn.textContent = label; }, 2000);
+    });
+  });
+</script>

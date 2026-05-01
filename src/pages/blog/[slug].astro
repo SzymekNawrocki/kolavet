@@ -7,6 +7,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import AuthorCard from '../../components/AuthorCard.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 import NewsletterCTA from '../../components/NewsletterCTA.astro';
 import { Badge } from '../../components/ui/badge';
 import { PostCard } from '../../components/PostCard';
@@ -143,6 +144,12 @@ const jsonLd = {
           <div class="h-full w-full bg-gradient-to-r from-cyan via-pink to-yellow" />
         </div>
       )}
+
+      <ShareButtons
+        url={`https://kolavet.pl/blog/${post.id}`}
+        title={post.data.title}
+        lang="pl"
+      />
 
       <div class="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-bright prose-a:text-cyan prose-a:no-underline hover:prose-a:text-cyan-dark prose-blockquote:border-l-pink prose-blockquote:italic prose-blockquote:text-secondary prose-code:rounded prose-code:bg-surface-medium prose-code:text-cyan prose-img:rounded-xl">
         <Content />
