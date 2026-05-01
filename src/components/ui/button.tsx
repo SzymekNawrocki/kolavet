@@ -8,7 +8,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default:   'bg-cyan text-dark hover:bg-cyan-dark active:scale-[0.96]',
+        default:   'bg-cyan text-dark hover:bg-cyan-dark hover:shadow-[0_0_24px_rgba(0,217,255,0.4)] active:scale-[0.96] transition-shadow duration-300',
         secondary: 'border-2 border-pink text-pink hover:bg-pink-light active:scale-[0.96]',
         outline:   'border border-border bg-transparent text-bright hover:bg-surface-medium',
         ghost:     'text-bright hover:bg-surface-medium',
