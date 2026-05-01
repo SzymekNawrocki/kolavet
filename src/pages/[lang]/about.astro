@@ -1,10 +1,10 @@
 ---
-import { Image } from 'astro:assets';
 import { getEntry, render } from 'astro:content';
 import { createReader } from '@keystatic/core/reader';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
+import ImagePlaceholder from '../../components/ImagePlaceholder.astro';
 import { LOCALES, type Locale } from '../../lib/i18n';
 import keystaticConfig from '../../../keystatic.config';
 
@@ -23,7 +23,13 @@ const locData = lang === 'en'
 
 const heading = locData.heading ?? about?.heading ?? '';
 const intro   = locData.intro   ?? about?.intro   ?? '';
-const photo   = about?.photo ?? null;
+const photo   = about?.photo ?? '/images/photo.jpeg';
+
+const roleLabel: Record<Locale, string> = {
+  pl: 'Lekarz weterynarii',
+  en: 'Veterinarian',
+  de: 'Tierärztin',
+};
 
 const bioEntry = lang === 'en'
   ? await getEntry('pages', 'about/en_bio')
@@ -44,33 +50,52 @@ const descriptions: Record<Locale, string> = {
 >
   <Nav />
 
-  <main id="main-content" class="mx-auto max-w-[768px] px-6 py-16">
+  <main id="main-content">
 
-    <header class="mb-10">
-      <h1 class="font-serif text-[3rem] font-bold leading-tight tracking-[-0.8px] text-bright">
-        {heading}
-      </h1>
-      {intro && (
-        <p class="mt-4 text-lg leading-relaxed text-secondary">{intro}</p>
-      )}
-    </header>
+    <!-- Two-column header -->
+    <section class="relative overflow-hidden">
+      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute -left-40 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-cyan/8 blur-[120px]" />
+      </div>
 
-    {photo && (
-      <Image
-        src={photo}
-        alt="Michalina Kolarz"
-        class="mb-10 aspect-square w-36 rounded-full border border-border object-cover shadow-card"
-        width={144}
-        height={144}
-        loading="eager"
-        decoding="async"
-        inferSize={false}
-      />
-    )}
+      <div class="relative z-10 mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-12 px-6 py-16 md:grid-cols-2 md:gap-20 md:py-24">
+
+        <!-- Image -->
+        <div class="flex justify-center md:justify-start">
+          <ImagePlaceholder
+            src={photo}
+            alt="Michalina Kolarz"
+            width={420}
+            height={525}
+            loading="eager"
+            class="aspect-[4/5] w-full max-w-[340px] md:max-w-[380px]"
+          />
+        </div>
+
+        <!-- Text -->
+        <div class="flex flex-col gap-5 text-center md:text-left">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan">{roleLabel[lang]}</p>
+          <h1 class="font-serif text-[2.75rem] font-bold leading-tight tracking-[-0.8px] text-bright md:text-[3.5rem] md:tracking-[-1px]">
+            {heading}
+          </h1>
+          {intro && (
+            <p class="text-lg leading-relaxed text-secondary">{intro}</p>
+          )}
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Gradient divider -->
+    <div class="mx-auto max-w-[1200px] px-6">
+      <div class="h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
+    </div>
 
     {BioContent && (
-      <div class="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-bright prose-a:text-cyan prose-a:no-underline hover:prose-a:text-cyan-dark prose-blockquote:border-l-pink prose-blockquote:italic prose-blockquote:text-secondary">
-        <BioContent />
+      <div class="mx-auto max-w-[768px] px-6 py-16">
+        <div class="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-bright prose-a:text-cyan prose-a:no-underline hover:prose-a:text-cyan-dark prose-blockquote:border-l-pink prose-blockquote:italic prose-blockquote:text-secondary">
+          <BioContent />
+        </div>
       </div>
     )}
 
