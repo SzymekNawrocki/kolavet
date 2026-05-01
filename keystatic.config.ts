@@ -94,6 +94,17 @@ export default config({
         de_heading: fields.text({ label: 'DE | Seitenüberschrift' }),
         de_intro:   fields.text({ label: 'DE | Kurze Einführung', multiline: true }),
         de_bio:     fields.markdoc({ label: 'DE | Vollständige Bio' }),
+        journeyItems: fields.array(
+          fields.object({
+            year:        fields.text({ label: 'Rok / Okres (np. "2024")',  validation: { isRequired: true } }),
+            title:       fields.text({ label: 'PL | Tytuł etapu',         validation: { isRequired: true } }),
+            description: fields.text({ label: 'PL | Opis', multiline: true }),
+          }),
+          {
+            label: 'Etapy drogi (oś czasu)',
+            itemLabel: props => props.fields.title.value ?? 'Etap',
+          }
+        ),
       },
     }),
 
