@@ -15,36 +15,78 @@ const links        = navLinks[currentLocale];
 
 const aboutLink   = links.find(l => l.href === aboutPaths[currentLocale])   ?? { href: aboutPaths[currentLocale],   label: 'O mnie' };
 const contactLink = links.find(l => l.href === contactPaths[currentLocale]) ?? { href: contactPaths[currentLocale], label: 'Kontakt' };
+
+const socialLinks = [
+  { href: import.meta.env.PUBLIC_INSTAGRAM_URL ?? '#', label: 'Instagram', icon: 'instagram' },
+  { href: import.meta.env.PUBLIC_FACEBOOK_URL  ?? '#', label: 'Facebook',  icon: 'facebook'  },
+] as const;
 ---
 
 <footer class="mt-20">
   <Separator />
-  <div class="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-6 px-6 py-8">
+  <div class="mx-auto max-w-[1200px] px-6 py-8">
 
-    <p class="text-sm font-medium text-secondary">
-      &copy; {year} Michalina — Kolavet.
+    <div class="flex flex-wrap items-center justify-between gap-6">
+
+      <a
+        href={currentLocale === 'pl' ? '/' : `/${currentLocale}/`}
+        class="font-serif text-lg font-bold text-cyan transition-colors hover:text-cyan-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+        aria-label="Kolavet — strona główna"
+      >
+        Kolavet
+      </a>
+
+      <nav aria-label="Nawigacja stopki">
+        <ul class="flex flex-wrap gap-6" role="list">
+          <li>
+            <a
+              href={aboutLink.href}
+              class="text-sm font-medium text-secondary transition-colors duration-150 hover:text-cyan focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+            >
+              {aboutLink.label}
+            </a>
+          </li>
+          <li>
+            <a
+              href={contactLink.href}
+              class="text-sm font-medium text-secondary transition-colors duration-150 hover:text-cyan focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+            >
+              {contactLink.label}
+            </a>
+          </li>
+          <li>
+            <a
+              href="/rss.xml"
+              class="text-sm font-medium text-secondary transition-colors duration-150 hover:text-cyan focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+              aria-label="Subskrybuj feed RSS"
+            >
+              RSS
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="flex items-center gap-4">
+        {socialLinks.map(({ href, label }) => (
+          href !== '#' && (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              class="text-sm font-medium text-secondary transition-colors duration-150 hover:text-cyan focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+            >
+              {label}
+            </a>
+          )
+        ))}
+      </div>
+
+    </div>
+
+    <p class="mt-6 text-xs text-muted">
+      &copy; {year} Michalina Kolarz — Kolavet. Wszelkie prawa zastrzeżone.
     </p>
-
-    <nav aria-label="Nawigacja stopki">
-      <ul class="flex gap-6" role="list">
-        <li>
-          <a
-            href={aboutLink.href}
-            class="text-sm font-medium text-secondary transition-colors duration-150 hover:text-cyan focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
-          >
-            {aboutLink.label}
-          </a>
-        </li>
-        <li>
-          <a
-            href={contactLink.href}
-            class="text-sm font-medium text-secondary transition-colors duration-150 hover:text-cyan focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
-          >
-            {contactLink.label}
-          </a>
-        </li>
-      </ul>
-    </nav>
 
   </div>
 </footer>
