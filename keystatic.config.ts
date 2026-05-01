@@ -97,6 +97,40 @@ export default config({
       },
     }),
 
+    faq: singleton({
+      label: 'FAQ',
+      path: 'src/content/pages/faq',
+      schema: {
+        heading: fields.text({ label: 'PL | Nagłówek strony', defaultValue: 'Najczęstsze pytania' }),
+        intro:   fields.text({ label: 'PL | Wstęp', multiline: true }),
+        items: fields.array(
+          fields.object({
+            question: fields.text({ label: 'PL | Pytanie',    validation: { isRequired: true } }),
+            answer:   fields.text({ label: 'PL | Odpowiedź', multiline: true, validation: { isRequired: true } }),
+          }),
+          { label: 'PL | Pytania', itemLabel: props => props.fields.question.value ?? 'Pytanie' }
+        ),
+        en_heading: fields.text({ label: 'EN | Page heading' }),
+        en_intro:   fields.text({ label: 'EN | Intro', multiline: true }),
+        en_items: fields.array(
+          fields.object({
+            question: fields.text({ label: 'EN | Question' }),
+            answer:   fields.text({ label: 'EN | Answer', multiline: true }),
+          }),
+          { label: 'EN | Questions', itemLabel: props => props.fields.question.value ?? 'Question' }
+        ),
+        de_heading: fields.text({ label: 'DE | Seitenüberschrift' }),
+        de_intro:   fields.text({ label: 'DE | Einführung', multiline: true }),
+        de_items: fields.array(
+          fields.object({
+            question: fields.text({ label: 'DE | Frage' }),
+            answer:   fields.text({ label: 'DE | Antwort', multiline: true }),
+          }),
+          { label: 'DE | Fragen', itemLabel: props => props.fields.question.value ?? 'Frage' }
+        ),
+      },
+    }),
+
     testimonials: singleton({
       label: 'Opinie',
       path: 'src/content/pages/testimonials',

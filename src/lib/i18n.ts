@@ -19,18 +19,21 @@ export const navLinks: Record<Locale, { href: string; label: string }[]> = {
   pl: [
     { href: '/',        label: 'Strona główna' },
     { href: '/blog',    label: 'Blog' },
+    { href: '/faq',     label: 'FAQ' },
     { href: '/o-mnie',  label: 'O mnie' },
     { href: '/kontakt', label: 'Kontakt' },
   ],
   en: [
     { href: '/en/',        label: 'Home' },
     { href: '/en/blog',    label: 'Blog' },
+    { href: '/en/faq',     label: 'FAQ' },
     { href: '/en/about',   label: 'About' },
     { href: '/en/contact', label: 'Contact' },
   ],
   de: [
     { href: '/de/',        label: 'Startseite' },
     { href: '/de/blog',    label: 'Blog' },
+    { href: '/de/faq',     label: 'FAQ' },
     { href: '/de/about',   label: 'Über mich' },
     { href: '/de/contact', label: 'Kontakt' },
   ],
@@ -42,6 +45,7 @@ const pageEquivalents: Record<string, Record<Locale, string>> = {
   '/blog':    { pl: '/blog',    en: '/en/blog',    de: '/de/blog' },
   '/about':   { pl: '/o-mnie', en: '/en/about',   de: '/de/about' },
   '/contact': { pl: '/kontakt', en: '/en/contact', de: '/de/contact' },
+  '/faq':     { pl: '/faq',    en: '/en/faq',     de: '/de/faq' },
 };
 
 export function getLocalePaths(currentPath: string): Record<Locale, string> {
