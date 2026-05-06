@@ -45,7 +45,18 @@ export function PostCard({ slug, title, publishDate, category, excerpt, coverIma
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-dark/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           </>
         ) : (
-          <div className="h-full w-full bg-surface-medium [background-image:radial-gradient(circle,rgba(0,217,255,0.07)_1px,transparent_1px)] [background-size:20px_20px]" />
+          <div className="relative h-full w-full bg-surface-medium [background-image:radial-gradient(circle,rgba(0,217,255,0.07)_1px,transparent_1px)] [background-size:20px_20px]">
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan/6 via-transparent to-pink/4" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <svg className="h-14 w-14 text-cyan/20" viewBox="0 0 48 48" fill="currentColor" aria-hidden="true">
+                <ellipse cx="24" cy="34" rx="9" ry="7"/>
+                <circle cx="13" cy="22" r="5"/>
+                <circle cx="35" cy="22" r="5"/>
+                <circle cx="8" cy="31" r="4"/>
+                <circle cx="40" cy="31" r="4"/>
+              </svg>
+            </div>
+          </div>
         )}
       </a>
 

@@ -91,6 +91,13 @@ const categories = [
   { key: 'porady',     label: 'Porady' },
 ];
 
+const catSvgs: Record<string, string> = {
+  psy:        '<ellipse cx="24" cy="34" rx="9" ry="7"/><circle cx="13" cy="22" r="5"/><circle cx="35" cy="22" r="5"/><circle cx="8" cy="31" r="4"/><circle cx="40" cy="31" r="4"/>',
+  koty:       '<path d="M8 24L12 8L22 20C23 19 25 19 26 20L36 8L40 24C40 34 33 43 24 43C15 43 8 34 8 24Z"/>',
+  egzotyczne: '<ellipse cx="24" cy="30" rx="9" ry="12"/><circle cx="24" cy="14" r="8"/><path d="M16 18L24 22L16 24Z"/>',
+  porady:     '<circle cx="13" cy="9" r="4"/><circle cx="35" cy="9" r="4"/><path fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" d="M13 13C13 20 9 25 9 30C9 39 17 44 24 44C31 44 39 39 39 30C39 25 35 20 35 13"/><circle cx="24" cy="44" r="5"/>',
+};
+
 ---
 
 <BaseLayout
@@ -282,7 +289,7 @@ const categories = [
           </a>
         </div>
 
-        <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
           {categories.map((cat, i) => (
             <a
               href={`/blog?category=${cat.key}`}
@@ -290,10 +297,16 @@ const categories = [
               style={`animation-delay: ${i * 0.08}s`}
               aria-label={`Kategoria: ${cat.label} — ${categoryCounts[cat.key] ?? 0} artykułów`}
             >
-              <!-- Placeholder background — swap inner content for a real <img> to add category photo -->
               <div class="absolute inset-0 [background-image:radial-gradient(circle,rgba(0,217,255,0.07)_1px,transparent_1px)] [background-size:20px_20px]" aria-hidden="true" />
               <div class="absolute inset-0 bg-gradient-to-br from-cyan/6 via-transparent to-pink/4" aria-hidden="true" />
               <div class="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan/10 blur-3xl [animation:glowPulse_5s_ease-in-out_infinite]" aria-hidden="true" />
+
+              <!-- Animal / topic icon -->
+              <div class="absolute inset-0 flex items-center justify-center pb-8" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="currentColor" class="h-16 w-16 text-cyan/20 drop-shadow-[0_0_10px_rgba(0,217,255,0.25)]" aria-hidden="true">
+                  <Fragment set:html={catSvgs[cat.key] ?? ''} />
+                </svg>
+              </div>
 
               <!-- Bottom overlay for text readability -->
               <div class="absolute inset-0 bg-gradient-to-t from-dark/85 via-dark/20 to-transparent" aria-hidden="true" />
@@ -342,7 +355,7 @@ const categories = [
           />
           <div class="absolute bottom-0 right-0 w-[135px] md:w-[155px]">
             <ImagePlaceholder
-              src={null}
+              src={heroPhoto}
               alt="Michalina przy pracy"
               width={155}
               height={155}
@@ -357,7 +370,7 @@ const categories = [
 
         <div class="flex flex-col gap-5 text-center md:text-left">
           <p class="reveal text-xs font-semibold uppercase tracking-[0.2em] text-cyan [animation:fadeInUp_0.5s_ease_both]">Lekarz weterynarii</p>
-          <h2 class="reveal font-serif text-[2.75rem] font-bold leading-tight tracking-[-0.8px] text-bright [animation:fadeInUp_0.6s_0.1s_ease_both] md:text-[3.5rem] md:tracking-[-1px]">
+          <h2 class="reveal font-serif text-[2rem] font-bold leading-tight tracking-[-0.5px] text-bright [animation:fadeInUp_0.6s_0.1s_ease_both] md:text-[2.75rem] md:tracking-[-0.8px] lg:text-[3.5rem] lg:tracking-[-1px]">
             {aboutHeading}
           </h2>
           {aboutIntro && (
@@ -409,10 +422,7 @@ const categories = [
       </div>
     </section>
 
-    <!-- Divider -->
-    <div class="mx-auto max-w-[1200px] px-6">
-      <div class="h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
-    </div>
+    <NewsletterCTA lang="pl" />
 
     <!-- FAQ section -->
     <section id="faq" class="relative overflow-hidden py-16 md:py-24">
@@ -422,7 +432,7 @@ const categories = [
 
       <div class="relative z-10 mx-auto max-w-[768px] px-6 text-center">
         <p class="reveal mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-cyan [animation:fadeInUp_0.5s_ease_both]">FAQ</p>
-        <h2 class="reveal font-serif text-[2.75rem] font-bold leading-tight tracking-[-0.8px] text-bright [animation:fadeInUp_0.6s_0.1s_ease_both] md:text-[3.5rem]">
+        <h2 class="reveal font-serif text-[1.875rem] font-bold leading-tight tracking-[-0.5px] text-bright [animation:fadeInUp_0.6s_0.1s_ease_both] md:text-[2.75rem] md:tracking-[-0.8px] lg:text-[3.5rem]">
           {faqHeading}
         </h2>
         {faqIntro && (
@@ -480,7 +490,7 @@ const categories = [
 
       <div class="relative z-10 mx-auto max-w-[768px] px-6">
         <header class="mb-10">
-          <h2 class="reveal font-serif text-[3rem] font-bold leading-tight tracking-[-0.8px] text-bright [animation:fadeInUp_0.5s_ease_both]">
+          <h2 class="reveal font-serif text-[2rem] font-bold leading-tight tracking-[-0.5px] text-bright [animation:fadeInUp_0.5s_ease_both] md:text-[3rem] md:tracking-[-0.8px]">
             {contactHeading}
           </h2>
           {contactIntro && (
@@ -537,7 +547,6 @@ const categories = [
       </div>
     </section>
 
-    <NewsletterCTA lang="pl" />
 
   </main>
 
