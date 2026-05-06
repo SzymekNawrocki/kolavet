@@ -1,20 +1,3 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
-## Commands
-
-```bash
-npm run dev       # Start dev server at localhost:4321 (includes Keystatic admin at /keystatic)
-npm run build     # Build static site to ./dist/
-npm run preview   # Preview production build locally
-npx astro check   # TypeScript type-check all .astro files
-```
-
-No lint or test scripts are configured yet.
-
-## Project Context
-
 Personal blog for Michalina, a veterinary doctor. Content focuses on animal health, pet care,
 and veterinary insights written for pet owners. The tone is warm, trustworthy, and expert —
 like advice from a vet you already know.

@@ -1,7 +1,7 @@
 ---
 import fs from 'node:fs';
 import path from 'node:path';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 import { createReader } from '@keystatic/core/reader';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
@@ -9,18 +9,23 @@ import Footer from '../components/Footer.astro';
 import { PostCard } from '../components/PostCard';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
+import { Card } from '../components/ui/card';
 import { categoryLabels } from '../lib/i18n';
 import ImagePlaceholder from '../components/ImagePlaceholder.astro';
-import AboutTeaser from '../components/AboutTeaser.astro';
+import { ContactForm } from '../components/ContactForm';
 import NewsletterCTA from '../components/NewsletterCTA.astro';
 import Testimonials from '../components/Testimonials.astro';
 import keystaticConfig from '../../keystatic.config';
 import { calculateReadingTime } from '../lib/reading-time';
 
+const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
+
 const reader = createReader(process.cwd(), keystaticConfig);
-const [homePage, aboutMe] = await Promise.all([
+const [homePage, aboutMe, faqData, contactData] = await Promise.all([
   reader.singletons.homePage.read(),
   reader.singletons.aboutMe.read(),
+  reader.singletons.faq.read(),
+  reader.singletons.contact.read(),
 ]);
 
 const heroBadge    = homePage?.heroBadgeLabel    ?? 'Blog weterynaryjny';
@@ -30,6 +35,30 @@ const heroCtaLabel = homePage?.heroCtaLabel       ?? 'Przeglądaj artykuły';
 const blogHeading  = homePage?.blogSectionHeading ?? 'Ostatnie artykuły';
 const blogCta      = homePage?.blogCtaLabel       ?? 'Pokaż wszystkie';
 const heroPhoto    = aboutMe?.photo ?? '/images/photo.jpeg';
+
+const aboutHeading = aboutMe?.heading ?? 'O mnie';
+const aboutIntro   = aboutMe?.intro   ?? '';
+const defaultJourney = [
+  { year: '2019–2024', title: 'Studia weterynaryjne', description: 'Pięć lat nauki na wydziale medycyny weterynaryjnej — od anatomii po chirurgię.' },
+  { year: '2024',      title: 'Dyplom lekarza weterynarii', description: 'Obrona pracy dyplomowej i uzyskanie tytułu lek. wet.' },
+  { year: '2025',      title: 'Pierwsza praca i ten blog', description: 'Zaczęłam pracę w klinice i postanowiłam dzielić się tym, czego się uczę — stąd Kolavet.' },
+];
+const journeyItems = (aboutMe?.journeyItems ?? []).length > 0 ? (aboutMe?.journeyItems ?? []) : defaultJourney;
+
+const bioEntry = await getEntry('pages', 'about/bio');
+const { Content: BioContent } = bioEntry ? await render(bioEntry) : { Content: null };
+
+const faqHeading = faqData?.heading ?? 'Najczęstsze pytania';
+const faqIntro   = faqData?.intro   ?? 'Pytania, które najczęściej słyszę od właścicieli zwierząt.';
+const faqItems   = faqData?.items   ?? [];
+
+const contactHeading = contactData?.heading ?? 'Kontakt';
+const contactIntro   = contactData?.intro   ?? '';
+const contactEmail   = contactData?.email   ?? '';
+const contactPhone   = contactData?.phone   ?? '';
+
+const contactBodyEntry = await getEntry('pages', 'contact/body');
+const { Content: ContactBodyContent } = contactBodyEntry ? await render(contactBodyEntry) : { Content: null };
 
 const allPosts = await getCollection('posts');
 const posts = allPosts
@@ -109,7 +138,7 @@ const categories = [
               <a href="/blog">{heroCtaLabel}</a>
             </Button>
             <Button variant="outline" asChild size="lg">
-              <a href="/o-mnie">O mnie</a>
+              <a href="#o-mnie">O mnie</a>
             </Button>
           </div>
 
@@ -134,13 +163,13 @@ const categories = [
       <section class="pb-16 pt-4">
         <div class="mx-auto max-w-[1200px] px-6">
 
-          <p class="mb-6 text-xs font-semibold uppercase tracking-[0.2em] text-cyan [animation:fadeInUp_0.5s_ease_both]">
+          <p class="reveal mb-6 text-xs font-semibold uppercase tracking-[0.2em] text-cyan [animation:fadeInUp_0.5s_ease_both]">
             Polecany artykuł
           </p>
 
           <a
             href={`/blog/${featuredPost.id}`}
-            class="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface-light shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-cyan/40 hover:shadow-deep md:flex-row focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan [animation:fadeInUp_0.6s_0.1s_ease_both]"
+            class="reveal group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface-light shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-cyan/40 hover:shadow-deep md:flex-row focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan [animation:fadeInUp_0.6s_0.1s_ease_both]"
           >
             <div class="relative aspect-video shrink-0 overflow-hidden md:aspect-auto md:w-[420px]">
               {featuredPost.data.coverImage ? (
@@ -180,11 +209,15 @@ const categories = [
     )}
 
     <!-- Latest posts -->
-    <section class="py-20 md:py-24">
-      <div class="mx-auto max-w-[1200px] px-6">
+    <section class="relative overflow-hidden py-20 md:py-24">
+      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute -right-20 top-1/4 h-[350px] w-[350px] rounded-full bg-pink/8 blur-[100px] [animation:float_14s_ease-in-out_2s_infinite]" />
+        <div class="absolute -left-10 bottom-1/3 h-[250px] w-[250px] rounded-full bg-yellow/6 blur-[80px] [animation:float_16s_ease-in-out_6s_infinite]" />
+      </div>
+      <div class="relative z-10 mx-auto max-w-[1200px] px-6">
 
         <div class="mb-10 flex items-baseline justify-between gap-4">
-          <h2 class="relative pl-5 font-serif text-[2.25rem] font-bold leading-snug tracking-[-0.5px] text-bright before:absolute before:bottom-1 before:left-0 before:top-1 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-cyan before:to-cyan/0 before:content-['']">
+          <h2 class="reveal relative pl-5 font-serif text-[2.25rem] font-bold leading-snug tracking-[-0.5px] text-bright [animation:fadeInUp_0.5s_ease_both] before:absolute before:bottom-1 before:left-0 before:top-1 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-cyan before:to-cyan/0 before:content-['']">
             {blogHeading}
           </h2>
           <a
@@ -230,11 +263,15 @@ const categories = [
     </div>
 
     <!-- Category cards -->
-    <section class="py-20 md:py-24">
-      <div class="mx-auto max-w-[1200px] px-6">
+    <section class="relative overflow-hidden py-20 md:py-24">
+      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute left-1/3 -top-10 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-cyan/7 blur-[100px] [animation:float_12s_ease-in-out_infinite]" />
+        <div class="absolute bottom-0 right-1/4 h-[220px] w-[220px] rounded-full bg-pink/6 blur-[80px] [animation:float_15s_ease-in-out_5s_infinite]" />
+      </div>
+      <div class="relative z-10 mx-auto max-w-[1200px] px-6">
 
         <div class="mb-10 flex items-baseline justify-between gap-4">
-          <h2 class="relative pl-5 font-serif text-[2.25rem] font-bold leading-snug tracking-[-0.5px] text-bright before:absolute before:bottom-1 before:left-0 before:top-1 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-cyan before:to-cyan/0 before:content-['']">
+          <h2 class="reveal relative pl-5 font-serif text-[2.25rem] font-bold leading-snug tracking-[-0.5px] text-bright [animation:fadeInUp_0.5s_ease_both] before:absolute before:bottom-1 before:left-0 before:top-1 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-cyan before:to-cyan/0 before:content-['']">
             Tematy
           </h2>
           <a
@@ -249,7 +286,7 @@ const categories = [
           {categories.map((cat, i) => (
             <a
               href={`/blog?category=${cat.key}`}
-              class="group relative aspect-square overflow-hidden rounded-2xl border border-border bg-surface-light transition-all duration-300 hover:-translate-y-1.5 hover:border-cyan/40 hover:shadow-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan [animation:scaleIn_0.5s_ease_both]"
+              class="reveal group relative aspect-square overflow-hidden rounded-2xl border border-border bg-surface-light transition-all duration-300 hover:-translate-y-1.5 hover:border-cyan/40 hover:shadow-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan [animation:scaleIn_0.5s_ease_both]"
               style={`animation-delay: ${i * 0.08}s`}
               aria-label={`Kategoria: ${cat.label} — ${categoryCounts[cat.key] ?? 0} artykułów`}
             >
@@ -284,7 +321,222 @@ const categories = [
     </section>
 
     <Testimonials />
-    <AboutTeaser lang="pl" />
+
+    <!-- About Me section -->
+    <section id="o-mnie" class="relative overflow-hidden">
+      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute -left-40 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-cyan/8 blur-[120px]" />
+      </div>
+
+      <div class="relative z-10 mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-12 px-6 py-16 md:grid-cols-2 md:gap-20 md:py-24">
+
+        <!-- Gallery collage: main portrait + secondary placeholder -->
+        <div class="relative flex justify-center pb-14 pr-12 md:justify-start md:pb-16 md:pr-16">
+          <ImagePlaceholder
+            src={heroPhoto}
+            alt="Michalina Kolarz — lekarz weterynarii"
+            width={320}
+            height={400}
+            loading="lazy"
+            class="aspect-[4/5] w-full max-w-[270px] md:max-w-[300px]"
+          />
+          <div class="absolute bottom-0 right-0 w-[135px] md:w-[155px]">
+            <ImagePlaceholder
+              src={null}
+              alt="Michalina przy pracy"
+              width={155}
+              height={155}
+              loading="lazy"
+              class="aspect-square w-full"
+            />
+            <span class="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-cyan/30 bg-dark px-3 py-1 text-[0.6rem] font-bold uppercase tracking-[0.18em] text-cyan shadow-deep">
+              Lek. wet.
+            </span>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-5 text-center md:text-left">
+          <p class="reveal text-xs font-semibold uppercase tracking-[0.2em] text-cyan [animation:fadeInUp_0.5s_ease_both]">Lekarz weterynarii</p>
+          <h2 class="reveal font-serif text-[2.75rem] font-bold leading-tight tracking-[-0.8px] text-bright [animation:fadeInUp_0.6s_0.1s_ease_both] md:text-[3.5rem] md:tracking-[-1px]">
+            {aboutHeading}
+          </h2>
+          {aboutIntro && (
+            <p class="reveal text-lg leading-relaxed text-secondary [animation:fadeInUp_0.6s_0.15s_ease_both]">{aboutIntro}</p>
+          )}
+        </div>
+
+      </div>
+
+      <div class="mx-auto max-w-[1200px] px-6">
+        <div class="h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
+      </div>
+
+      {BioContent && (
+        <div class="mx-auto max-w-[768px] px-6 py-16">
+          <div class="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-bright prose-a:text-cyan prose-a:no-underline hover:prose-a:text-cyan-dark prose-blockquote:border-l-pink prose-blockquote:italic prose-blockquote:text-secondary">
+            <BioContent />
+          </div>
+        </div>
+      )}
+
+      <div class="mx-auto max-w-[768px] px-6 pb-20">
+        <div class="h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
+
+        <h3 class="reveal relative mb-10 mt-12 pl-5 font-serif text-[1.875rem] font-bold tracking-[-0.5px] text-bright [animation:fadeInUp_0.5s_ease_both] before:absolute before:bottom-1 before:left-0 before:top-1 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-cyan before:to-cyan/0 before:content-['']">
+          Moja droga
+        </h3>
+
+        <ol class="relative flex flex-col" aria-label="Oś czasu">
+          <div class="absolute bottom-2 left-[11px] top-2 w-px bg-border" aria-hidden="true" />
+          {journeyItems.map((item, i) => (
+            <li
+              class="reveal relative flex gap-5 pb-10 last:pb-0 [animation:slideInLeft_0.5s_ease_both]"
+              style={`animation-delay: ${i * 0.1}s`}
+            >
+              <div class="relative mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-border bg-surface-light">
+                <div class="h-2 w-2 rounded-full bg-cyan [animation:glowPulse_3s_ease-in-out_infinite]" aria-hidden="true" />
+              </div>
+              <div class="flex flex-col gap-1 pt-0.5">
+                <span class="text-xs font-bold uppercase tracking-[0.15em] text-cyan">{item.year}</span>
+                <p class="font-serif text-lg font-bold text-bright">{item.title}</p>
+                {item.description && (
+                  <p class="text-sm leading-relaxed text-secondary">{item.description}</p>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="mx-auto max-w-[1200px] px-6">
+      <div class="h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
+    </div>
+
+    <!-- FAQ section -->
+    <section id="faq" class="relative overflow-hidden py-16 md:py-24">
+      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute -top-20 left-1/2 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-cyan/8 blur-[120px] [animation:float_12s_ease-in-out_infinite]" />
+      </div>
+
+      <div class="relative z-10 mx-auto max-w-[768px] px-6 text-center">
+        <p class="reveal mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-cyan [animation:fadeInUp_0.5s_ease_both]">FAQ</p>
+        <h2 class="reveal font-serif text-[2.75rem] font-bold leading-tight tracking-[-0.8px] text-bright [animation:fadeInUp_0.6s_0.1s_ease_both] md:text-[3.5rem]">
+          {faqHeading}
+        </h2>
+        {faqIntro && (
+          <p class="reveal mt-5 text-lg leading-relaxed text-secondary [animation:fadeInUp_0.6s_0.15s_ease_both]">
+            {faqIntro}
+          </p>
+        )}
+      </div>
+
+      <div class="mx-auto mt-10 max-w-[768px] px-6">
+        <div class="h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
+      </div>
+
+      {faqItems.length > 0 ? (
+        <div class="mx-auto max-w-[768px] px-6 py-12">
+          <dl class="flex flex-col gap-6">
+            {faqItems.map((item, i) => (
+              <div
+                class="reveal rounded-2xl border border-border bg-surface-light p-6 shadow-card [animation:fadeInUp_0.5s_ease_both]"
+                style={`animation-delay: ${i * 0.06}s`}
+              >
+                <dt class="font-serif text-lg font-bold leading-snug text-bright md:text-xl">
+                  {item.question}
+                </dt>
+                <dd class="mt-3 text-base leading-relaxed text-secondary">
+                  {item.answer}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      ) : (
+        <p class="mx-auto max-w-[768px] px-6 py-12 text-base text-secondary">Pytania wkrótce.</p>
+      )}
+
+      <div class="mx-auto max-w-[768px] px-6 pb-4 text-center">
+        <p class="mb-5 text-base text-secondary">Nie znalazłeś odpowiedzi na swoje pytanie?</p>
+        <Button asChild>
+          <a href="#kontakt">Napisz do mnie</a>
+        </Button>
+      </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="mx-auto max-w-[1200px] px-6">
+      <div class="h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
+    </div>
+
+    <!-- Contact section -->
+    <section id="kontakt" class="relative overflow-hidden py-16 md:py-24">
+      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute -bottom-20 left-1/4 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-cyan/8 blur-[120px] [animation:float_14s_ease-in-out_infinite]" />
+        <div class="absolute -top-10 right-1/4 h-[300px] w-[300px] rounded-full bg-pink/6 blur-[100px] [animation:float_16s_ease-in-out_4s_infinite]" />
+      </div>
+
+      <div class="relative z-10 mx-auto max-w-[768px] px-6">
+        <header class="mb-10">
+          <h2 class="reveal font-serif text-[3rem] font-bold leading-tight tracking-[-0.8px] text-bright [animation:fadeInUp_0.5s_ease_both]">
+            {contactHeading}
+          </h2>
+          {contactIntro && (
+            <p class="reveal mt-4 text-lg leading-relaxed text-secondary [animation:fadeInUp_0.6s_0.1s_ease_both]">{contactIntro}</p>
+          )}
+        </header>
+
+        {(contactPhone || contactEmail) && (
+          <div class="reveal mb-8 [animation:fadeInUp_0.6s_0.15s_ease_both]">
+            <Card>
+              <div class="p-6">
+                <div class="flex flex-col gap-4">
+                  {contactPhone && (
+                    <div class="flex items-center gap-4">
+                      <span class="min-w-[4.5rem] text-xs font-bold uppercase tracking-[0.15em] text-muted">Tel.</span>
+                      <a
+                        href={`tel:${contactPhone.replace(/\s/g, '')}`}
+                        class="text-base font-medium text-bright transition-colors hover:text-cyan focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+                      >
+                        {contactPhone}
+                      </a>
+                    </div>
+                  )}
+                  {contactEmail && (
+                    <div class="flex items-center gap-4">
+                      <span class="min-w-[4.5rem] text-xs font-bold uppercase tracking-[0.15em] text-muted">E-mail</span>
+                      <a
+                        href={`mailto:${contactEmail}`}
+                        class="text-base font-semibold text-cyan transition-colors hover:text-cyan-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+                      >
+                        {contactEmail}
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Card>
+          </div>
+        )}
+
+        {ContactBodyContent && (
+          <div class="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-bright prose-a:text-cyan prose-a:no-underline hover:prose-a:text-cyan-dark mb-8">
+            <ContactBodyContent />
+          </div>
+        )}
+
+        <div class="reveal [animation:fadeInUp_0.6s_0.2s_ease_both]">
+          <Card>
+            <div class="p-6 md:p-8">
+              <ContactForm lang="pl" accessKey={web3formsKey} client:load />
+            </div>
+          </Card>
+        </div>
+      </div>
+    </section>
+
     <NewsletterCTA lang="pl" />
 
   </main>

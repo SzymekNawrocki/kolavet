@@ -39,6 +39,9 @@
   100% { background-position:  200% center; }
 }
 
+.reveal { animation-play-state: paused; }
+.reveal.in-view { animation-play-state: running; }
+
 @theme {
   /* Fonts */
   --font-sans:    'Geist', system-ui, -apple-system, sans-serif;
@@ -84,6 +87,7 @@
     background-color: var(--color-dark);
     color: var(--color-bright);
     -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
   }
 
   body {

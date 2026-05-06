@@ -1,10 +1,16 @@
 ---
 import { Image } from 'astro:assets';
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../keystatic.config';
 
 interface Props {
   lang?: 'pl' | 'en' | 'de';
 }
 const { lang = 'pl' } = Astro.props;
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const aboutMe = await reader.singletons.aboutMe.read();
+const photo = aboutMe?.photo ?? '/images/photo.jpeg';
 
 const t = {
   pl: { label: 'Autorka', role: 'Lekarz weterynarii', cta: 'Więcej o mnie', href: '/o-mnie' },
@@ -16,13 +22,14 @@ const t = {
 <aside class="mt-12 border-t border-border pt-10">
   <div class="flex flex-wrap items-center gap-5">
     <Image
-      src="/images/photo.jpeg"
+      src={photo}
       alt="Michalina Kolarz"
       width={64}
       height={64}
       class="size-16 shrink-0 rounded-full border border-border object-cover"
       loading="lazy"
       decoding="async"
+      inferSize={false}
     />
     <div class="flex-1">
       <p class="text-xs font-semibold uppercase tracking-wider text-muted">{t.label}</p>

@@ -20,7 +20,11 @@
       "Bash(curl -s \"https://kolavet.pl\")",
       "Bash(curl -s \"https://kolavet.pl/blog\")",
       "Read(//tmp/**)",
-      "Bash(curl -sL \"https://kolavet.pl/blog/\")"
+      "Bash(curl -sL \"https://kolavet.pl/blog/\")",
+      "Bash(Get-ChildItem -Path \"C:\\\\kolavet\" -Force)",
+      "Bash(Select-Object Name, PSIsContainer)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\kolavet\" -Force | Select-Object Name, @{Name=\"IsDir\"; Expression={$_.PSIsContainer}})",
+      "Bash(Remove-Item *)"
     ]
   }
 }
