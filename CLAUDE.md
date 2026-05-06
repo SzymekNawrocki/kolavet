@@ -35,8 +35,10 @@ in `src/content.config.ts` for Astro's content collections.
 
 1. Keystatic writes `.mdoc` files + frontmatter to `src/content/posts/`
 2. Astro reads them via `getCollection('posts')` at build time
-3. Dynamic blog routes use `getStaticPaths` + slug from `post.data.title.slug`
-4. Images stored in `public/images/` and referenced by path
+3. Dynamic blog routes use `getStaticPaths` + `post.id` as the URL slug
+4. Pages that list posts call `getPosts(lang)` from `src/lib/posts.ts` — returns sorted, reading-time-annotated `PostData[]`
+5. CMS singleton data is fetched via `src/lib/cms.ts` helpers — never call `createReader` directly
+6. Images stored in `public/images/` and referenced by path
 
 ### Key Files
 
@@ -48,12 +50,19 @@ in `src/content.config.ts` for Astro's content collections.
 | `src/layouts/BaseLayout.astro` | Root layout — SEO, OG tags, Google Fonts, named `head` slot; accepts `lang` prop |
 | `astro.config.mjs` | Vite plugin: tailwindcss; Keystatic excluded from production builds (dev-only) |
 | `src/lib/utils.ts` | `cn()` utility (clsx + tailwind-merge) — import in all React components |
-| `src/lib/i18n.ts` | Locale constants, nav links per locale, `getLocalePaths()` helper |
-| `src/lib/reading-time.ts` | `calculateReadingTime()` — used in blog post and post card |
+| `src/lib/i18n.ts` | Locale constants, nav links, `getLocalePaths()`, `detectLocale(path)` |
+| `src/lib/categories.ts` | Single source for category enum — `CATEGORIES` tuple + `CATEGORY_LABELS_PL`; imported by Keystatic, Zod schema, BlogFilter |
+| `src/lib/cms.ts` | CMS access layer — `getHomePage/getAboutMe/getFaq/getContact/getTestimonials`; never call `createReader` elsewhere |
+| `src/lib/posts.ts` | Post data helpers — `getPosts(lang)`, `getRelatedPosts(id, category, lang)`, `readRaw(id)` |
+| `src/lib/reading-time.ts` | `calculateReadingTime()` — called internally by `posts.ts` |
 | `src/components/ui/` | shadcn/ui components: `button`, `badge`, `card`, `sheet`, `separator`, `input` |
 | `src/components/NavClient.tsx` | React nav — desktop links + mobile Sheet + PL/EN/DE switcher, `client:load` |
-| `src/components/PostCard.tsx` | React post card — uses `Badge` + `CardContent`, server-rendered |
+| `src/components/PostCard.tsx` | React post card — uses `Badge` + `CardContent`, server-rendered; link always `/blog/[slug]` |
+| `src/components/BlogFilter.tsx` | React blog listing — search, category filter, pagination; exports `PostData` type |
 | `src/components/ContactForm.tsx` | React contact form — web3forms submission, `client:load` |
+| `src/components/HeroSection.astro` | Hero section component — used by both `index.astro` and `[lang]/index.astro` |
+| `src/components/CategoryGrid.astro` | Category cards grid — self-contained, accepts `categoryCounts` prop |
+| `src/components/FaqSection.astro` | FAQ section — accepts `heading`, `intro`, `items` props |
 | `src/components/ImagePlaceholder.astro` | Image wrapper with glow frame + dot-grid placeholder when `src` is null |
 | `src/components/Testimonials.astro` | Keystatic-driven testimonial grid (`singletons.testimonials`) |
 | `src/components/NewsletterCTA.astro` | Newsletter signup section — i18n-aware, no backend wired yet |
@@ -65,16 +74,18 @@ in `src/content.config.ts` for Astro's content collections.
 
 ### Homepage Section Order (`src/pages/index.astro`)
 
-1. Hero (headline, subtext, CTA buttons, vet photo)
-2. Featured Post (optional, driven by `homePage.featuredPostSlug`)
-3. Latest Posts (3 most recent, links to `/blog`)
-4. Category Cards (Psy / Koty / Egzotyczne / Porady — with SVG icons)
-5. Testimonials (`<Testimonials />`)
-6. About Me (portrait collage, bio prose, journey timeline)
-7. Newsletter CTA (`<NewsletterCTA />`)
-8. FAQ (accordion-free list, driven by `singletons.faq`)
-9. Contact (card-wrapped phone/email + `<ContactForm />`)
+1. `<HeroSection />` — headline, subtext, CTA buttons, vet photo
+2. Featured Post (optional inline, driven by `homePage.featuredPostSlug`)
+3. Latest Posts (3 most recent via `getPosts()`, links to `/blog`)
+4. `<CategoryGrid />` — Psy / Koty / Egzotyczne / Porady with SVG icons
+5. `<Testimonials />` — Keystatic-driven
+6. About Me (inline — portrait collage, bio prose, journey timeline)
+7. `<NewsletterCTA />`
+8. `<FaqSection />` — driven by `singletons.faq`
+9. Contact (inline — card-wrapped phone/email + `<ContactForm />`)
 10. Footer
+
+`HeroSection` is also used by `src/pages/[lang]/index.astro` — edit props there, not the markup.
 
 ### Tailwind v4 Critical Notes
 
@@ -88,11 +99,7 @@ in `src/content.config.ts` for Astro's content collections.
 
 ### Content Collection Schema (Astro 6)
 
-`post.data.title` is a nested object from `fields.slug()`:
-```ts
-title: { name: string; slug: string }
-```
-Use `post.data.title.name` for display and `post.data.title.slug` for URL routing.
+`post.data.title` is a plain `string` (the display name). The URL slug is `post.id` (the Markdoc filename without extension), set by Keystatic's `slugField`.
 
 ## Design System
 
@@ -145,7 +152,8 @@ shadow-card / shadow-deep  →  cyan-tinted multi-layer shadows
 ### i18n (Internationalisation)
 
 - Three locales: `pl` (default, no prefix), `en` (`/en/`), `de` (`/de/`)
-- Locale utilities in `src/lib/i18n.ts`: `LOCALES`, `Locale`, `navLinks`, `getLocalePaths()`
+- Locale utilities in `src/lib/i18n.ts`: `LOCALES`, `Locale`, `navLinks`, `getLocalePaths()`, `detectLocale(pathname)`
+- Use `detectLocale(Astro.url.pathname)` to get the current locale — never pattern-match on the path string directly
 - Polish content lives at root paths (`/`, `/blog`)
 - About / Contact / FAQ for all locales are **inline sections** on the homepage (`#o-mnie`, `#kontakt`, `#faq`) — there are no separate page files for these
 - `BaseLayout` accepts a `lang` prop (default `'pl'`) used on `<html lang>`
@@ -156,11 +164,12 @@ shadow-card / shadow-deep  →  cyan-tinted multi-layer shadows
 - Blog posts stay at Polish-only URLs (`/blog/[slug]`); `[lang]/blog` links there
 
 ### Keystatic CMS
-- Content schema defined in `keystatic.config.ts`
+- Content schema defined in `keystatic.config.ts`; category enum sourced from `src/lib/categories.ts`
 - Blog posts stored as Markdoc in `src/content/posts/`
 - Images stored in `public/images/`
 - Never hardcode content that belongs in the CMS
 - Singletons: `homePage`, `aboutMe`, `contact`, `faq`, `testimonials` — all wired up, all locale-aware
+- Access singletons via `src/lib/cms.ts` helpers (`getHomePage()`, etc.) — never call `createReader` in components or pages
 - Keystatic admin (`/keystatic`) only active in dev mode (`NODE_ENV !== 'production'`)
 
 ### Astro Conventions
