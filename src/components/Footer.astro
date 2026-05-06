@@ -1,13 +1,10 @@
 ---
 import { Separator } from './ui/separator';
-import { navLinks, type Locale } from '../lib/i18n';
+import { navLinks, detectLocale } from '../lib/i18n';
 
 const year = new Date().getFullYear();
 const currentPath = Astro.url.pathname;
-
-let currentLocale: Locale = 'pl';
-if (currentPath.startsWith('/en')) currentLocale = 'en';
-else if (currentPath.startsWith('/de')) currentLocale = 'de';
+const currentLocale = detectLocale(currentPath);
 
 const links = navLinks[currentLocale];
 

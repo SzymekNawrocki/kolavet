@@ -1,9 +1,7 @@
 ---
-import { createReader } from '@keystatic/core/reader';
-import keystaticConfig from '../../keystatic.config';
+import { getTestimonials } from '../lib/cms';
 
-const reader = createReader(process.cwd(), keystaticConfig);
-const data = await reader.singletons.testimonials.read();
+const data = await getTestimonials();
 const items = data?.items ?? [];
 ---
 

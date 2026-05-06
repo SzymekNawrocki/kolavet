@@ -1,0 +1,62 @@
+---
+import { Button } from './ui/button';
+
+interface Props {
+  heading: string;
+  intro?: string;
+  items: readonly { readonly question: string; readonly answer: string }[];
+}
+
+const { heading, intro, items } = Astro.props;
+---
+
+<section id="faq" class="relative overflow-hidden py-16 md:py-24">
+  <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div class="absolute -top-20 left-1/2 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-cyan/8 blur-[120px] [animation:float_12s_ease-in-out_infinite]" />
+  </div>
+
+  <div class="relative z-10 mx-auto max-w-[768px] px-6 text-center">
+    <p class="reveal mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-cyan [animation:fadeInUp_0.5s_ease_both]">FAQ</p>
+    <h2 class="reveal font-serif text-[1.875rem] font-bold leading-tight tracking-[-0.5px] text-bright [animation:fadeInUp_0.6s_0.1s_ease_both] md:text-[2.75rem] md:tracking-[-0.8px] lg:text-[3.5rem]">
+      {heading}
+    </h2>
+    {intro && (
+      <p class="reveal mt-5 text-lg leading-relaxed text-secondary [animation:fadeInUp_0.6s_0.15s_ease_both]">
+        {intro}
+      </p>
+    )}
+  </div>
+
+  <div class="mx-auto mt-10 max-w-[768px] px-6">
+    <div class="h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
+  </div>
+
+  {items.length > 0 ? (
+    <div class="mx-auto max-w-[768px] px-6 py-12">
+      <dl class="flex flex-col gap-6">
+        {items.map((item, i) => (
+          <div
+            class="reveal rounded-2xl border border-border bg-surface-light p-6 shadow-card [animation:fadeInUp_0.5s_ease_both]"
+            style={`animation-delay: ${i * 0.06}s`}
+          >
+            <dt class="font-serif text-lg font-bold leading-snug text-bright md:text-xl">
+              {item.question}
+            </dt>
+            <dd class="mt-3 text-base leading-relaxed text-secondary">
+              {item.answer}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  ) : (
+    <p class="mx-auto max-w-[768px] px-6 py-12 text-base text-secondary">Pytania wkrótce.</p>
+  )}
+
+  <div class="mx-auto max-w-[768px] px-6 pb-4 text-center">
+    <p class="mb-5 text-base text-secondary">Nie znalazłeś odpowiedzi na swoje pytanie?</p>
+    <Button asChild>
+      <a href="#kontakt">Napisz do mnie</a>
+    </Button>
+  </div>
+</section>

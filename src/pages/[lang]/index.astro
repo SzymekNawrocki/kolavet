@@ -1,17 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
-import { createReader } from '@keystatic/core/reader';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import { PostCard } from '../../components/PostCard';
-import { Button } from '../../components/ui/button';
-import { Badge } from '../../components/ui/badge';
-import ImagePlaceholder from '../../components/ImagePlaceholder.astro';
 import AboutTeaser from '../../components/AboutTeaser.astro';
 import NewsletterCTA from '../../components/NewsletterCTA.astro';
+import HeroSection from '../../components/HeroSection.astro';
 import { LOCALES, type Locale } from '../../lib/i18n';
-import keystaticConfig from '../../../keystatic.config';
+import { getHomePage, getAboutMe } from '../../lib/cms';
 
 export function getStaticPaths() {
   return LOCALES.filter(l => l !== 'pl').map(lang => ({ params: { lang } }));
@@ -19,10 +16,9 @@ export function getStaticPaths() {
 
 const { lang } = Astro.params as { lang: Locale };
 
-const reader = createReader(process.cwd(), keystaticConfig);
 const [hp, aboutMe] = await Promise.all([
-  reader.singletons.homePage.read(),
-  reader.singletons.aboutMe.read(),
+  getHomePage(),
+  getAboutMe(),
 ]);
 
 const locData = lang === 'en'
@@ -64,54 +60,15 @@ const descriptions: Record<Locale, string> = {
 
   <main id="main-content">
 
-    <!-- Hero — two-column on desktop -->
-    <section class="relative overflow-hidden py-16 md:py-24 lg:py-32">
-
-      <!-- Floating gradient orbs -->
-      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div class="absolute -top-32 left-1/4 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-cyan/10 blur-[140px] [animation:float_12s_ease-in-out_infinite]" />
-        <div class="absolute -right-20 top-1/3 h-[400px] w-[400px] rounded-full bg-pink/8 blur-[120px] [animation:float_16s_ease-in-out_4s_infinite]" />
-        <div class="absolute -bottom-20 left-1/2 h-[300px] w-[300px] rounded-full bg-yellow/6 blur-[100px] [animation:float_14s_ease-in-out_8s_infinite]" />
-      </div>
-
-      <div class="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-dark to-transparent" aria-hidden="true" />
-
-      <div class="relative z-10 mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-12 px-6 md:grid-cols-2 md:gap-16 lg:gap-24">
-
-        <!-- Text column -->
-        <div class="flex flex-col items-center gap-6 text-center md:items-start md:text-left">
-          <span class="[animation:fadeInUp_0.5s_ease_both]">
-            <Badge>{heroBadge}</Badge>
-          </span>
-          <h1 class="font-serif text-[2.75rem] font-extrabold leading-[1.06] tracking-[-1px] text-bright [animation:fadeInUp_0.65s_0.1s_ease_both] md:text-[3.5rem] md:tracking-[-1.2px] lg:text-[4.25rem] lg:tracking-[-1.5px]">
-            {heroHeadline}
-          </h1>
-          {heroSubtext && (
-            <p class="max-w-[520px] text-lg leading-relaxed text-secondary [animation:fadeInUp_0.65s_0.2s_ease_both]">
-              {heroSubtext}
-            </p>
-          )}
-          <div class="[animation:fadeInUp_0.65s_0.3s_ease_both]">
-            <Button asChild size="lg">
-              <a href={`/${lang}/blog`}>{heroCtaLabel}</a>
-            </Button>
-          </div>
-        </div>
-
-        <!-- Image column -->
-        <div class="flex justify-center [animation:fadeInUp_0.8s_0.4s_ease_both] md:justify-end">
-          <ImagePlaceholder
-            src={heroPhoto}
-            alt="Michalina Kolarz — veterinarian"
-            width={480}
-            height={600}
-            loading="eager"
-            class="aspect-[4/5] w-full max-w-[380px] md:max-w-[420px]"
-          />
-        </div>
-
-      </div>
-    </section>
+    <HeroSection
+      badge={heroBadge}
+      headline={heroHeadline}
+      subtext={heroSubtext}
+      ctaLabel={heroCtaLabel}
+      ctaHref={`/${lang}/blog`}
+      photoSrc={heroPhoto}
+      photoAlt="Michalina Kolarz — veterinarian"
+    />
 
     <!-- Latest posts -->
     <section class="pb-24 pt-8">
@@ -138,7 +95,6 @@ const descriptions: Record<Locale, string> = {
                   category={post.data.category}
                   excerpt={post.data.excerpt}
                   coverImage={post.data.coverImage}
-                  basePath="/blog"
                   lang={lang}
                 />
               </li>

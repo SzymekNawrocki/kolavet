@@ -1,4 +1,5 @@
 import { config, collection, singleton, fields } from '@keystatic/core';
+import { CATEGORIES, CATEGORY_LABELS_PL } from './src/lib/categories';
 
 export default config({
   storage: { kind: 'local' },
@@ -17,12 +18,7 @@ export default config({
         }),
         category: fields.select({
           label: 'Kategoria',
-          options: [
-            { label: 'Psy', value: 'psy' },
-            { label: 'Koty', value: 'koty' },
-            { label: 'Egzotyczne', value: 'egzotyczne' },
-            { label: 'Porady', value: 'porady' },
-          ],
+          options: CATEGORIES.map(v => ({ label: CATEGORY_LABELS_PL[v], value: v })),
           defaultValue: 'porady',
         }),
         excerpt: fields.text({

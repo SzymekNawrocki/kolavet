@@ -1,15 +1,13 @@
 ---
 import { Image } from 'astro:assets';
-import { createReader } from '@keystatic/core/reader';
-import keystaticConfig from '../../keystatic.config';
+import { getAboutMe } from '../lib/cms';
 
 interface Props {
   lang?: 'pl' | 'en' | 'de';
 }
 const { lang = 'pl' } = Astro.props;
 
-const reader = createReader(process.cwd(), keystaticConfig);
-const aboutMe = await reader.singletons.aboutMe.read();
+const aboutMe = await getAboutMe();
 const photo = aboutMe?.photo ?? '/images/photo.jpeg';
 
 const t = {

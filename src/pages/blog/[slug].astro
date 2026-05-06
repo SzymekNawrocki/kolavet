@@ -1,6 +1,4 @@
 ---
-import fs from 'node:fs';
-import path from 'node:path';
 import { Image } from 'astro:assets';
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -14,6 +12,7 @@ import { Badge } from '../../components/ui/badge';
 import { PostCard } from '../../components/PostCard';
 import { categoryLabels } from '../../lib/i18n';
 import { calculateReadingTime } from '../../lib/reading-time';
+import { getRelatedPosts, readRaw } from '../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -37,38 +36,8 @@ export async function getStaticPaths() {
 const { post, prevPost, nextPost } = Astro.props;
 const { Content, headings } = await render(post);
 
-let rawContent = '';
-try {
-  rawContent = fs.readFileSync(
-    path.join(process.cwd(), 'src/content/posts', `${post.id}.mdoc`),
-    'utf-8'
-  );
-} catch {}
-const readingTime = calculateReadingTime(rawContent, 'pl');
-
-const allPosts = await getCollection('posts');
-const related = allPosts
-  .filter(p => p.id !== post.id && p.data.category === post.data.category)
-  .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
-  .slice(0, 3)
-  .map(p => {
-    let raw = '';
-    try {
-      raw = fs.readFileSync(
-        path.join(process.cwd(), 'src/content/posts', `${p.id}.mdoc`),
-        'utf-8'
-      );
-    } catch {}
-    return {
-      slug:        p.id,
-      title:       p.data.title,
-      publishDate: p.data.publishDate,
-      category:    p.data.category,
-      excerpt:     p.data.excerpt,
-      coverImage:  p.data.coverImage ?? null,
-      readingTime: calculateReadingTime(raw, 'pl'),
-    };
-  });
+const readingTime = calculateReadingTime(readRaw(post.id), 'pl');
+const related = await getRelatedPosts(post.id, post.data.category, 'pl');
 
 const date = new Date(post.data.publishDate).toLocaleDateString('pl-PL', {
   year: 'numeric', month: 'long', day: 'numeric',

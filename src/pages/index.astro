@@ -1,8 +1,5 @@
 ---
-import fs from 'node:fs';
-import path from 'node:path';
 import { getCollection, getEntry, render } from 'astro:content';
-import { createReader } from '@keystatic/core/reader';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
@@ -11,21 +8,23 @@ import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Card } from '../components/ui/card';
 import { categoryLabels } from '../lib/i18n';
-import ImagePlaceholder from '../components/ImagePlaceholder.astro';
 import { ContactForm } from '../components/ContactForm';
 import NewsletterCTA from '../components/NewsletterCTA.astro';
 import Testimonials from '../components/Testimonials.astro';
-import keystaticConfig from '../../keystatic.config';
-import { calculateReadingTime } from '../lib/reading-time';
+import HeroSection from '../components/HeroSection.astro';
+import CategoryGrid from '../components/CategoryGrid.astro';
+import FaqSection from '../components/FaqSection.astro';
+import ImagePlaceholder from '../components/ImagePlaceholder.astro';
+import { getHomePage, getAboutMe, getFaq, getContact } from '../lib/cms';
+import { getPosts } from '../lib/posts';
 
 const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
 
-const reader = createReader(process.cwd(), keystaticConfig);
 const [homePage, aboutMe, faqData, contactData] = await Promise.all([
-  reader.singletons.homePage.read(),
-  reader.singletons.aboutMe.read(),
-  reader.singletons.faq.read(),
-  reader.singletons.contact.read(),
+  getHomePage(),
+  getAboutMe(),
+  getFaq(),
+  getContact(),
 ]);
 
 const heroBadge    = homePage?.heroBadgeLabel    ?? 'Blog weterynaryjny';
@@ -61,18 +60,7 @@ const contactBodyEntry = await getEntry('pages', 'contact/body');
 const { Content: ContactBodyContent } = contactBodyEntry ? await render(contactBodyEntry) : { Content: null };
 
 const allPosts = await getCollection('posts');
-const posts = allPosts
-  .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
-  .slice(0, 3)
-  .map(post => {
-    let rawContent = '';
-    try {
-      rawContent = fs.readFileSync(
-        path.join(process.cwd(), 'src/content/posts', `${post.id}.mdoc`), 'utf-8'
-      );
-    } catch {}
-    return { ...post, readingTime: calculateReadingTime(rawContent, 'pl') };
-  });
+const posts = (await getPosts('pl')).slice(0, 3);
 
 const featuredSlug = homePage?.featuredPostSlug ?? null;
 const featuredPost = featuredSlug
@@ -83,21 +71,6 @@ const categoryCounts = allPosts.reduce((acc, post) => {
   acc[post.data.category] = (acc[post.data.category] || 0) + 1;
   return acc;
 }, {} as Record<string, number>);
-
-const categories = [
-  { key: 'psy',        label: 'Psy' },
-  { key: 'koty',       label: 'Koty' },
-  { key: 'egzotyczne', label: 'Egzotyczne' },
-  { key: 'porady',     label: 'Porady' },
-];
-
-const catSvgs: Record<string, string> = {
-  psy:        '<ellipse cx="24" cy="34" rx="9" ry="7"/><circle cx="13" cy="22" r="5"/><circle cx="35" cy="22" r="5"/><circle cx="8" cy="31" r="4"/><circle cx="40" cy="31" r="4"/>',
-  koty:       '<path d="M8 24L12 8L22 20C23 19 25 19 26 20L36 8L40 24C40 34 33 43 24 43C15 43 8 34 8 24Z"/>',
-  egzotyczne: '<ellipse cx="24" cy="30" rx="9" ry="12"/><circle cx="24" cy="14" r="8"/><path d="M16 18L24 22L16 24Z"/>',
-  porady:     '<circle cx="13" cy="9" r="4"/><circle cx="35" cy="9" r="4"/><path fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" d="M13 13C13 20 9 25 9 30C9 39 17 44 24 44C31 44 39 39 39 30C39 25 35 20 35 13"/><circle cx="24" cy="44" r="5"/>',
-};
-
 ---
 
 <BaseLayout
@@ -108,63 +81,16 @@ const catSvgs: Record<string, string> = {
 
   <main id="main-content">
 
-    <!-- Hero — two-column on desktop -->
-    <section class="relative overflow-hidden py-16 md:py-24 lg:py-32">
-
-      <!-- Floating gradient orbs -->
-      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div class="absolute -top-32 left-1/4 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-cyan/10 blur-[140px] [animation:float_12s_ease-in-out_infinite]" />
-        <div class="absolute -right-20 top-1/3 h-[400px] w-[400px] rounded-full bg-pink/8 blur-[120px] [animation:float_16s_ease-in-out_4s_infinite]" />
-        <div class="absolute -bottom-20 left-1/2 h-[300px] w-[300px] rounded-full bg-yellow/6 blur-[100px] [animation:float_14s_ease-in-out_8s_infinite]" />
-      </div>
-
-      <!-- Bottom gradient fade -->
-      <div class="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-dark to-transparent" aria-hidden="true" />
-
-      <div class="relative z-10 mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-12 px-6 md:grid-cols-2 md:gap-16 lg:gap-24">
-
-        <!-- Text column -->
-        <div class="flex flex-col items-center gap-6 text-center md:items-start md:text-left">
-
-          <span class="[animation:fadeInUp_0.5s_ease_both]">
-            <Badge>{heroBadge}</Badge>
-          </span>
-
-          <h1 class="font-serif text-[2.75rem] font-extrabold leading-[1.06] tracking-[-1px] text-bright [animation:fadeInUp_0.65s_0.1s_ease_both] md:text-[3.5rem] md:tracking-[-1.2px] lg:text-[4.25rem] lg:tracking-[-1.5px]">
-            {heroHeadline}
-          </h1>
-
-          {heroSubtext && (
-            <p class="max-w-[520px] text-lg leading-relaxed text-secondary [animation:fadeInUp_0.65s_0.2s_ease_both]">
-              {heroSubtext}
-            </p>
-          )}
-
-          <div class="flex flex-wrap justify-center gap-3 [animation:fadeInUp_0.65s_0.3s_ease_both] md:justify-start">
-            <Button asChild size="lg">
-              <a href="/blog">{heroCtaLabel}</a>
-            </Button>
-            <Button variant="outline" asChild size="lg">
-              <a href="#o-mnie">O mnie</a>
-            </Button>
-          </div>
-
-        </div>
-
-        <!-- Image column -->
-        <div class="flex justify-center [animation:fadeInUp_0.8s_0.4s_ease_both] md:justify-end">
-          <ImagePlaceholder
-            src={heroPhoto}
-            alt="Michalina Kolarz — lekarz weterynarii"
-            width={480}
-            height={600}
-            loading="eager"
-            class="aspect-[4/5] w-full max-w-[380px] md:max-w-[420px]"
-          />
-        </div>
-
-      </div>
-    </section>
+    <HeroSection
+      badge={heroBadge}
+      headline={heroHeadline}
+      subtext={heroSubtext}
+      ctaLabel={heroCtaLabel}
+      ctaHref="/blog"
+      photoSrc={heroPhoto}
+      photoAlt="Michalina Kolarz — lekarz weterynarii"
+      secondaryCta={{ label: 'O mnie', href: '#o-mnie' }}
+    />
 
     {featuredPost && (
       <section class="pb-16 pt-4">
@@ -240,12 +166,12 @@ const catSvgs: Record<string, string> = {
             {posts.map((post) => (
               <li>
                 <PostCard
-                  slug={post.id}
-                  title={post.data.title}
-                  publishDate={post.data.publishDate}
-                  category={post.data.category}
-                  excerpt={post.data.excerpt}
-                  coverImage={post.data.coverImage}
+                  slug={post.slug}
+                  title={post.title}
+                  publishDate={post.publishDate}
+                  category={post.category}
+                  excerpt={post.excerpt}
+                  coverImage={post.coverImage}
                   readingTime={post.readingTime}
                 />
               </li>
@@ -264,74 +190,11 @@ const catSvgs: Record<string, string> = {
       </div>
     </section>
 
-    <!-- Divider -->
     <div class="mx-auto max-w-[1200px] px-6">
       <div class="h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
     </div>
 
-    <!-- Category cards -->
-    <section class="relative overflow-hidden py-20 md:py-24">
-      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div class="absolute left-1/3 -top-10 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-cyan/7 blur-[100px] [animation:float_12s_ease-in-out_infinite]" />
-        <div class="absolute bottom-0 right-1/4 h-[220px] w-[220px] rounded-full bg-pink/6 blur-[80px] [animation:float_15s_ease-in-out_5s_infinite]" />
-      </div>
-      <div class="relative z-10 mx-auto max-w-[1200px] px-6">
-
-        <div class="mb-10 flex items-baseline justify-between gap-4">
-          <h2 class="reveal relative pl-5 font-serif text-[2.25rem] font-bold leading-snug tracking-[-0.5px] text-bright [animation:fadeInUp_0.5s_ease_both] before:absolute before:bottom-1 before:left-0 before:top-1 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-cyan before:to-cyan/0 before:content-['']">
-            Tematy
-          </h2>
-          <a
-            href="/blog"
-            class="shrink-0 text-sm font-semibold text-cyan transition-colors hover:text-cyan-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
-          >
-            Wszystkie artykuły →
-          </a>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {categories.map((cat, i) => (
-            <a
-              href={`/blog?category=${cat.key}`}
-              class="reveal group relative aspect-square overflow-hidden rounded-2xl border border-border bg-surface-light transition-all duration-300 hover:-translate-y-1.5 hover:border-cyan/40 hover:shadow-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan [animation:scaleIn_0.5s_ease_both]"
-              style={`animation-delay: ${i * 0.08}s`}
-              aria-label={`Kategoria: ${cat.label} — ${categoryCounts[cat.key] ?? 0} artykułów`}
-            >
-              <div class="absolute inset-0 [background-image:radial-gradient(circle,rgba(0,217,255,0.07)_1px,transparent_1px)] [background-size:20px_20px]" aria-hidden="true" />
-              <div class="absolute inset-0 bg-gradient-to-br from-cyan/6 via-transparent to-pink/4" aria-hidden="true" />
-              <div class="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan/10 blur-3xl [animation:glowPulse_5s_ease-in-out_infinite]" aria-hidden="true" />
-
-              <!-- Animal / topic icon -->
-              <div class="absolute inset-0 flex items-center justify-center pb-8" aria-hidden="true">
-                <svg viewBox="0 0 48 48" fill="currentColor" class="h-16 w-16 text-cyan/20 drop-shadow-[0_0_10px_rgba(0,217,255,0.25)]" aria-hidden="true">
-                  <Fragment set:html={catSvgs[cat.key] ?? ''} />
-                </svg>
-              </div>
-
-              <!-- Bottom overlay for text readability -->
-              <div class="absolute inset-0 bg-gradient-to-t from-dark/85 via-dark/20 to-transparent" aria-hidden="true" />
-
-              <!-- Text -->
-              <div class="absolute bottom-0 left-0 right-0 p-4 md:p-5">
-                <p class="mb-0.5 text-[0.6rem] font-bold uppercase tracking-[0.2em] text-cyan md:text-[0.625rem]">
-                  {categoryCounts[cat.key] ?? 0} artykułów
-                </p>
-                <p class="font-serif text-base font-bold text-bright md:text-lg">{cat.label}</p>
-              </div>
-
-              <!-- Hover arrow -->
-              <div
-                class="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-dark/60 text-cyan opacity-0 transition-all duration-200 group-hover:opacity-100 md:right-4 md:top-4"
-                aria-hidden="true"
-              >
-                <span class="text-xs font-bold">→</span>
-              </div>
-            </a>
-          ))}
-        </div>
-
-      </div>
-    </section>
+    <CategoryGrid categoryCounts={categoryCounts} />
 
     <Testimonials />
 
@@ -343,7 +206,6 @@ const catSvgs: Record<string, string> = {
 
       <div class="relative z-10 mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-12 px-6 py-16 md:grid-cols-2 md:gap-20 md:py-24">
 
-        <!-- Gallery collage: main portrait + secondary placeholder -->
         <div class="relative flex justify-center pb-14 pr-12 md:justify-start md:pb-16 md:pr-16">
           <ImagePlaceholder
             src={heroPhoto}
@@ -424,59 +286,8 @@ const catSvgs: Record<string, string> = {
 
     <NewsletterCTA lang="pl" />
 
-    <!-- FAQ section -->
-    <section id="faq" class="relative overflow-hidden py-16 md:py-24">
-      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div class="absolute -top-20 left-1/2 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-cyan/8 blur-[120px] [animation:float_12s_ease-in-out_infinite]" />
-      </div>
+    <FaqSection heading={faqHeading} intro={faqIntro} items={faqItems} />
 
-      <div class="relative z-10 mx-auto max-w-[768px] px-6 text-center">
-        <p class="reveal mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-cyan [animation:fadeInUp_0.5s_ease_both]">FAQ</p>
-        <h2 class="reveal font-serif text-[1.875rem] font-bold leading-tight tracking-[-0.5px] text-bright [animation:fadeInUp_0.6s_0.1s_ease_both] md:text-[2.75rem] md:tracking-[-0.8px] lg:text-[3.5rem]">
-          {faqHeading}
-        </h2>
-        {faqIntro && (
-          <p class="reveal mt-5 text-lg leading-relaxed text-secondary [animation:fadeInUp_0.6s_0.15s_ease_both]">
-            {faqIntro}
-          </p>
-        )}
-      </div>
-
-      <div class="mx-auto mt-10 max-w-[768px] px-6">
-        <div class="h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
-      </div>
-
-      {faqItems.length > 0 ? (
-        <div class="mx-auto max-w-[768px] px-6 py-12">
-          <dl class="flex flex-col gap-6">
-            {faqItems.map((item, i) => (
-              <div
-                class="reveal rounded-2xl border border-border bg-surface-light p-6 shadow-card [animation:fadeInUp_0.5s_ease_both]"
-                style={`animation-delay: ${i * 0.06}s`}
-              >
-                <dt class="font-serif text-lg font-bold leading-snug text-bright md:text-xl">
-                  {item.question}
-                </dt>
-                <dd class="mt-3 text-base leading-relaxed text-secondary">
-                  {item.answer}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      ) : (
-        <p class="mx-auto max-w-[768px] px-6 py-12 text-base text-secondary">Pytania wkrótce.</p>
-      )}
-
-      <div class="mx-auto max-w-[768px] px-6 pb-4 text-center">
-        <p class="mb-5 text-base text-secondary">Nie znalazłeś odpowiedzi na swoje pytanie?</p>
-        <Button asChild>
-          <a href="#kontakt">Napisz do mnie</a>
-        </Button>
-      </div>
-    </section>
-
-    <!-- Divider -->
     <div class="mx-auto max-w-[1200px] px-6">
       <div class="h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
     </div>
@@ -546,7 +357,6 @@ const catSvgs: Record<string, string> = {
         </div>
       </div>
     </section>
-
 
   </main>
 

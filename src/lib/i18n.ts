@@ -1,6 +1,12 @@
 export const LOCALES = ['pl', 'en', 'de'] as const;
 export type Locale = (typeof LOCALES)[number];
 
+export function detectLocale(pathname: string): Locale {
+  if (pathname.startsWith('/en')) return 'en';
+  if (pathname.startsWith('/de')) return 'de';
+  return 'pl';
+}
+
 export const localeLabels: Record<Locale, string> = { pl: 'PL', en: 'EN', de: 'DE' };
 
 export const categoryLabels: Record<Locale, Record<string, string>> = {

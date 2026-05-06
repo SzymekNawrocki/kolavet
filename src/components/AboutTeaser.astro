@@ -1,16 +1,14 @@
 ---
 import { Image } from 'astro:assets';
 import { Button } from './ui/button';
-import { createReader } from '@keystatic/core/reader';
-import keystaticConfig from '../../keystatic.config';
+import { getAboutMe } from '../lib/cms';
 
 interface Props {
   lang?: 'pl' | 'en' | 'de';
 }
 const { lang = 'pl' } = Astro.props;
 
-const reader = createReader(process.cwd(), keystaticConfig);
-const about  = await reader.singletons.aboutMe.read();
+const about = await getAboutMe();
 
 const photo    = about?.photo ?? '/images/photo.jpeg';
 const rawHead  = lang === 'en' ? about?.en_heading : lang === 'de' ? about?.de_heading : about?.heading;

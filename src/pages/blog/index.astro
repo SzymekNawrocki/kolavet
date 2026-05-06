@@ -1,34 +1,11 @@
 ---
-import fs from 'node:fs';
-import path from 'node:path';
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import { BlogFilter } from '../../components/BlogFilter';
-import { calculateReadingTime } from '../../lib/reading-time';
+import { getPosts } from '../../lib/posts';
 
-const allPosts = await getCollection('posts');
-const posts = allPosts
-  .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
-  .map(post => {
-    let rawContent = '';
-    try {
-      rawContent = fs.readFileSync(
-        path.join(process.cwd(), 'src/content/posts', `${post.id}.mdoc`),
-        'utf-8'
-      );
-    } catch {}
-    return {
-      slug:        post.id,
-      title:       post.data.title,
-      publishDate: post.data.publishDate,
-      category:    post.data.category,
-      excerpt:     post.data.excerpt,
-      coverImage:  post.data.coverImage ?? null,
-      readingTime: calculateReadingTime(rawContent, 'pl'),
-    };
-  });
+const posts = await getPosts('pl');
 ---
 
 <BaseLayout

@@ -11,11 +11,11 @@ interface PostCardProps {
   excerpt:      string;
   coverImage:   string | null;
   readingTime?: string;
-  basePath?:    string;
   lang?:        Locale;
 }
 
-export function PostCard({ slug, title, publishDate, category, excerpt, coverImage, readingTime, basePath = '/blog', lang = 'pl' }: PostCardProps) {
+export function PostCard({ slug, title, publishDate, category, excerpt, coverImage, readingTime, lang = 'pl' }: PostCardProps) {
+  const basePath = '/blog';
   const date = new Date(publishDate).toLocaleDateString(lang === 'pl' ? 'pl-PL' : lang === 'de' ? 'de-DE' : 'en-GB', {
     year: 'numeric', month: 'long', day: 'numeric',
   });

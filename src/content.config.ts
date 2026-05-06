@@ -1,13 +1,14 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'zod';
 import { glob } from 'astro/loaders';
+import { CATEGORIES } from './lib/categories';
 
 const posts = defineCollection({
   loader: glob({ pattern: '**/*.mdoc', base: './src/content/posts' }),
   schema: z.object({
     title: z.string(),
     publishDate: z.string(),
-    category: z.enum(['psy', 'koty', 'egzotyczne', 'porady']),
+    category: z.enum(CATEGORIES),
     excerpt: z.string(),
     coverImage: z.string().nullish().transform(v => v ?? null),
   }),

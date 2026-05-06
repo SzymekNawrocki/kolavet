@@ -1,24 +1,16 @@
 import * as React from 'react';
 import { PostCard } from './PostCard';
 import { categoryLabels, type Locale } from '@/lib/i18n';
+import { CATEGORIES } from '@/lib/categories';
+import type { PostData } from '@/lib/posts';
 
 const POSTS_PER_PAGE = 9;
-const CATEGORIES = ['psy', 'koty', 'egzotyczne', 'porady'] as const;
 
-export interface PostData {
-  slug:        string;
-  title:       string;
-  publishDate: string;
-  category:    string;
-  excerpt:     string;
-  coverImage:  string | null;
-  readingTime: string;
-}
+export type { PostData };
 
 interface BlogFilterProps {
-  posts:     PostData[];
-  lang?:     Locale;
-  basePath?: string;
+  posts: PostData[];
+  lang?: Locale;
 }
 
 const ui: Record<Locale, { placeholder: string; all: string; noResults: string; count: (n: number) => string }> = {
@@ -110,7 +102,7 @@ function Pagination({
   );
 }
 
-export function BlogFilter({ posts, lang = 'pl', basePath = '/blog' }: BlogFilterProps) {
+export function BlogFilter({ posts, lang = 'pl' }: BlogFilterProps) {
   const [query, setQuery]                   = React.useState('');
   const [debouncedQuery, setDebouncedQuery] = React.useState('');
   const [activeCategory, setActiveCategory] = React.useState<string | null>(null);
@@ -205,7 +197,6 @@ export function BlogFilter({ posts, lang = 'pl', basePath = '/blog' }: BlogFilte
                 excerpt={post.excerpt}
                 coverImage={post.coverImage}
                 readingTime={post.readingTime}
-                basePath={basePath}
                 lang={lang}
               />
             </li>
