@@ -34,6 +34,7 @@ function resolveExcerpt(data: Record<string, unknown>, lang: Locale): string {
 export async function getPosts(lang: Locale = 'pl'): Promise<PostData[]> {
   const posts = await getCollection('posts');
   return posts
+    .filter(post => post.data.status === 'published')
     .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
     .map(post => ({
       slug:        post.id,
@@ -50,7 +51,7 @@ export async function getPosts(lang: Locale = 'pl'): Promise<PostData[]> {
 export async function getRelatedPosts(currentId: string, category: string, lang: Locale = 'pl'): Promise<PostData[]> {
   const posts = await getCollection('posts');
   return posts
-    .filter(p => p.id !== currentId && p.data.category === category)
+    .filter(p => p.id !== currentId && p.data.category === category && p.data.status === 'published')
     .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
     .slice(0, 3)
     .map(p => ({

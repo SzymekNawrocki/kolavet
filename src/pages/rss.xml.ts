@@ -4,9 +4,9 @@ import type { APIContext } from 'astro';
 
 export async function GET(context: APIContext) {
   const posts = await getCollection('posts');
-  const sorted = posts.sort(
-    (a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
-  );
+  const sorted = posts
+    .filter(p => p.data.status === 'published')
+    .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime());
 
   return rss({
     title:       'Kolavet — Blog weterynaryjny Michaliny',

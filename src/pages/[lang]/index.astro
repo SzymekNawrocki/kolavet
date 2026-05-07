@@ -41,6 +41,7 @@ const heroPhoto    = aboutMe?.photo ?? '/images/photo.jpeg';
 
 const allPosts = await getCollection('posts');
 const posts = allPosts
+  .filter(p => p.data.status === 'published')
   .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
   .slice(0, 3);
 

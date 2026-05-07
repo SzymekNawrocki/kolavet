@@ -10,6 +10,7 @@ const posts = defineCollection({
     pl_excerpt:  z.string(),
     publishDate: z.string(),
     category:    z.enum(CATEGORIES),
+    status:      z.enum(['draft', 'published']).default('draft'),
     coverImage:  z.string().nullish().transform(v => v ?? null),
     en_title:    z.string().optional(),
     en_excerpt:  z.string().optional(),

@@ -16,9 +16,9 @@ import { getRelatedPosts, readRaw } from '../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
-  const sorted = posts.sort(
-    (a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
-  );
+  const sorted = posts
+    .filter(p => p.data.status === 'published')
+    .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime());
   return sorted.map((post, i) => ({
     params: { slug: post.id },
     props: {

@@ -21,6 +21,15 @@ export default config({
           options: CATEGORIES.map(v => ({ label: CATEGORY_LABELS_PL[v], value: v })),
           defaultValue: 'porady',
         }),
+        status: fields.select({
+          label: '🚦 Status publikacji',
+          description: 'SZKIC — niewidoczny na stronie. OPUBLIKOWANY — widoczny publicznie.',
+          options: [
+            { label: '📝 Szkic — niewidoczny na stronie', value: 'draft' },
+            { label: '✅ Opublikowany — widoczny publicznie', value: 'published' },
+          ],
+          defaultValue: 'draft',
+        }),
         coverImage: fields.image({
           label: 'Zdjęcie okładki',
           directory: 'public/images/posts',

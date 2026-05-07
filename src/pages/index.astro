@@ -60,14 +60,15 @@ const contactBodyEntry = await getEntry('pages', 'contact/body');
 const { Content: ContactBodyContent } = contactBodyEntry ? await render(contactBodyEntry) : { Content: null };
 
 const allPosts = await getCollection('posts');
+const publishedPosts = allPosts.filter(p => p.data.status === 'published');
 const posts = (await getPosts('pl')).slice(0, 3);
 
 const featuredSlug = homePage?.featuredPostSlug ?? null;
 const featuredPost = featuredSlug
-  ? allPosts.find(p => p.id === featuredSlug) ?? null
+  ? publishedPosts.find(p => p.id === featuredSlug) ?? null
   : null;
 
-const categoryCounts = allPosts.reduce((acc, post) => {
+const categoryCounts = publishedPosts.reduce((acc, post) => {
   acc[post.data.category] = (acc[post.data.category] || 0) + 1;
   return acc;
 }, {} as Record<string, number>);
