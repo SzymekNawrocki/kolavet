@@ -151,7 +151,6 @@ export function BlogFilter({ posts, lang = 'pl' }: BlogFilterProps) {
 
   return (
     <div>
-      {/* Search + category chips */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <input
           type="search"
@@ -181,10 +180,8 @@ export function BlogFilter({ posts, lang = 'pl' }: BlogFilterProps) {
         </div>
       </div>
 
-      {/* Result count */}
       <p className="mb-8 text-sm text-secondary">{t.count(filtered.length)}</p>
 
-      {/* Post grid */}
       {pagePosts.length > 0 ? (
         <ul className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3" role="list">
           {pagePosts.map(post => (

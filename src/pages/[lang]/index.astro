@@ -1,9 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Nav from '../../components/Nav.astro';
-import Footer from '../../components/Footer.astro';
-import { PostCard } from '../../components/PostCard';
+import Nav from '../../components/nav/Nav.astro';
+import Footer from '../../components/nav/Footer.astro';
+import { PostCard } from '../../components/blog/PostCard';
 import AboutTeaser from '../../components/AboutTeaser.astro';
 import NewsletterCTA from '../../components/NewsletterCTA.astro';
 import HeroSection from '../../components/HeroSection.astro';
@@ -90,10 +90,10 @@ const descriptions: Record<Locale, string> = {
               <li>
                 <PostCard
                   slug={post.id}
-                  title={post.data.title}
+                  title={(post.data as Record<string, string>)[`${lang}_title`] ?? post.data.pl_title}
                   publishDate={post.data.publishDate}
                   category={post.data.category}
-                  excerpt={post.data.excerpt}
+                  excerpt={(post.data as Record<string, string>)[`${lang}_excerpt`] ?? post.data.pl_excerpt}
                   coverImage={post.data.coverImage}
                   lang={lang}
                 />

@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { getLocalePaths, LOCALES } from '../lib/i18n';
+import { CookieBanner } from '../components/CookieBanner';
 
 interface Props {
   title: string;
@@ -25,6 +26,7 @@ const {
 const siteName = 'Kolavet — Blog weterynaryjny Michaliny';
 const siteOrigin = Astro.site ?? new URL(Astro.url.origin);
 const localePaths = getLocalePaths(Astro.url.pathname);
+const ga4Id = import.meta.env.PUBLIC_GA4_ID ?? '';
 ---
 
 <!doctype html>
@@ -79,6 +81,7 @@ const localePaths = getLocalePaths(Astro.url.pathname);
       Przejdź do treści
     </a>
     <slot />
+    <CookieBanner lang={lang as 'pl' | 'en' | 'de'} ga4Id={ga4Id || undefined} client:load />
     <script is:inline>
       const io = new IntersectionObserver(
         entries => entries.forEach(e => {

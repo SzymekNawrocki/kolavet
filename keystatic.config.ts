@@ -7,11 +7,11 @@ export default config({
   collections: {
     posts: collection({
       label: 'Posty',
-      slugField: 'title',
+      slugField: 'pl_title',
       path: 'src/content/posts/*',
-      format: { contentField: 'content' },
+      format: { contentField: 'pl_content' },
       schema: {
-        title: fields.slug({ name: { label: 'Tytuł' } }),
+        pl_title: fields.slug({ name: { label: 'Tytuł (PL)' } }),
         publishDate: fields.date({
           label: 'Data publikacji',
           validation: { isRequired: true },
@@ -21,17 +21,24 @@ export default config({
           options: CATEGORIES.map(v => ({ label: CATEGORY_LABELS_PL[v], value: v })),
           defaultValue: 'porady',
         }),
-        excerpt: fields.text({
-          label: 'Opis skrócony',
-          multiline: true,
-          validation: { isRequired: true },
-        }),
         coverImage: fields.image({
           label: 'Zdjęcie okładki',
           directory: 'public/images/posts',
           publicPath: '/images/posts/',
         }),
-        content: fields.markdoc({ label: 'Treść' }),
+        // Polish
+        pl_excerpt: fields.text({
+          label: 'Opis skrócony (PL)',
+          multiline: true,
+          validation: { isRequired: true },
+        }),
+        pl_content: fields.markdoc({ label: 'Treść (PL)' }),
+        // English
+        en_title:   fields.text({ label: 'Tytuł (EN)', validation: { isRequired: false } }),
+        en_excerpt: fields.text({ label: 'Opis skrócony (EN)', multiline: true, validation: { isRequired: false } }),
+        // German
+        de_title:   fields.text({ label: 'Tytuł (DE)', validation: { isRequired: false } }),
+        de_excerpt: fields.text({ label: 'Opis skrócony (DE)', multiline: true, validation: { isRequired: false } }),
       },
     }),
   },

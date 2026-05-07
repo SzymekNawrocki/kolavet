@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Badge } from './ui/badge';
-import { CardContent } from './ui/card';
+import { Badge } from '../ui/badge';
+import { CardContent } from '../ui/card';
 import { categoryLabels, readMoreLabel, type Locale } from '@/lib/i18n';
 
 interface PostCardProps {
@@ -15,7 +15,7 @@ interface PostCardProps {
 }
 
 export function PostCard({ slug, title, publishDate, category, excerpt, coverImage, readingTime, lang = 'pl' }: PostCardProps) {
-  const basePath = '/blog';
+  const basePath = lang === 'pl' ? '/blog' : `/${lang}/blog`;
   const date = new Date(publishDate).toLocaleDateString(lang === 'pl' ? 'pl-PL' : lang === 'de' ? 'de-DE' : 'en-GB', {
     year: 'numeric', month: 'long', day: 'numeric',
   });

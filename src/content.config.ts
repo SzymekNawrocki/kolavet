@@ -6,11 +6,15 @@ import { CATEGORIES } from './lib/categories';
 const posts = defineCollection({
   loader: glob({ pattern: '**/*.mdoc', base: './src/content/posts' }),
   schema: z.object({
-    title: z.string(),
+    pl_title:    z.string(),
+    pl_excerpt:  z.string(),
     publishDate: z.string(),
-    category: z.enum(CATEGORIES),
-    excerpt: z.string(),
-    coverImage: z.string().nullish().transform(v => v ?? null),
+    category:    z.enum(CATEGORIES),
+    coverImage:  z.string().nullish().transform(v => v ?? null),
+    en_title:    z.string().optional(),
+    en_excerpt:  z.string().optional(),
+    de_title:    z.string().optional(),
+    de_excerpt:  z.string().optional(),
   }),
 });
 

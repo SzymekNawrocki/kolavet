@@ -24,7 +24,13 @@
       "Bash(Get-ChildItem -Path \"C:\\\\kolavet\" -Force)",
       "Bash(Select-Object Name, PSIsContainer)",
       "PowerShell(Get-ChildItem -Path \"C:\\\\kolavet\" -Force | Select-Object Name, @{Name=\"IsDir\"; Expression={$_.PSIsContainer}})",
-      "Bash(Remove-Item *)"
+      "Bash(Remove-Item *)",
+      "Bash(Get-ChildItem \"C:\\\\kolavet\\\\public\\\\images\\\\\" -ErrorAction SilentlyContinue | Select-Object Name, Length *)",
+      "Bash(Select-Object Name, FullName)",
+      "Bash(Get-ChildItem -Path C:\\\\kolavet -Recurse -Depth 3 -Force)",
+      "Bash(Select-Object FullName, PSIsContainer)",
+      "Bash(Sort-Object FullName)",
+      "Bash(Format-Table -AutoSize)"
     ]
   }
 }

@@ -4,9 +4,8 @@ import { Input } from './ui/input';
 
 interface Props {
   lang?: 'pl' | 'en' | 'de';
-  href?: string;
 }
-const { lang = 'pl', href = '#' } = Astro.props;
+const { lang = 'pl' } = Astro.props;
 
 const t = {
   pl: {
@@ -17,6 +16,8 @@ const t = {
     inputLabel:  'Adres e-mail',
     cta:         'Zapisz się',
     legal:       'Bez spamu. Możesz wypisać się w każdej chwili.',
+    success:     'Zapisano! Sprawdź skrzynkę.',
+    error:       'Coś poszło nie tak. Spróbuj ponownie.',
   },
   en: {
     eyebrow:     'Newsletter',
@@ -26,6 +27,8 @@ const t = {
     inputLabel:  'Email address',
     cta:         'Subscribe',
     legal:       'No spam. Unsubscribe at any time.',
+    success:     'Subscribed! Check your inbox.',
+    error:       'Something went wrong. Please try again.',
   },
   de: {
     eyebrow:     'Newsletter',
@@ -35,24 +38,19 @@ const t = {
     inputLabel:  'E-Mail-Adresse',
     cta:         'Abonnieren',
     legal:       'Kein Spam. Jederzeit abbestellbar.',
+    success:     'Angemeldet! Prüfen Sie Ihr Postfach.',
+    error:       'Etwas ist schief gelaufen. Bitte versuchen Sie es erneut.',
   },
 }[lang];
 ---
 
 <section class="relative isolate overflow-hidden">
-  <!-- Gradient top divider -->
   <div class="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan/40 to-transparent" aria-hidden="true" />
-
-  <!-- Elevated surface background -->
   <div class="absolute inset-0 bg-surface-light/40" aria-hidden="true" />
-
-  <!-- Glow orb -->
   <div
     class="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan/8 blur-[120px] [animation:glowPulse_5s_ease-in-out_infinite]"
     aria-hidden="true"
   />
-
-  <!-- Gradient bottom divider -->
   <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" aria-hidden="true" />
 
   <div class="relative z-10 mx-auto max-w-[640px] px-6 py-20 md:py-24 text-center">
@@ -67,8 +65,9 @@ const t = {
     </p>
 
     <form
-      action={href}
-      method="POST"
+      id="newsletter-form"
+      data-success={t.success}
+      data-error={t.error}
       class="reveal mt-8 flex flex-col gap-3 sm:flex-row sm:gap-2 [animation:fadeInUp_0.6s_0.2s_ease_both]"
       novalidate
     >
@@ -85,8 +84,35 @@ const t = {
       </Button>
     </form>
 
-    <p class="reveal mt-4 text-xs text-muted [animation:fadeInUp_0.6s_0.25s_ease_both]">
+    <p id="newsletter-msg" class="reveal mt-4 text-xs text-muted [animation:fadeInUp_0.6s_0.25s_ease_both]">
       {t.legal}
     </p>
   </div>
 </section>
+
+<script>
+  const form = document.getElementById('newsletter-form') as HTMLFormElement | null;
+  const msg  = document.getElementById('newsletter-msg');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+    const successText = form.dataset.success ?? '';
+    const errorText   = form.dataset.error   ?? '';
+
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (msg) {
+        msg.textContent = res.ok ? successText : errorText;
+        msg.style.color = res.ok ? 'var(--color-cyan)' : '#ff6b6b';
+      }
+      if (res.ok) form.reset();
+    } catch {
+      if (msg) { msg.textContent = errorText; msg.style.color = '#ff6b6b'; }
+    }
+  });
+</script>

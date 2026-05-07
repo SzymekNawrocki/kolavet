@@ -1,9 +1,9 @@
 ---
 import { getCollection, getEntry, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Nav from '../components/Nav.astro';
-import Footer from '../components/Footer.astro';
-import { PostCard } from '../components/PostCard';
+import Nav from '../components/nav/Nav.astro';
+import Footer from '../components/nav/Footer.astro';
+import { PostCard } from '../components/blog/PostCard';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Card } from '../components/ui/card';
@@ -128,10 +128,10 @@ const categoryCounts = allPosts.reduce((acc, post) => {
             <div class="flex flex-col justify-center gap-4 p-6 md:p-8 lg:p-10">
               <Badge>{categoryLabels.pl[featuredPost.data.category] ?? featuredPost.data.category}</Badge>
               <h2 class="font-serif text-[1.5rem] font-bold leading-snug tracking-[-0.4px] text-bright transition-colors group-hover:text-cyan md:text-[1.875rem]">
-                {featuredPost.data.title}
+                {featuredPost.data.pl_title}
               </h2>
               <p class="line-clamp-3 text-base leading-relaxed text-secondary">
-                {featuredPost.data.excerpt}
+                {featuredPost.data.pl_excerpt}
               </p>
               <span class="text-sm font-semibold text-cyan">Czytaj artykuł →</span>
             </div>

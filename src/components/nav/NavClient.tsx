@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Menu } from 'lucide-react';
-import { Button } from './ui/button';
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from './ui/sheet';
-import { LOCALES, localeLabels, type Locale } from '../lib/i18n';
+import { Button } from '../ui/button';
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '../ui/sheet';
+import { LOCALES, localeLabels, type Locale } from '../../lib/i18n';
 
 interface NavClientProps {
   currentPath: string;

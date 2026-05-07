@@ -1,50 +1,64 @@
 ---
 import { Image } from 'astro:assets';
 import { getCollection, render } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Nav from '../../components/nav/Nav.astro';
-import Footer from '../../components/nav/Footer.astro';
-import AuthorCard from '../../components/blog/AuthorCard.astro';
-import ShareButtons from '../../components/blog/ShareButtons.astro';
-import TableOfContents from '../../components/blog/TableOfContents.astro';
-import NewsletterCTA from '../../components/NewsletterCTA.astro';
-import { Badge } from '../../components/ui/badge';
-import { PostCard } from '../../components/blog/PostCard';
-import { categoryLabels } from '../../lib/i18n';
-import { calculateReadingTime } from '../../lib/reading-time';
-import { getRelatedPosts, readRaw } from '../../lib/posts';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Nav from '../../../components/nav/Nav.astro';
+import Footer from '../../../components/nav/Footer.astro';
+import AuthorCard from '../../../components/blog/AuthorCard.astro';
+import ShareButtons from '../../../components/blog/ShareButtons.astro';
+import TableOfContents from '../../../components/blog/TableOfContents.astro';
+import NewsletterCTA from '../../../components/NewsletterCTA.astro';
+import { Badge } from '../../../components/ui/badge';
+import { PostCard } from '../../../components/blog/PostCard';
+import { categoryLabels, LOCALES, type Locale } from '../../../lib/i18n';
+import { calculateReadingTime } from '../../../lib/reading-time';
+import { getRelatedPosts, readRaw } from '../../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
   const sorted = posts.sort(
     (a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
   );
-  return sorted.map((post, i) => ({
-    params: { slug: post.id },
-    props: {
-      post,
-      prevPost: i < sorted.length - 1
-        ? { slug: sorted[i + 1].id, title: sorted[i + 1].data.pl_title }
-        : null,
-      nextPost: i > 0
-        ? { slug: sorted[i - 1].id, title: sorted[i - 1].data.pl_title }
-        : null,
-    },
-  }));
+
+  const langs = LOCALES.filter(l => l !== 'pl') as Exclude<Locale, 'pl'>[];
+  return langs.flatMap(lang =>
+    sorted.map((post, i) => ({
+      params: { lang, slug: post.id },
+      props: {
+        post,
+        lang,
+        prevPost: i < sorted.length - 1
+          ? { slug: sorted[i + 1].id, title: (sorted[i + 1].data as Record<string, string>)[`${lang}_title`] ?? sorted[i + 1].data.pl_title }
+          : null,
+        nextPost: i > 0
+          ? { slug: sorted[i - 1].id, title: (sorted[i - 1].data as Record<string, string>)[`${lang}_title`] ?? sorted[i - 1].data.pl_title }
+          : null,
+      },
+    }))
+  );
 }
 
-const { post, prevPost, nextPost } = Astro.props;
+const { post, lang, prevPost, nextPost } = Astro.props;
 const { Content, headings } = await render(post);
 
-const title   = post.data.pl_title;
-const excerpt = post.data.pl_excerpt;
+const data = post.data as Record<string, string | null | undefined>;
+const title   = (data[`${lang}_title`]   ?? post.data.pl_title)  as string;
+const excerpt = (data[`${lang}_excerpt`] ?? post.data.pl_excerpt) as string;
 
-const readingTime = calculateReadingTime(readRaw(post.id), 'pl');
-const related = await getRelatedPosts(post.id, post.data.category, 'pl');
+const readingTime = calculateReadingTime(readRaw(post.id), lang);
+const related = await getRelatedPosts(post.id, post.data.category, lang);
 
-const date = new Date(post.data.publishDate).toLocaleDateString('pl-PL', {
+const dateLocale = lang === 'de' ? 'de-DE' : 'en-GB';
+const date = new Date(post.data.publishDate).toLocaleDateString(dateLocale, {
   year: 'numeric', month: 'long', day: 'numeric',
 });
+
+const canonicalUrl = `https://kolavet.pl/${lang}/blog/${post.id}`;
+
+const relatedHeading = { en: 'Related articles', de: 'Ähnliche Artikel' }[lang];
+const olderLabel     = { en: '← Older',          de: '← Älter'         }[lang];
+const newerLabel     = { en: 'Newer →',           de: 'Neuer →'         }[lang];
+const backLabel      = { en: '← Blog',            de: '← Blog'          }[lang];
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -52,10 +66,7 @@ const jsonLd = {
   headline: title,
   description: excerpt,
   datePublished: post.data.publishDate,
-  author: {
-    '@type': 'Person',
-    name: 'Michalina',
-  },
+  author: { '@type': 'Person', name: 'Michalina' },
   ...(post.data.coverImage && { image: post.data.coverImage }),
 };
 ---
@@ -66,6 +77,8 @@ const jsonLd = {
   ogImage={post.data.coverImage ?? undefined}
   type="article"
   publishDate={post.data.publishDate}
+  canonicalUrl={canonicalUrl}
+  lang={lang}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" is:inline />
 
@@ -76,16 +89,16 @@ const jsonLd = {
 
       <nav aria-label="Breadcrumb" class="mb-10">
         <a
-          href="/blog"
+          href={`/${lang}/blog`}
           class="inline-flex items-center gap-1.5 text-sm font-semibold text-secondary transition-colors hover:text-cyan focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
         >
-          ← Blog
+          {backLabel}
         </a>
       </nav>
 
       <header class="mb-10">
         <div class="mb-4 flex flex-wrap items-center gap-3">
-          <Badge>{categoryLabels.pl[post.data.category] ?? post.data.category}</Badge>
+          <Badge>{categoryLabels[lang][post.data.category] ?? post.data.category}</Badge>
           <time class="text-sm font-medium text-secondary" datetime={post.data.publishDate}>
             {date}
           </time>
@@ -119,27 +132,27 @@ const jsonLd = {
       )}
 
       <ShareButtons
-        url={`https://kolavet.pl/blog/${post.id}`}
+        url={canonicalUrl}
         title={title}
-        lang="pl"
+        lang={lang}
       />
 
-      <TableOfContents headings={headings} />
+      <TableOfContents headings={headings} lang={lang} />
 
       <div class="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-bright prose-a:text-cyan prose-a:no-underline hover:prose-a:text-cyan-dark prose-blockquote:border-l-pink prose-blockquote:italic prose-blockquote:text-secondary prose-code:rounded prose-code:bg-surface-medium prose-code:text-cyan prose-img:rounded-xl">
         <Content />
       </div>
 
-      <AuthorCard />
+      <AuthorCard lang={lang} />
 
     </article>
 
-    <NewsletterCTA lang="pl" />
+    <NewsletterCTA lang={lang} />
 
     {related.length > 0 && (
       <section class="mx-auto max-w-[1200px] border-t border-border px-6 py-16">
         <h2 class="relative mb-8 pl-5 font-serif text-[1.75rem] font-bold tracking-[-0.4px] text-bright before:absolute before:bottom-1 before:left-0 before:top-1 before:w-[3px] before:rounded-full before:bg-gradient-to-b before:from-cyan before:to-cyan/0 before:content-['']">
-          Podobne artykuły
+          {relatedHeading}
         </h2>
         <ul class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3" role="list">
           {related.map(p => (
@@ -152,24 +165,26 @@ const jsonLd = {
                 excerpt={p.excerpt}
                 coverImage={p.coverImage}
                 readingTime={p.readingTime}
+                lang={lang}
               />
             </li>
           ))}
         </ul>
       </section>
     )}
+
     {(prevPost || nextPost) && (
       <nav
-        aria-label="Nawigacja między artykułami"
+        aria-label="Post navigation"
         class="mx-auto max-w-[768px] border-t border-border px-6 py-10"
       >
         <div class="flex flex-col gap-4 sm:flex-row sm:justify-between">
           {prevPost ? (
             <a
-              href={`/blog/${prevPost.slug}`}
+              href={`/${lang}/blog/${prevPost.slug}`}
               class="group flex max-w-[45%] flex-col gap-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
             >
-              <span class="text-xs font-semibold uppercase tracking-wider text-muted">← Starszy</span>
+              <span class="text-xs font-semibold uppercase tracking-wider text-muted">{olderLabel}</span>
               <span class="text-sm font-semibold text-secondary transition-colors group-hover:text-cyan line-clamp-2">
                 {prevPost.title}
               </span>
@@ -178,10 +193,10 @@ const jsonLd = {
 
           {nextPost && (
             <a
-              href={`/blog/${nextPost.slug}`}
+              href={`/${lang}/blog/${nextPost.slug}`}
               class="group flex max-w-[45%] flex-col items-end gap-1 text-right focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
             >
-              <span class="text-xs font-semibold uppercase tracking-wider text-muted">Nowszy →</span>
+              <span class="text-xs font-semibold uppercase tracking-wider text-muted">{newerLabel}</span>
               <span class="text-sm font-semibold text-secondary transition-colors group-hover:text-cyan line-clamp-2">
                 {nextPost.title}
               </span>

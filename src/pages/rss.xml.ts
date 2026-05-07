@@ -13,8 +13,8 @@ export async function GET(context: APIContext) {
     description: 'Porady weterynaryjne, zdrowie zwierząt i opieka nad pupilami.',
     site:        context.site!,
     items:       sorted.map(post => ({
-      title:       post.data.title,
-      description: post.data.excerpt,
+      title:       post.data.pl_title,
+      description: post.data.pl_excerpt,
       pubDate:     new Date(post.data.publishDate),
       link:        `/blog/${post.id}/`,
     })),
